@@ -182,5 +182,95 @@
     throw failure;
   }
 
-  window.CppRunner = { run, ServiceError };
+  // ---------- Input interaktif (jawaban diketik di kotak output) ----------
+  // Layanan kompilasi hanya menerima satu kali kirim, tanpa stdin yang bisa diisi saat program
+  // berjalan. Jadi program dijalankan ulang dari awal setiap kali pengguna menjawab:
+  //  - jawaban yang sudah diketik ditanam di kode (prelude di bawah), dan stdin diganti dengan
+  //    aliran buatan (fopencookie) yang membacanya per baris;
+  //  - bila program meminta lebih banyak input daripada jawaban yang ada, prelude mencetak
+  //    penanda CKNEED lalu menghentikan program, dan editor menampilkan kotak ketik di output;
+  //  - setiap baris jawaban yang dipakai ditandai CKIN, supaya editor bisa menampilkan ketikan
+  //    pengguna di posisi yang tepat (seperti terminal sungguhan).
+  // Prelude diberi `#line 1` sehingga nomor baris pesan error tetap sama dengan kode pengguna.
+  const PRELUDE = [
+    "#include <cstdio>",
+    "#include <cstdlib>",
+    "#include <cstring>",
+    "#include <iostream>",
+    "#include <ext/stdio_sync_filebuf.h>",
+    "namespace ck_impl_ {",
+    'static const char ck_data_[] = "@@DATA@@";',
+    "static const std::size_t ck_len_ = @@LEN@@;",
+    "static const bool ck_eof_ = @@EOF@@;",
+    "static std::size_t ck_pos_ = 0;",
+    "static void ck_mark_(const char* m) { std::fputs(m, stdout); std::fflush(stdout); }",
+    "static ssize_t ck_read_(void*, char* buf, std::size_t n) {",
+    "  std::cout.flush(); std::fflush(stdout);",
+    "  if (ck_pos_ >= ck_len_) {",
+    "    if (ck_eof_) return 0;",
+    '    ck_mark_("\\x1e" "CKNEED" "\\x1e");',
+    "    std::_Exit(0);",
+    "  }",
+    "  std::size_t k = 0;",
+    "  while (ck_pos_ + k < ck_len_ && k < n) { char c = ck_data_[ck_pos_ + k]; k++; if (c == '\\n') break; }",
+    "  std::memcpy(buf, ck_data_ + ck_pos_, k);",
+    "  ck_pos_ += k;",
+    '  ck_mark_("\\x1e" "CKIN" "\\x1e");',
+    "  return (ssize_t)k;",
+    "}",
+    "__attribute__((constructor)) static void ck_setup_() {",
+    "  std::ios_base::Init ck_guard_;",
+    "  cookie_io_functions_t fn = { ck_read_, nullptr, nullptr, nullptr };",
+    '  FILE* f = fopencookie(nullptr, "r", fn);',
+    "  if (!f) return;",
+    "  stdin = f;",
+    "  std::cin.rdbuf(new __gnu_cxx::stdio_sync_filebuf<char>(f));",
+    "}",
+    "}",
+    "#line 1 \"main.cpp\""
+  ].join("\n");
+
+  function toOctalLiteral(bytes) {
+    let out = "";
+    for (let i = 0; i < bytes.length; i++) out += "\\" + bytes[i].toString(8).padStart(3, "0");
+    return out;
+  }
+
+  // answers: array berisi satu baris per jawaban (tanpa karakter baris baru).
+  function buildProgram(code, answers, eof) {
+    const bytes = new TextEncoder().encode(answers.map((line) => line + "\n").join(""));
+    const prelude = PRELUDE
+      .replace("@@DATA@@", () => toOctalLiteral(bytes))
+      .replace("@@LEN@@", () => String(bytes.length))
+      .replace("@@EOF@@", () => (eof ? "true" : "false"));
+    // sync_with_stdio(false) memutus pembacaan dari aliran buatan di atas, jadi dinetralkan.
+    const patched = code.replace(/sync_with_stdio\s*\(\s*(?:false|0)\s*\)/g, "sync_with_stdio(true)");
+    return prelude + "\n" + patched;
+  }
+
+  function parseOutput(stdout, answers) {
+    const marker = /\x1e(CKIN|CKNEED)\x1e/g;
+    let text = "";
+    let last = 0;
+    let used = 0;
+    let needsInput = false;
+    let match;
+    while ((match = marker.exec(stdout)) !== null) {
+      text += stdout.slice(last, match.index);
+      last = marker.lastIndex;
+      if (match[1] === "CKIN") text += (answers[used++] || "") + "\n";
+      else needsInput = true;
+    }
+    return { text: text + stdout.slice(last), needsInput };
+  }
+
+  // Seperti run(), tetapi program boleh berhenti untuk meminta input. Hasilnya memuat
+  // needsInput=true bila program menunggu jawaban berikutnya; stdout sudah berisi ketikan pengguna.
+  async function runInteractive(code, answers, eof, options) {
+    const result = await run(buildProgram(code, answers, eof), "", options);
+    const parsed = parseOutput(result.stdout, answers);
+    return Object.assign({}, result, { stdout: parsed.text, needsInput: parsed.needsInput && !result.compileFailed });
+  }
+
+  window.CppRunner = { run, runInteractive, buildProgram, parseOutput, ServiceError };
 })();

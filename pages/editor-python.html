@@ -8,13 +8,14 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/theme/material-darker.min.css">
-  <link rel="stylesheet" href="../css/editor-python.css?v=3">
+  <link rel="stylesheet" href="../css/editor-python.css?v=4">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/codemirror.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/mode/python/python.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/edit/closebrackets.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/edit/matchbrackets.min.js" defer></script>
   <script src="../js/main.js" defer></script>
-  <script src="../js/editor-python.js?v=3" defer></script>
+  <script src="../js/terminal.js?v=4" defer></script>
+  <script src="../js/editor-python.js?v=4" defer></script>
 </head>
 <body>
   <header class="navbar">
@@ -54,8 +55,6 @@
           <textarea id="python-code" aria-label="Kode Python"># Selamat datang di Python Editor CodingSkanetra!
 print("Hai, Kaito")
 </textarea>
-          <label class="py-stdin-label" for="py-stdin">Input program (opsional, untuk <code>input()</code>)</label>
-          <textarea id="py-stdin" class="py-stdin" rows="2" spellcheck="false" placeholder="Satu baris untuk setiap input(). Kosongkan jika ingin diminta lewat kotak dialog saat program berjalan."></textarea>
           <div class="py-actions">
             <button id="py-run" class="btn btn-primary" type="button"><span aria-hidden="true">▶</span> Jalankan</button>
             <button id="py-reset" class="py-btn-secondary" type="button">Reset</button>
@@ -74,7 +73,7 @@ print("Hai, Kaito")
             <canvas id="py-canvas" width="640" height="400" aria-label="Kanvas hasil visual Python"></canvas>
             <p class="py-visual-hint">Mode Visual memakai fungsi gambar bawaan CodingSkanetra: <code>lingkaran()</code>, <code>persegi()</code>, <code>garis()</code>, dan <code>teks()</code>.</p>
           </div>
-          <div class="py-output-note">Program berjalan di browser. Mode Visual menyediakan kanvas gambar yang bisa dikendalikan dari Python.</div>
+          <div class="py-output-note">Program berjalan di browser. Kalau programmu memakai <code>input()</code>, ketik jawabannya langsung di kotak output ini lalu tekan Enter (Ctrl + D untuk mengakhiri input). Mode Visual menyediakan kanvas gambar yang bisa dikendalikan dari Python.</div>
         </div>
       </section>
 

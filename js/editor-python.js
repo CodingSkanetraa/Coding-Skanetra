@@ -11,9 +11,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const status = document.querySelector("#py-status");
   const runtimeStatus = document.querySelector("#py-runtime-status");
   const exampleButtons = document.querySelectorAll("[data-example]");
-  const stdinInput = document.querySelector("#py-stdin");
 
   if (!textarea || !runButton || !resetButton || !clearButton || !output || !status || !runtimeStatus) return;
+  if (!window.CkTerminal) {
+    output.textContent = "Modul terminal gagal dimuat. Muat ulang halaman.";
+    return;
+  }
+
+  // Kotak output berperan sebagai terminal: teks program + kolom ketik untuk input().
+  const term = window.CkTerminal.create(output);
 
   const initialCode = textarea.value;
   let editor = null;
@@ -79,6 +85,7 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
 
   function setOutputMode(mode) {
     if (mode !== outputMode) {
+      cancelSession();
       modeCodes[outputMode] = getCode();
       outputMode = mode;
       setCode(modeCodes[mode]);
@@ -137,48 +144,123 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
   }
 
   // ---------- Input program: input() ----------
-  // Baris dari kotak "Input program" dipakai lebih dulu, satu per panggilan input().
-  // Jika sudah habis, browser menampilkan kotak dialog untuk mengetik jawabannya.
-  let stdinQueue = [];
+  // Pyodide berjalan di thread utama dan input() harus mengembalikan nilai secara sinkron,
+  // sehingga program tidak bisa "berhenti menunggu" sambil menampilkan kolom ketik.
+  // Caranya: program dijalankan dari awal setiap kali pengguna menjawab. Jawaban yang sudah
+  // ada dipakai oleh input() satu per satu; bila jawabannya habis, input() melempar
+  // _CkNeedInput, tampilan berhenti di situ, dan kolom ketik muncul di ujung output.
+  // Seed random dibuat tetap selama satu sesi supaya hasil acak sama di setiap putaran.
+  const EOF_MARK = { eof: true };
+  let session = 0;
 
-  function fillStdinQueue() {
-    const raw = stdinInput ? stdinInput.value : "";
-    stdinQueue = raw === "" ? [] : raw.replace(/\r\n?/g, "\n").replace(/\n$/, "").split("\n");
-  }
-
-  function readInputLine(promptText) {
-    if (stdinQueue.length) return stdinQueue.shift();
-    const answer = window.prompt(promptText || "Masukkan input untuk program:");
-    return answer === null ? null : answer;
-  }
-
-  // input() bawaan diganti agar memakai readInputLine, lalu menampilkan jawabannya
-  // di output seperti terminal sungguhan ("Nama: Kaito").
-  const INPUT_PATCH = [
-    "import builtins",
+  const RUNTIME_PATCH = [
+    "import builtins, sys",
+    "class _CkNeedInput(BaseException):",
+    "    pass",
+    "class _CkOut:",
+    "    encoding = 'utf-8'",
+    "    errors = 'strict'",
+    "    def write(self, s):",
+    "        s = str(s)",
+    "        _ck_write(s)",
+    "        return len(s)",
+    "    def flush(self):",
+    "        pass",
+    "    def isatty(self):",
+    "        return False",
+    "    def writable(self):",
+    "        return True",
+    "def _ck_next(prompt):",
+    "    reply = _ck_read_line(prompt)",
+    "    if reply is None:",
+    "        raise _CkNeedInput()",
+    "    return reply",
     "def _ck_input(prompt=''):",
     "    prompt = str(prompt)",
-    "    value = _ck_read_line(prompt)",
-    "    if value is None:",
-    "        raise EOFError('Tidak ada input lagi (dialog dibatalkan atau kotak Input sudah habis).')",
-    "    value = str(value)",
-    "    print(prompt + value)",
+    "    reply = _ck_next(prompt)",
+    "    if reply == 'E':",
+    "        sys.stdout.write(prompt)",
+    "        raise EOFError('EOF when reading a line')",
+    "    value = reply[1:]",
+    "    sys.stdout.write(prompt + value + '\\n')",
     "    return value",
-    "builtins.input = _ck_input"
+    "class _CkIn:",
+    "    encoding = 'utf-8'",
+    "    def readline(self, size=-1):",
+    "        reply = _ck_next('')",
+    "        if reply == 'E':",
+    "            return ''",
+    "        value = reply[1:]",
+    "        sys.stdout.write(value + '\\n')",
+    "        return value + '\\n'",
+    "    def read(self, size=-1):",
+    "        parts = []",
+    "        while True:",
+    "            line = self.readline()",
+    "            if not line:",
+    "                break",
+    "            parts.append(line)",
+    "        return ''.join(parts)",
+    "    def readlines(self, hint=-1):",
+    "        return self.read().splitlines(True)",
+    "    def __iter__(self):",
+    "        return self",
+    "    def __next__(self):",
+    "        line = self.readline()",
+    "        if not line:",
+    "            raise StopIteration",
+    "        return line",
+    "    def isatty(self):",
+    "        return False",
+    "    def readable(self):",
+    "        return True",
+    "builtins.input = _ck_input",
+    "sys.stdout = _CkOut()",
+    "sys.stderr = _CkOut()",
+    "sys.stdin = _CkIn()"
   ].join("\n");
 
-  function installInput(runtime) {
-    runtime.globals.set("_ck_read_line", (promptText) => readInputLine(String(promptText || "")));
-    runtime.runPython(INPUT_PATCH);
-    // Cadangan untuk kode yang membaca sys.stdin langsung.
-    try {
-      if (typeof runtime.setStdin === "function") {
-        runtime.setStdin({ stdin: () => {
-          const line = readInputLine("Masukkan input untuk program:");
-          return line === null ? undefined : line;
-        } });
+  function installRuntimePatch(runtime) {
+    runtime.runPython(RUNTIME_PATCH);
+  }
+
+  // Menjalankan kode sekali dari awal dengan daftar jawaban yang sudah ada.
+  // Hasil: { text, pending, error } — pending berisi teks prompt bila program menunggu input.
+  async function runOnce(runtime, code, answers, seed) {
+    let text = "";
+    let pending = null;
+    let readIndex = 0;
+
+    runtime.globals.set("_ck_write", (chunk) => { text += String(chunk); });
+    runtime.globals.set("_ck_read_line", (promptText) => {
+      const index = readIndex++;
+      if (index < answers.length) {
+        const answer = answers[index];
+        return answer === EOF_MARK ? "E" : "L" + answer;
       }
-    } catch (error) { /* tidak fatal: input() tetap berfungsi */ }
+      if (pending === null) pending = String(promptText || "");
+      return undefined; // undefined selalu menjadi None di Python (null bisa berbeda antar versi Pyodide)
+    });
+    installVisualHelpers(runtime);
+    runtime.runPython("import random\nrandom.seed(" + seed + ")");
+
+    // Namespace baru di setiap putaran, supaya variabel putaran sebelumnya tidak ikut terbawa.
+    const namespace = runtime.runPython("dict(globals())");
+    try {
+      await runtime.runPythonAsync(code, { globals: namespace });
+      return { text, pending, error: null };
+    } catch (error) {
+      if (pending !== null) return { text, pending, error: null };
+      return { text, pending: null, error: error && error.message ? error.message : String(error) };
+    } finally {
+      namespace.destroy();
+    }
+  }
+
+  function cancelSession() {
+    session++;
+    term.cancel();
+    runButton.disabled = false;
   }
 
   async function loadRuntime() {
@@ -187,7 +269,6 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
 
     runtimeStatus.textContent = "Memuat Python…";
     status.textContent = "Menyiapkan runtime Python…";
-    runButton.disabled = true;
 
     pyodideLoading = (async () => {
       if (!window.loadPyodide) {
@@ -201,7 +282,7 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
       }
       pyodide = await window.loadPyodide();
       installVisualHelpers(pyodide);
-      installInput(pyodide);
+      installRuntimePatch(pyodide);
       runtimeStatus.textContent = "Python siap";
       return pyodide;
     })();
@@ -212,45 +293,77 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
       pyodideLoading = null;
       runtimeStatus.textContent = "Gagal memuat runtime";
       throw error;
-    } finally {
-      runButton.disabled = false;
     }
   }
 
   async function runCode() {
+    if (runButton.disabled) return;
+
+    const token = ++session;
+    term.cancel();
     const code = getCode();
+    const seed = Math.floor(Math.random() * 2147483647);
+    const answers = [];
+
     output.classList.remove("is-error");
     if (outputMode === "visual") {
       clearCanvas();
       output.hidden = true;
     }
-    output.textContent = "Menjalankan kode…";
+    term.show("Menjalankan kode…");
     status.textContent = "Sedang menjalankan…";
     runButton.disabled = true;
 
     try {
       const runtime = await loadRuntime();
-      installVisualHelpers(runtime);
-      fillStdinQueue();
-      let printed = "";
-      runtime.setStdout({ batched: (text) => { printed += text + "\n"; } });
-      runtime.setStderr({ batched: (text) => { printed += text + "\n"; } });
-      await runtime.runPythonAsync(code);
-      output.textContent = printed.trimEnd() || "Program selesai tanpa output.";
-      // Mode Visual: tampilkan teks print() hanya bila ada.
-      if (outputMode === "visual") output.hidden = !printed.trim();
-      status.textContent = "Program selesai.";
+
+      for (;;) {
+        if (token !== session) return;
+        if (outputMode === "visual") clearCanvas();
+
+        const result = await runOnce(runtime, code, answers, seed);
+        if (token !== session) return;
+
+        if (result.pending !== null) {
+          // Program menunggu input: tampilkan kolom ketik di ujung output.
+          output.hidden = false;
+          status.textContent = "Program menunggu input. Ketik di kotak output lalu tekan Enter.";
+          runButton.disabled = false;
+          const reply = await term.prompt(result.text + result.pending);
+          if (reply === null || token !== session) return;
+          runButton.disabled = true;
+          answers.push(reply.eof ? EOF_MARK : reply.line);
+          status.textContent = "Sedang menjalankan…";
+          continue;
+        }
+
+        if (result.error !== null) {
+          // Tetap di mode saat ini; di mode Visual, tampilkan pesan error di bawah kanvas.
+          if (outputMode === "visual") output.hidden = false;
+          const printed = result.text ? result.text.replace(/\n?$/, "\n") : "";
+          term.show(printed + result.error);
+          output.classList.add("is-error");
+          status.textContent = "Terjadi error.";
+        } else {
+          term.show(result.text.trimEnd() || "Program selesai tanpa output.");
+          // Mode Visual: tampilkan teks print() hanya bila ada.
+          if (outputMode === "visual") output.hidden = !result.text.trim();
+          status.textContent = "Program selesai.";
+        }
+        break;
+      }
     } catch (error) {
-      // Tetap di mode saat ini; di mode Visual, tampilkan pesan error di bawah kanvas.
+      if (token !== session) return;
       if (outputMode === "visual") output.hidden = false;
-      output.textContent = error && error.message ? error.message : String(error);
+      let message = error && error.message ? error.message : String(error);
+      if (String(error).includes("Runtime Python gagal dimuat")) {
+        message = "Runtime Python tidak berhasil dimuat. Periksa koneksi internet, lalu coba lagi.\n\n" + message;
+      }
+      term.show(message);
       output.classList.add("is-error");
       status.textContent = "Terjadi error.";
-      if (String(error).includes("Runtime Python gagal dimuat")) {
-        output.textContent = "Runtime Python tidak berhasil dimuat. Periksa koneksi internet, lalu coba lagi.\n\n" + output.textContent;
-      }
     } finally {
-      runButton.disabled = false;
+      if (token === session) runButton.disabled = false;
     }
   }
 
@@ -268,17 +381,19 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
     status.textContent = "Mode Visual dipilih. Jalankan kode untuk menggambar.";
   });
   resetButton.addEventListener("click", () => {
+    cancelSession();
     // Hanya mengembalikan kode pada mode yang sedang aktif.
     setCode(modeDefaults[outputMode]);
     output.classList.remove("is-error");
-    output.textContent = "Output program akan muncul di sini.";
+    term.show("Output program akan muncul di sini.");
     if (outputMode === "visual") output.hidden = true;
     if (canvasContext) clearCanvas();
     status.textContent = "Kode mode " + (outputMode === "visual" ? "Visual" : "Console") + " dikembalikan ke contoh awal.";
   });
   clearButton.addEventListener("click", () => {
+    cancelSession();
     output.classList.remove("is-error");
-    output.textContent = "Output dibersihkan.";
+    term.show("Output dibersihkan.");
     status.textContent = "Output dibersihkan.";
   });
 

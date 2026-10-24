@@ -78,36 +78,30 @@
 .py-visual-hint { margin: 10px 2px 2px; color: var(--text-muted, #a1b0a7); font-size: 12px; line-height: 1.6; }
 .py-visual-hint code { color: #a4e7b8; }
 
-/* Kotak input (stdin) pada C++ Editor */
-.cpp-stdin-label,
-.py-stdin-label {
-  display: block;
-  margin: 14px 0 6px;
-  color: var(--muted, #99a89e);
-  font-size: 0.78rem;
+/* Terminal di kotak output: kolom ketik untuk input program (input(), cin, getline, scanf) */
+.py-output.is-waiting {
+  cursor: text;
+  box-shadow: inset 0 0 0 2px rgb(112 217 154 / 35%);
 }
 
-.cpp-stdin,
-.py-stdin {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 12px;
-  border: 1px solid var(--border, #25342b);
-  border-radius: 10px;
-  background: #0a0f0c;
-  color: #e6e6e6;
-  font: 0.88rem/1.5 Consolas, Monaco, monospace;
-  resize: vertical;
+.term-input {
+  display: inline-block;
+  box-sizing: content-box;
+  width: 2ch;
+  min-width: 2ch;
+  max-width: 100%;
+  margin: 0;
+  padding: 0 1px;
+  border: 0;
+  border-bottom: 1px solid var(--accent, #70d99a);
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--accent, #70d99a);
+  caret-color: var(--accent, #70d99a);
+  font: inherit;
 }
 
-.cpp-stdin:focus,
-.py-stdin:focus {
-  outline: 2px solid rgb(112 217 154 / 45%);
-  outline-offset: 1px;
-}
-
-/* C++: kotak input disorot saat program membutuhkan input tapi kotaknya kosong */
-.cpp-stdin.needs-input {
-  border-color: #e7c47d;
-  box-shadow: 0 0 0 3px rgb(231 196 125 / 22%);
+.term-input:focus-visible {
+  background: rgb(112 217 154 / 10%);
 }

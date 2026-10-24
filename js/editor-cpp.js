@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
   const textarea = document.querySelector("#cpp-code");
-  const stdinInput = document.querySelector("#cpp-stdin");
   const runButton = document.querySelector("#cpp-run");
   const resetButton = document.querySelector("#cpp-reset");
   const clearButton = document.querySelector("#cpp-clear");
@@ -9,17 +8,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const exampleButtons = document.querySelectorAll("[data-example]");
 
   if (!textarea || !runButton || !resetButton || !clearButton || !output || !status) return;
+  if (!window.CkTerminal) {
+    output.textContent = "Modul terminal gagal dimuat. Muat ulang halaman.";
+    return;
+  }
+
+  // Kotak output berperan sebagai terminal: teks program + kolom ketik untuk cin / getline / scanf.
+  const term = window.CkTerminal.create(output);
 
   // Logika layanan kompilasi (Wandbox + cadangan) ada di cpp-runner.js.
   const MAX_OUTPUT_CHARS = 20000;
   const initialCode = textarea.value;
   let editor = null;
   let abortController = null;
+  let session = 0;
 
   const examples = {
     print: '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Halo dunia!" << endl;\n    return 0;\n}\n',
     variables: '#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string nama = "Kaito";\n    int umur = 17;\n\n    cout << "Nama: " << nama << endl;\n    cout << "Umur: " << umur << endl;\n    return 0;\n}\n',
-    input: '#include <iostream>\n#include <string>\nusing namespace std;\n\n// Isi kotak "Input program" dengan satu nama, lalu jalankan.\nint main() {\n    string nama;\n    cin >> nama;\n    cout << "Halo, " << nama << "!" << endl;\n    return 0;\n}\n',
+    input: '#include <iostream>\n#include <string>\nusing namespace std;\n\n// Ketik namamu langsung di kotak output saat program menunggu.\nint main() {\n    string nama;\n    cin >> nama;\n    cout << "Halo, " << nama << "!" << endl;\n    return 0;\n}\n',
     condition: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int nilai = 82;\n\n    if (nilai >= 75) {\n        cout << "Lulus" << endl;\n    } else {\n        cout << "Belum lulus" << endl;\n    }\n    return 0;\n}\n',
     loop: '#include <iostream>\nusing namespace std;\n\nint main() {\n    for (int i = 1; i <= 3; i++) {\n        cout << "Perulangan ke-" << i << endl;\n    }\n    return 0;\n}\n',
     function: '#include <iostream>\nusing namespace std;\n\nint tambah(int a, int b) {\n    return a + b;\n}\n\nint main() {\n    cout << "3 + 4 = " << tambah(3, 4) << endl;\n    return 0;\n}\n',
@@ -75,21 +82,14 @@ document.addEventListener("DOMContentLoaded", () => {
       : text;
   }
 
-  // Program C++ dikompilasi dan dijalankan di server, jadi seluruh input harus
-  // disiapkan sebelum program berjalan (tidak bisa diketik saat program berjalan).
-  const INPUT_PATTERN = /\b(cin|getline|scanf|fscanf|gets|fgets|getchar)\b/;
-  let inputWarned = false;
+  // Program yang membaca input dijalankan interaktif: setiap jawaban yang diketik di kotak output
+  // membuat program dikompilasi dan dijalankan ulang dari awal bersama semua jawaban sebelumnya
+  // (lihat cpp-runner.js). Program tanpa input dijalankan sekali saja seperti biasa.
+  const INPUT_PATTERN = /\b(cin|getline|scanf|fscanf|gets|fgets|getchar|getc|fgetc)\b/;
 
   function usesInput(code) {
     const bersih = code.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
     return INPUT_PATTERN.test(bersih);
-  }
-
-  if (stdinInput) {
-    stdinInput.addEventListener("input", () => {
-      inputWarned = false;
-      stdinInput.classList.remove("needs-input");
-    });
   }
 
   function finish(message, isError) {
@@ -98,89 +98,116 @@ document.addEventListener("DOMContentLoaded", () => {
     output.classList.toggle("is-error", Boolean(isError));
   }
 
+  // Menyusun teks output dari hasil kompilasi/eksekusi.
+  // Saat program masih menunggu input, teks berhenti tepat di prompt (tanpa dipotong spasinya).
+  function describe(result) {
+    const parts = [];
+    if (result.compilerMessage) parts.push((result.compileFailed ? "Kompilasi gagal:\n" : "Pesan compiler:\n") + result.compilerMessage);
+    if (result.needsInput) {
+      if (result.stdout) parts.push(result.stdout);
+      return clip(parts.join("\n\n"));
+    }
+    if (result.stdout) parts.push(result.stdout.trimEnd());
+    if (result.stderr) parts.push("stderr:\n" + result.stderr.trimEnd());
+    if (result.signal) parts.push("(program dihentikan: " + result.signal + ". Periksa perulangan tanpa akhir atau akses memori yang salah.)");
+    if (!parts.length) parts.push("Program selesai tanpa output.");
+    if (!result.compileFailed && result.exitCode !== 0) parts.push("(program berakhir dengan kode " + result.exitCode + ")");
+    return clip(parts.join("\n\n"));
+  }
+
   async function runCode() {
     if (runButton.disabled) return;
 
     const code = getCode();
     if (!code.trim()) {
-      output.textContent = "Kode masih kosong.";
+      term.show("Kode masih kosong.");
       status.textContent = "Tulis kode dulu.";
       return;
     }
-    if (stdinInput && !stdinInput.value.trim() && usesInput(code) && !inputWarned) {
-      inputWarned = true;
-      stdinInput.classList.add("needs-input");
-      stdinInput.focus();
-      output.classList.remove("is-error");
-      output.textContent = "Program ini membaca input (cin / getline / scanf), tetapi kotak \"Input program\" masih kosong.\n\n" +
-        "Isi kotak Input program di bawah editor dengan semua nilai yang akan dibaca, urut sesuai pemanggilan cin. " +
-        "Pisahkan dengan spasi atau baris baru. Contoh: Kaito 17\n\n" +
-        "Lalu tekan Kompilasi & Jalankan lagi. (Menekan tombolnya sekali lagi tanpa mengisi input akan tetap menjalankan program.)";
-      status.textContent = "Isi Input program dulu.";
-      return;
-    }
-    inputWarned = false;
-    if (stdinInput) stdinInput.classList.remove("needs-input");
     if (!window.CppRunner) {
-      output.textContent = "Modul penjalan C++ gagal dimuat. Muat ulang halaman.";
+      term.show("Modul penjalan C++ gagal dimuat. Muat ulang halaman.");
       finish("Terjadi error.", true);
       return;
     }
 
+    const token = ++session;
+    term.cancel();
+    const interactive = usesInput(code);
+    const answers = [];
+    let eof = false;
+
     output.classList.remove("is-error");
-    output.textContent = "Mengompilasi dan menjalankan…";
+    term.show("Mengompilasi dan menjalankan…");
     status.textContent = "Sedang diproses…";
     runButton.disabled = true;
 
-    abortController = new AbortController();
-
     try {
-      const result = await window.CppRunner.run(code, stdinInput ? stdinInput.value : "", {
-        signal: abortController.signal,
-        onStatus: (text) => { status.textContent = text; }
-      });
+      for (;;) {
+        abortController = new AbortController();
+        const options = {
+          signal: abortController.signal,
+          onStatus: (text) => { if (token === session) status.textContent = text; }
+        };
+        const result = interactive
+          ? await window.CppRunner.runInteractive(code, answers, eof, options)
+          : await window.CppRunner.run(code, "", options);
+        if (token !== session) return;
 
-      const parts = [];
-      if (result.compilerMessage) parts.push((result.compileFailed ? "Kompilasi gagal:\n" : "Pesan compiler:\n") + result.compilerMessage);
-      if (result.stdout) parts.push(result.stdout.trimEnd());
-      if (result.stderr) parts.push("stderr:\n" + result.stderr.trimEnd());
-      if (result.signal) parts.push("(program dihentikan: " + result.signal + ". Periksa perulangan tanpa akhir atau akses memori yang salah.)");
-      if (!parts.length) parts.push("Program selesai tanpa output.");
-      if (!result.compileFailed && result.exitCode !== 0) parts.push("(program berakhir dengan kode " + result.exitCode + ")");
+        if (result.needsInput) {
+          // Program menunggu input: tampilkan kolom ketik di ujung output.
+          status.textContent = "Program menunggu input. Ketik di kotak output lalu tekan Enter.";
+          runButton.disabled = false;
+          const reply = await term.prompt(describe(result));
+          if (reply === null || token !== session) return;
+          runButton.disabled = true;
+          if (reply.eof) eof = true;
+          else answers.push(reply.line);
+          status.textContent = "Menjalankan ulang dengan jawabanmu…";
+          continue;
+        }
 
-      output.textContent = clip(parts.join("\n\n"));
-      if (result.compileFailed) finish("Kompilasi gagal.", true);
-      else if (result.signal || result.exitCode !== 0) finish("Program berakhir dengan error.", true);
-      else finish("Program selesai.", false);
+        term.show(describe(result));
+        if (result.compileFailed) finish("Kompilasi gagal.", true);
+        else if (result.signal || result.exitCode !== 0) finish("Program berakhir dengan error.", true);
+        else finish("Program selesai.", false);
+        return;
+      }
     } catch (error) {
+      if (token !== session) return;
       if (error && error.name === "AbortError") {
-        output.textContent = "Proses dibatalkan.";
+        term.show("Proses dibatalkan.");
         finish("Dibatalkan.", true);
       } else {
         const details = error && error.details ? "\n\nRincian:\n- " + error.details.join("\n- ") : "";
-        output.textContent = "Layanan kompilasi sedang tidak bisa dihubungi. Periksa koneksi internet, tunggu sebentar, lalu coba lagi. Kodemu tidak hilang." + details;
+        term.show("Layanan kompilasi sedang tidak bisa dihubungi. Periksa koneksi internet, tunggu sebentar, lalu coba lagi. Kodemu tidak hilang." + details);
         finish("Gagal terhubung.", true);
       }
     } finally {
       abortController = null;
+      if (token === session) runButton.disabled = false;
     }
   }
 
   runButton.addEventListener("click", runCode);
 
   resetButton.addEventListener("click", () => {
+    session++;
     if (abortController) abortController.abort();
+    term.cancel();
     runButton.disabled = false;
     setCode(initialCode);
-    if (stdinInput) stdinInput.value = "";
     output.classList.remove("is-error");
-    output.textContent = "Output program akan muncul di sini.";
+    term.show("Output program akan muncul di sini.");
     status.textContent = "Kode dikembalikan ke contoh awal.";
   });
 
   clearButton.addEventListener("click", () => {
+    session++;
+    if (abortController) abortController.abort();
+    term.cancel();
+    runButton.disabled = false;
     output.classList.remove("is-error");
-    output.textContent = "Output dibersihkan.";
+    term.show("Output dibersihkan.");
     status.textContent = "Output dibersihkan.";
   });
 
@@ -189,7 +216,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const example = examples[button.dataset.example];
       if (example) {
         setCode(example);
-        if (button.dataset.example === "input" && stdinInput && !stdinInput.value) stdinInput.value = "Kaito";
         status.textContent = "Contoh " + button.querySelector("strong").textContent + " dimuat.";
       }
     });

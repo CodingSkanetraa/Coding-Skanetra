@@ -8,14 +8,15 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/theme/material-darker.min.css">
-  <link rel="stylesheet" href="../css/editor-python.css?v=3">
+  <link rel="stylesheet" href="../css/editor-python.css?v=4">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/codemirror.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/mode/clike/clike.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/edit/closebrackets.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/edit/matchbrackets.min.js" defer></script>
   <script src="../js/main.js" defer></script>
-  <script src="../js/cpp-runner.js?v=3" defer></script>
-  <script src="../js/editor-cpp.js?v=3" defer></script>
+  <script src="../js/terminal.js?v=4" defer></script>
+  <script src="../js/cpp-runner.js?v=4" defer></script>
+  <script src="../js/editor-cpp.js?v=4" defer></script>
 </head>
 <body>
   <header class="navbar">
@@ -58,8 +59,6 @@ int main() {
     return 0;
 }
 </textarea>
-          <label class="cpp-stdin-label" for="cpp-stdin">Input program (isi sebelum menjalankan, untuk <code>cin</code>, <code>getline</code>, <code>scanf</code>)</label>
-          <textarea id="cpp-stdin" class="cpp-stdin" rows="3" spellcheck="false" placeholder="Tulis semua masukan di sini, urut sesuai cin. Pisahkan dengan spasi atau baris baru. Contoh: Kaito 17"></textarea>
           <div class="py-actions">
             <button id="cpp-run" class="btn btn-primary" type="button"><span aria-hidden="true">▶</span> Kompilasi &amp; Jalankan</button>
             <button id="cpp-reset" class="py-btn-secondary" type="button">Reset</button>
@@ -74,7 +73,7 @@ int main() {
             <span class="py-runtime-status">Ctrl + Enter untuk menjalankan</span>
           </div>
           <pre id="cpp-output" class="py-output" aria-live="polite">Output program akan muncul di sini.</pre>
-          <div class="py-output-note">Kompilasi memakai layanan gratis Wandbox, jadi butuh koneksi internet dan bisa memakan beberapa detik. Jangan kirim data pribadi lewat editor ini.</div>
+          <div class="py-output-note">Kompilasi memakai layanan gratis (Wandbox, cadangan Compiler Explorer), jadi butuh koneksi internet dan bisa memakan beberapa detik. Kalau programmu memakai <code>cin</code>, <code>getline</code>, atau <code>scanf</code>, ketik jawabannya langsung di kotak output ini lalu tekan Enter (Ctrl + D untuk mengakhiri input). Setiap jawaban membuat program dikompilasi dan dijalankan ulang dari awal, jadi tiap Enter butuh beberapa detik. Jangan kirim data pribadi lewat editor ini.</div>
         </div>
       </section>
 
@@ -95,7 +94,7 @@ int main() {
           </button>
           <button class="py-example-card" type="button" data-example="input">
             <span class="py-example-number">03</span><strong>Input</strong>
-            <code>cin &gt;&gt; nama;</code><span>Membaca masukan (isi kotak Input program).</span>
+            <code>cin &gt;&gt; nama;</code><span>Membaca masukan (ketik di kotak output).</span>
           </button>
           <button class="py-example-card" type="button" data-example="condition">
             <span class="py-example-number">04</span><strong>Percabangan</strong>
