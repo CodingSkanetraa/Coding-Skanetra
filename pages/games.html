@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="Tentang CodingSkanetra, pembuat website, tim pengembang, pemelihara, dan kontak."
+  >
+
+  <meta name="theme-color" content="#0b100e">
+  <title>Tentang | CodingSkanetra</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/games.css">
+</head>
+
+<body>
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda"
+       aria-label="CodingSkanetra, beranda">
+      <span class="brand-icon">&lt;/&gt;</span>
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+
+    <button
+      class="menu-toggle"
+      id="menu-toggle"
+      type="button"
+      aria-label="Buka navigasi"
+      aria-expanded="false"
+      aria-controls="nav-links"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda">Beranda</a>
+      <a class="nav-link" href="materi.html">Materi</a>
+      <a class="nav-link" href="playground.html">Playground</a>
+      <a class="nav-link" href="peringkat.html">Peringkat</a>
+      <a class="nav-link active" href="games.html">Games</a>
+      <a class="nav-link" href="struktur-organisasi.html">Struktur Organisasi</a>
+      <a class="nav-link" href="about.html">Tentang</a>
+      <a class="nav-link" href="setting.html">Setting</a>
+    </nav>
+  </header>
+
+<main class="games-page">
+
+  <div class="games-container">
+    <header class="games-heading">
+      <span class="games-eyebrow">CODINGSKANETRA ARCADE</span>
+      <h1>Code Rush: Robot Escape</h1>
+      <p>
+        Pecahkan soal coding, jaga nyawa, dan hindari robot penjaga!
+      </p>
+    </header>
+    <section class="game-settings" id="gameSettings">
+    <h2>Pengaturan permainan</h2>
+
+    <label for="gameLanguage">Bahasa pemrograman</label>
+    <select id="gameLanguage">
+        <option value="python">Python</option>
+        <option value="cpp">C++</option>
+        <option value="website">Website (HTML, CSS, JavaScript)</option>
+    </select>
+
+    <label for="gameDifficulty">Level</label>
+    <select id="gameDifficulty">
+        <option value="1">Level 1 — Dasar</option>
+        <option value="2">Level 2 — Menengah</option>
+        <option value="3">Level 3 — Tantangan</option>
+    </select>
+    </section>
+    <section class="game-card" aria-label="Permainan Code Rush">
+      <div class="game-toolbar">
+        <div class="game-stat">
+          <span class="game-stat-label">Waktu</span>
+          <strong id="gameTimer">—</strong>
+        </div>
+        <div class="game-stat">
+          <span class="game-stat-label">Nyawa</span>
+          <strong id="gameLives">♥ ♥ ♥</strong>
+        </div>
+        <div class="game-stat">
+          <span class="game-stat-label">Skor</span>
+          <strong id="gameScore">0</strong>
+        </div>
+      </div>
+
+      <div class="game-arena" id="gameArena">
+        <div class="arena-status">
+          <span>RUANG SERVER</span>
+          <span>LEVEL <span id="gameLevel">1</span></span>
+        </div>
+
+        <div class="arena-characters">
+          <div class="game-character">
+            <span class="character-sprite" aria-hidden="true">🧑‍💻</span>
+            <span class="character-name">Pemain</span>
+          </div>
+
+          <div class="arena-distance">
+            <span>Jarak robot</span>
+            <div class="distance-track">
+              <div class="distance-fill" id="robotDistance"></div>
+            </div>
+          </div>
+
+          <div class="game-character robot-character" id="robotCharacter">
+            <span class="character-sprite" aria-hidden="true">🤖</span>
+            <span class="character-name">Penjaga</span>
+          </div>
+        </div>
+
+        <div class="game-progress">
+          <div class="game-progress-fill" id="gameProgressFill"></div>
+        </div>
+
+        <div class="game-overlay" id="gameOverlay">
+          <h2 id="overlayTitle">Code Rush: Robot Escape</h2>
+          <p id="overlayText">
+            Jawab soal coding sebelum waktu habis!
+          </p>
+          <button
+            class="game-button game-button-primary"
+            id="overlayButton"
+            type="button"
+          >
+            Mulai bermain
+          </button>
+        </div>
+      </div>
+
+      <div class="game-content">
+        <div class="game-question-meta" id="questionNumber">SOAL 1</div>
+        <h2 class="game-question" id="gameQuestion">
+          Tekan Mulai bermain untuk memulai.
+        </h2>
+
+        <div class="game-answers" id="gameAnswers"></div>
+        <p class="game-feedback" id="gameFeedback" aria-live="polite">
+          Siap menyelamatkan diri?
+        </p>
+
+        <div class="game-actions">
+          <button
+            class="game-button game-button-primary"
+            id="gameStart"
+            type="button"
+          >
+            Mulai bermain
+          </button>
+          <button
+            class="game-button"
+            id="gameRestart"
+            type="button"
+            disabled
+          >
+            Ulangi permainan
+          </button>
+          
+            <button
+            type="button"
+            id="gameAudioToggle"
+            class="game-audio-toggle"
+            aria-pressed="false"
+            aria-label="Matikan semua audio"
+            >
+            🔊 Audio aktif
+            </button>
+
+        </div>
+
+        <p class="game-help">
+          Rekor tertinggi: <strong id="gameHighScore">0</strong> poin.
+          Jawaban benar memberi 100 poin; jawaban salah atau waktu habis
+          mengurangi nyawa dan mendekatkan robot.
+        </p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="../js/games.js" defer></script>
+  <script src="../js/theme.js"></script>
+</body>
+</html>

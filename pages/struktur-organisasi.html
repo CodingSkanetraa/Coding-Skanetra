@@ -1,0 +1,392 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="Struktur organisasi CodingSkanetra, pengurus inti, bendahara, dokumentasi, dan anggota."
+  >
+
+  <title>Struktur Organisasi | CodingSkanetra</title>
+
+  <link rel="stylesheet" href="../css/struktur-organisasi.css">
+  <link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+      <header class="navbar">
+        <a class="brand" href="../index.html#beranda" aria-label="Coding Skanetra, beranda">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>Coding<span class="brand-accent">Skanetra</span></span>
+        </a>
+        <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+        </button>
+        <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+        <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+        <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+        <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+        <a class="nav-link" href="peringkat.html" data-nav="peringkat">Peringkat</a>
+        <a class="nav-link" href="games.html">Games</a>
+        <a class="nav-link active" href="struktur-organisasi.html" data-nav="struktur organisasi">Struktur Organisasi</a>
+        <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
+        <a class="nav-link" href="setting.html" data-nav="setting">Setting</a>
+        </nav>
+    </header>
+    
+<!-- TAB ANGKATAN -->
+<div class="generation-tabs" role="tablist" aria-label="Pilih angkatan CodingSkanetra">
+  <button
+    type="button"
+    class="generation-tab"
+    id="tab-2025"
+    role="tab"
+    aria-selected="false"
+    aria-controls="panel-2025"
+    tabindex="-1"
+    data-generation="2025"
+  >
+    Angkatan 2025
+  </button>
+
+  <button
+    type="button"
+    class="generation-tab active"
+    id="tab-2026"
+    role="tab"
+    aria-selected="true"
+    aria-controls="panel-2026"
+    tabindex="0"
+    data-generation="2026"
+  >
+    Angkatan 2026
+  </button>
+
+  <button
+    type="button"
+    class="generation-tab"
+    id="tab-2027"
+    role="tab"
+    aria-selected="false"
+    aria-controls="panel-2027"
+    tabindex="-1"
+    data-generation="2027"
+  >
+    Angkatan 2027
+    <span class="coming-soon-badge">Soon</span>
+  </button>
+</div>
+
+  <main class="organization-page">
+    <header class="page-heading">
+      <span class="heading-label">CODINGSKANETRA</span>
+      <h1>Struktur Organisasi</h1>
+      <p>
+        Mengenal susunan pengurus dan anggota CodingSkanetra
+        dalam membangun komunitas teknologi yang kreatif.
+      </p>
+    </header>
+
+
+        <section
+        class="organization-chart generation-panel"
+        id="panel-2026"
+        role="tabpanel"
+        aria-labelledby="tab-2026"
+        aria-label="Bagan struktur organisasi CodingSkanetra angkatan 2026"
+        >
+
+    
+        <!-- PEMBINA -->
+        <section class="advisor-section" aria-label="Pembina CodingSkanetra">
+        <article class="person-card advisor-card">
+            <div class="photo-frame advisor-photo">
+            <img
+                src="../assets/images/eli.jpeg"
+                alt="Foto Ibu Pembina CodingSkanetra"
+                class="person-photo"
+            >
+            </div>
+
+            <span class="position-label">PEMBINA</span>
+            <h2>Eli Herlina, S.Kom., Gr</h2>
+            <p class="advisor-role">Pembina CodingSkanetra</p>
+        </article>
+        </section>
+
+        <div class="advisor-connector" aria-hidden="true">
+        <span></span>
+        <div>↓</div>
+        </div>
+
+      <!-- PENGURUS INTI -->
+      <div class="core-grid">
+
+        <article class="person-card vice-card">
+          <div class="photo-frame core-photo">
+            <img
+              src="../assets/images/kaitosora.jpg"
+              alt="Foto Wakil Ketua"
+              class="person-photo"
+            >
+          </div>
+
+          <span class="position-label">Wakil Ketua</span>
+          <h2>Rangga Aditia</h2>
+          <p class="person-role">Back End</p>
+          <div class="card-accent"></div>
+        </article>
+
+        <article class="person-card chair-card">
+          <div class="photo-frame core-photo">
+            <img
+              src="../assets/images/alin.jpeg"
+              alt="Foto Ketua"
+              class="person-photo"
+            >
+          </div>
+
+          <span class="position-label">Ketua</span>
+          <h2>Alin Sarifathul Zanah</h2>
+          <p class="person-role">Front End</p>
+          <div class="card-accent"></div>
+        </article>
+
+      </div>
+
+      <!-- PENGHUBUNG ORGANISASI -->
+      <div class="organization-connectors" aria-hidden="true">
+        <span class="connector-stem"></span>
+        <span class="connector-crossbar"></span>
+        <div class="connector-branches">
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <!-- DIVISI PENDUKUNG -->
+      <div class="division-grid">
+
+        <article class="person-card division-card">
+          <div class="photo-frame division-photo">
+            <img
+              src="../assets/images/provilpolos.jpg"
+              alt="Foto Bendahara"
+              class="person-photo"
+            >
+          </div>
+
+          <div class="division-info">
+            <span class="position-label">DIVISI</span>
+            <h2>Bendahara</h2>
+            <p>Dikelola oleh tim bendahara</p>
+          </div>
+        </article>
+
+        <article class="person-card division-card">
+          <div class="photo-frame division-photo">
+            <img
+              src="../assets/images/provilpolos.jpg"
+              alt="Foto Dokumentasi"
+              class="person-photo"
+            >
+          </div>
+
+          <div class="division-info">
+            <span class="position-label">DIVISI</span>
+            <h2>Dokumentasi</h2>
+            <p>Dikelola oleh eskul MultiMedia</p>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- PENGHUBUNG MENUJU ANGGOTA -->
+      <div class="members-connector" aria-hidden="true">
+        <span></span>
+        <div class="connector-arrow">↓</div>
+      </div>
+
+      <!-- INFORMASI ANGGOTA -->
+      <section class="members-card">
+        <div class="members-icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 48 48"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="18" cy="15" r="7" stroke="currentColor" stroke-width="2.5"/>
+            <path
+              d="M5 37V33C5 26.9 10 23 18 23C26 23 31 26.9 31 33V37"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            />
+            <path
+              d="M31 9C36 10 39 13 39 18C39 22 36 25 32 26M35 27C40 29 43 32 43 37"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+
+        <div class="members-info">
+          <span class="position-label">KELUARGA BESAR</span>
+          <h2>Anggota CodingSkanetra</h2>
+          <p>Belajar, berkarya, dan berkembang bersama.</p>
+        </div>
+
+        <div class="members-count">
+          <strong id="memberCount">131</strong>
+          <span>Murid</span>
+        </div>
+      </section>
+
+    </section>
+    
+    <!-- PANEL ANGKATAN 2025 -->
+    <section
+    class="generation-panel organization-chart"
+    id="panel-2025"
+    role="tabpanel"
+    aria-labelledby="tab-2025"
+    hidden
+    >
+    <!-- PEMBINA -->
+        <section class="advisor-section" aria-label="Pembina CodingSkanetra">
+        <article class="person-card advisor-card">
+            <div class="photo-frame advisor-photo">
+            <img
+                src="../assets/images/eli.jpeg"
+                alt="Foto Ibu Pembina CodingSkanetra"
+                class="person-photo"
+            >
+            </div>
+
+            <span class="position-label">PEMBINA</span>
+            <h2>Eli Herlina, S.Kom., Gr</h2>
+            <p class="advisor-role">Pembina CodingSkanetra</p>
+        </article>
+        </section>
+
+        <div class="advisor-connector" aria-hidden="true">
+        <span></span>
+        <div>↓</div>
+        </div>
+
+      <!-- PENGURUS INTI -->
+      <div class="core-grid">
+
+        <article class="person-card vice-card">
+          <div class="photo-frame core-photo">
+            <img
+              src="../assets/images/provilpolos.jpg"
+              alt="Foto Wakil Ketua"
+              class="person-photo"
+            >
+          </div>
+
+          <span class="position-label">Wakil Ketua</span>
+          <h2>Fauzan</h2>
+          <p class="person-role">Angkatan 2025</p>
+          <div class="card-accent"></div>
+        </article>
+
+        <article class="person-card chair-card">
+          <div class="photo-frame core-photo">
+            <img
+              src="../assets/images/provilpolos.jpg"
+              alt="Foto Ketua"
+              class="person-photo"
+            >
+          </div>
+
+          <span class="position-label">Ketua</span>
+          <h2>Fadril</h2>
+          <p class="person-role">Angkatan 2025</p>
+          <div class="card-accent"></div>
+        </article>
+
+      </div>
+
+      
+
+      <!-- PENGHUBUNG MENUJU ANGGOTA -->
+      <div class="members-connector" aria-hidden="true">
+        <span></span>
+        <div class="connector-arrow">↓</div>
+      </div>
+
+      <!-- INFORMASI ANGGOTA -->
+      <section class="members-card">
+        <div class="members-icon" aria-hidden="true">
+          <svg
+            viewBox="0 0 48 48"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="18" cy="15" r="7" stroke="currentColor" stroke-width="2.5"/>
+            <path
+              d="M5 37V33C5 26.9 10 23 18 23C26 23 31 26.9 31 33V37"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            />
+            <path
+              d="M31 9C36 10 39 13 39 18C39 22 36 25 32 26M35 27C40 29 43 32 43 37"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+
+        <div class="members-info">
+          <span class="position-label">KELUARGA BESAR</span>
+          <h2>Anggota CodingSkanetra</h2>
+          <p>Belajar, berkarya, dan berkembang bersama.</p>
+        </div>
+
+        <div class="members-count">
+          <strong id="memberCount">—</strong>
+          <span>Murid</span>
+        </div>
+      </section>
+
+
+    </section>
+
+    <!-- PANEL ANGKATAN 2027 -->
+    <section
+    class="generation-panel generation-placeholder"
+    id="panel-2027"
+    role="tabpanel"
+    aria-labelledby="tab-2027"
+    hidden
+    >
+    <div class="placeholder-icon" aria-hidden="true">
+        <span>2027</span>
+    </div>
+    <span class="coming-soon-badge">COMING SOON</span>
+    <h2>Angkatan 2027</h2>
+    <p>
+        Cerita baru CodingSkanetra segera dimulai.
+        Struktur organisasi angkatan 2027 akan hadir di sini.
+    </p>
+    </section>
+
+    <footer class="page-footer">
+      <span class="footer-dot"></span>
+      <p>Bersama membangun, bersama berkembang.</p>
+    </footer>
+  </main>
+  
+<script src="../js/struktur-organisasi.js"></script>
+<script src="../js/theme.js"></script>
+</body>
+</html>

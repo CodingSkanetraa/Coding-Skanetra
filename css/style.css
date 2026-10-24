@@ -2,6 +2,7 @@
 :root {
   color-scheme: dark;
 
+  /* Warna utama interface */
   --background: #0b100e;
   --surface: #111915;
   --surface-hover: #16211a;
@@ -11,13 +12,35 @@
   --accent-dark: #2f9b62;
   --border: #25342b;
 
+  /* Alias kompatibilitas halaman lama */
+  --primary: var(--accent);
+  --text-muted: var(--muted);
+  --border-color: var(--border);
+
+  /* Warna komponen */
+  --navbar-background: rgb(11 16 14 / 92%);
+  --navbar-border: rgb(37 52 43 / 75%);
+  --card-background: linear-gradient(145deg, #121a15, #0e1411);
+  --card-hover-background: linear-gradient(145deg, #16231a, #101713);
+  --code-background: #0e1511;
+  --code-panel-background: #111a15;
+  --button-text: #07120b;
+
+  /* Efek dekoratif */
+  --accent-soft: rgb(112 217 154 / 8%);
+  --accent-glow: rgb(112 217 154 / 10%);
+  --shadow: rgb(0 0 0 / 28%);
+
+  /* Layout */
   --container: 1120px;
   --radius: 16px;
 }
 
+
 * {
   box-sizing: border-box;
-  margin: 1px;
+  margin: 0;
+  padding: 0;
 }
 
 html {
@@ -72,8 +95,8 @@ button {
 
   padding: 16px max(24px, calc((100% - var(--container)) / 2));
 
-  background: rgb(11 16 14 / 92%);
-  border-bottom: 1px solid rgb(37 52 43 / 75%);
+  background: var(--navbar-background);
+  border-bottom: 1px solid var(--navbar-border);
   backdrop-filter: blur(16px);
 }
 
@@ -246,7 +269,7 @@ button {
 }
 
 .button-primary {
-  color: #07120b;
+  color: var(--button-text);
   background: var(--accent);
 }
 
@@ -482,7 +505,7 @@ button {
   border-top: 1px solid var(--border);
 }
 
-.section-heading {
+.section-headings {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -540,7 +563,7 @@ button {
 
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: linear-gradient(145deg, #121a15, #0e1411);
+  background: var(--card-background);
 
   transition:
     transform 200ms ease,
@@ -551,7 +574,7 @@ button {
 .feature-card:hover {
   transform: translateY(-4px);
   border-color: #3a5943;
-  background: linear-gradient(145deg, #16231a, #101713);
+  background: var(--card-hover-background);
 }
 
 .feature-icon {
@@ -628,7 +651,7 @@ button {
 
 /* ABOUT */
 
-.about-section {
+.about-sections {
   display: grid;
   grid-template-columns: 0.75fr 1.25fr;
   align-items: center;
@@ -2233,4 +2256,241 @@ body:has(.materi-grid) .materi-grid {
 
 .playground-workspace.preview-fullscreen .console-output {
   max-height: 24vh;
+}
+
+/* ===== GLOBAL THEME FIX: LIGHT & DARK ===== */
+
+/* Warna komponen yang sebelumnya hardcoded */
+:root {
+  --text-soft: #bdcfc3;
+  --text-subtle: #809187;
+  --text-link: #c7d7cc;
+
+  --code-window-border: #2a3b30;
+  --code-window-dots: #435247;
+  --code-line-number: #536359;
+  --code-line-text: #d6e2d9;
+  --code-output-text: #a9dcb7;
+
+  --panel-heading-background: #0b100e;
+  --editor-background: #0b100e;
+  --editor-text: #d5e9dc;
+  --editor-gutter-background: #080d0b;
+  --console-background: #0b100e;
+  --console-text: #d7e6dc;
+
+  --hover-border: #405848;
+}
+
+/* Semua mode terang */
+:root[data-mode="light"] {
+  color-scheme: light;
+
+  --text-soft: #425b4b;
+  --text-subtle: #64766a;
+  --text-link: #365c43;
+
+  --code-window-border: var(--border);
+  --code-window-dots: #9aa99e;
+  --code-line-number: #84968a;
+  --code-line-text: var(--text);
+  --code-output-text: #286d42;
+
+  --panel-heading-background: var(--surface-hover);
+  --editor-background: #f8faf9;
+  --editor-text: #263d2e;
+  --editor-gutter-background: #eaf0ec;
+  --console-background: var(--surface);
+  --console-text: var(--text);
+
+  --hover-border: var(--accent-dark);
+}
+
+/* Teks sekunder */
+.status-label {
+  color: var(--text-soft);
+}
+
+.hero-note p,
+.footer p {
+  color: var(--text-subtle);
+}
+
+.section-heading h2 span,
+.about-content h2 span,
+.cta-panel h2 span {
+  color: var(--muted);
+}
+
+.text-link {
+  color: var(--text-link);
+}
+
+/* Tombol dan kartu */
+.button-primary:hover {
+  filter: brightness(1.08);
+}
+
+.button-secondary:hover {
+  border-color: var(--hover-border);
+}
+
+.feature-card:hover {
+  border-color: var(--hover-border);
+}
+
+.card-index {
+  color: var(--muted);
+}
+
+/* Jendela kode di halaman utama */
+.code-window {
+  border-color: var(--code-window-border);
+  background: var(--code-background);
+  box-shadow: 0 30px 80px var(--shadow);
+}
+
+.window-header,
+.window-footer {
+  background: var(--code-panel-background);
+}
+
+.window-header,
+.window-footer,
+.code-output {
+  border-color: var(--border);
+}
+
+.window-dots span {
+  background: var(--code-window-dots);
+}
+
+.window-filename,
+.window-footer {
+  color: var(--muted);
+}
+
+.code-line code {
+  color: var(--code-line-text);
+}
+
+.line-number {
+  color: var(--code-line-number);
+}
+
+.code-output {
+  color: var(--code-output-text);
+}
+
+/* Bagian tentang proyek */
+.about-mark {
+  background:
+    radial-gradient(
+      ellipse at center,
+      var(--accent-glow),
+      transparent 70%
+    ),
+    var(--surface);
+}
+
+/* Panel call to action */
+.cta-panel {
+  border-color: var(--border);
+  background: linear-gradient(
+    120deg,
+    var(--surface-hover),
+    var(--surface)
+  );
+}
+
+/* Navbar mobile */
+@media (max-width: 600px) {
+  .nav-links {
+    background: var(--background);
+  }
+
+  .nav-link {
+    border-bottom-color: var(--border);
+  }
+}
+
+/* Materi dan halaman belajar */
+.lesson-section pre {
+  color: var(--text);
+  background: var(--code-background);
+}
+
+.lesson-table th {
+  background: var(--surface-hover);
+}
+
+/* Playground: panel dan tab */
+.panel-heading,
+.editor-tabs {
+  background: var(--panel-heading-background);
+}
+
+.code-editor {
+  background: var(--editor-background);
+  color: var(--editor-text);
+}
+
+.console-panel {
+  background: var(--console-background);
+}
+
+.console-output {
+  color: var(--console-text);
+}
+
+/* CodeMirror: area editor dan nomor baris */
+.editor-tab-panel .CodeMirror {
+  background: var(--editor-background);
+  color: var(--editor-text);
+}
+
+.editor-tab-panel .CodeMirror-gutters,
+.editor-tab-panel .CodeMirror-gutter {
+  background: var(--editor-gutter-background);
+}
+
+.editor-tab-panel .CodeMirror-linenumber {
+  color: var(--muted);
+}
+
+/* Pencarian editor: warna tetap terbaca di kedua mode */
+.editor-tab-panel .CodeMirror-dialog,
+.editor-search {
+  color: var(--text);
+  background: var(--surface);
+  border-color: var(--border);
+  box-shadow: 0 8px 24px var(--shadow);
+}
+
+.editor-tab-panel .CodeMirror-dialog input,
+.editor-search-input {
+  color: var(--text);
+  background: var(--background);
+  border-color: var(--border);
+}
+
+.editor-tab-panel .CodeMirror-dialog button,
+.editor-search button {
+  color: var(--text);
+  background: var(--surface-hover);
+  border-color: var(--border);
+}
+
+.editor-tab-panel .CodeMirror-dialog button:hover,
+.editor-search button:hover {
+  background: var(--surface-hover);
+}
+
+/* Sorotan pencarian tetap kontras */
+.editor-search-match {
+  background: rgb(240 190 40 / 30%);
+}
+
+.editor-search-match-active {
+  background: rgb(240 140 30 / 55%);
 }

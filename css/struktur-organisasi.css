@@ -1,0 +1,851 @@
+
+/* ========================================
+   CODINGSKANETRA - STRUKTUR ORGANISASI
+======================================== */
+
+:root {
+  --org-bg: #0b100e;
+  --org-surface: #111915;
+  --org-surface-hover: #17221b;
+  --org-text: #edf4ef;
+  --org-muted: #99a89e;
+  --org-accent: #70d99a;
+  --org-accent-light: #d9f8e4;
+  --org-border: #25342b;
+  --org-radius: 20px;
+  --org-content-width: 960px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgb(56 110 75 / 12%),
+      transparent 50%
+    ),
+    var(--org-bg);
+  color: var(--org-text);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  line-height: 1.5;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.organization-page {
+  width: min(
+    var(--org-content-width),
+    calc(100% - 40px)
+  );
+  margin-inline: auto;
+  padding: 64px 0 32px;
+}
+
+/* ========================================
+   JUDUL HALAMAN
+======================================== */
+
+.page-heading {
+  max-width: 650px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.heading-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 12px;
+  color: var(--org-accent);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.heading-label::before,
+.heading-label::after {
+  width: 18px;
+  height: 1px;
+  background: var(--org-accent);
+  content: "";
+}
+
+.page-heading h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+}
+
+.page-heading p {
+  max-width: 520px;
+  margin: 16px auto 0;
+  color: var(--org-muted);
+  font-size: 0.98rem;
+}
+
+/* ========================================
+   BAGAN ORGANISASI
+======================================== */
+
+.organization-chart {
+  width: 100%;
+  max-width: 740px;
+  margin-inline: auto;
+}
+
+/* ========================================
+   KARTU PENGURUS INTI
+======================================== */
+
+.core-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 20px;
+}
+
+.person-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--org-border);
+  border-radius: var(--org-radius);
+}
+
+.core-grid .person-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 18px 22px;
+  text-align: center;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.core-grid .person-card:hover {
+  transform: translateY(-4px);
+}
+
+.vice-card {
+  background:
+    linear-gradient(
+      145deg,
+      rgb(73 132 96 / 16%),
+      transparent 65%
+    ),
+    #14231a;
+  border-color: #376849;
+}
+
+.vice-card:hover {
+  border-color: #70d99a;
+  box-shadow: 0 12px 32px rgb(0 0 0 / 18%);
+}
+
+.chair-card {
+  background:
+    linear-gradient(
+      145deg,
+      #e8fff0,
+      var(--org-accent-light)
+    );
+  border-color: #b2e9c4;
+  color: #174b30;
+  box-shadow: 0 12px 35px rgb(61 160 99 / 10%);
+}
+
+.chair-card:hover {
+  box-shadow: 0 16px 38px rgb(61 160 99 / 18%);
+}
+
+.photo-frame {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #25352b;
+  border: 1px solid rgb(255 255 255 / 12%);
+}
+
+.core-photo {
+  width: 148px;
+  max-width: 100%;
+  aspect-ratio: 4 / 5;
+  margin-bottom: 20px;
+  border-radius: 16px;
+}
+
+.person-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.position-label {
+  display: inline-block;
+  margin-bottom: 7px;
+  color: var(--org-accent);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.chair-card .position-label {
+  color: #277449;
+}
+
+.core-grid h2 {
+  margin: 0;
+  font-size: clamp(1.15rem, 2.6vw, 1.55rem);
+  font-weight: 800;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.person-role {
+  margin: 8px 0 0;
+  color: #a8e5bd;
+  font-size: 0.92rem;
+  font-weight: 650;
+}
+
+.chair-card .person-role {
+  color: #277449;
+}
+
+.card-accent {
+  width: 34px;
+  height: 4px;
+  margin-top: 18px;
+  border-radius: 99px;
+  background: var(--org-accent);
+}
+
+.chair-card .card-accent {
+  background: #389660;
+}
+
+/* ========================================
+   GARIS PENGHUBUNG
+======================================== */
+
+.organization-connectors {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 62px;
+}
+
+.connector-stem {
+  width: 2px;
+  height: 25px;
+  background: #42694f;
+}
+
+.connector-crossbar {
+  width: calc(50% + 10px);
+  height: 2px;
+  background: #42694f;
+}
+
+.connector-branches {
+  display: grid;
+  width: calc(50% + 10px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.connector-branches span {
+  justify-self: center;
+  width: 2px;
+  height: 35px;
+  background: #42694f;
+}
+
+/* ========================================
+   DIVISI PENDUKUNG
+======================================== */
+
+.division-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.division-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: var(--org-surface);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.division-card:hover {
+  background: var(--org-surface-hover);
+  border-color: #41664b;
+}
+
+.division-photo {
+  width: 76px;
+  aspect-ratio: 1;
+  border-radius: 14px;
+}
+
+.division-info {
+  min-width: 0;
+}
+
+.division-info .position-label {
+  margin-bottom: 3px;
+  font-size: 0.62rem;
+}
+
+.division-info h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 750;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.division-info p {
+  margin: 5px 0 0;
+  color: var(--org-muted);
+  font-size: 0.76rem;
+  line-height: 1.4;
+}
+
+/* ========================================
+   MENUJU ANGGOTA
+======================================== */
+
+.members-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto 10px;
+}
+
+.members-connector > span {
+  width: 2px;
+  height: 24px;
+  background: #42694f;
+}
+
+.connector-arrow {
+  color: var(--org-accent);
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+/* ========================================
+   KARTU INFORMASI ANGGOTA
+======================================== */
+
+.members-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px;
+  border: 1px solid #2d4935;
+  border-radius: var(--org-radius);
+  background:
+    linear-gradient(
+      110deg,
+      rgb(55 111 73 / 15%),
+      transparent 70%
+    ),
+    var(--org-surface);
+}
+
+.members-icon {
+  display: grid;
+  flex: 0 0 54px;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border: 1px solid #355c40;
+  border-radius: 16px;
+  background: #193324;
+  color: var(--org-accent);
+}
+
+.members-icon svg {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+
+.members-info {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.members-info .position-label {
+  margin-bottom: 4px;
+}
+
+.members-info h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 750;
+}
+
+.members-info p {
+  margin: 5px 0 0;
+  color: var(--org-muted);
+  font-size: 0.82rem;
+}
+
+.members-count {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  padding-left: 16px;
+  border-left: 1px solid var(--org-border);
+}
+
+.members-count strong {
+  color: var(--org-accent);
+  font-size: 1.8rem;
+  line-height: 1.15;
+}
+
+.members-count span {
+  color: var(--org-muted);
+  font-size: 0.75rem;
+}
+
+/* ========================================
+   FOOTER
+======================================== */
+
+.page-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  margin-top: 42px;
+  color: var(--org-muted);
+  text-align: center;
+}
+
+.page-footer p {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.footer-dot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--org-accent);
+}
+
+/* ========================================
+   RESPONSIVE: TABLET
+======================================== */
+
+@media (max-width: 640px) {
+  .organization-page {
+    width: calc(100% - 28px);
+    padding-top: 42px;
+  }
+
+  .page-heading {
+    margin-bottom: 32px;
+  }
+
+  .core-grid {
+    gap: 12px;
+  }
+
+  .core-grid .person-card {
+    padding: 18px 12px;
+    border-radius: 17px;
+  }
+
+  .core-photo {
+    width: min(100%, 128px);
+    margin-bottom: 15px;
+    border-radius: 13px;
+  }
+
+  .organization-connectors {
+    height: 52px;
+  }
+
+  .connector-stem {
+    height: 20px;
+  }
+
+  .connector-branches span {
+    height: 30px;
+  }
+
+  .division-grid {
+    gap: 10px;
+  }
+
+  .division-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 13px;
+    border-radius: 15px;
+  }
+
+  .division-photo {
+    width: 62px;
+    border-radius: 12px;
+  }
+
+  .division-info h2 {
+    font-size: 0.94rem;
+  }
+
+  .division-info p {
+    font-size: 0.73rem;
+  }
+
+  .members-card {
+    gap: 12px;
+    padding: 16px;
+    border-radius: 17px;
+  }
+
+  .members-icon {
+    flex-basis: 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+  }
+
+  .members-icon svg {
+    width: 27px;
+    height: 27px;
+  }
+
+  .members-info h2 {
+    font-size: 0.92rem;
+  }
+
+  .members-info p {
+    font-size: 0.74rem;
+  }
+
+  .members-count {
+    padding-left: 11px;
+  }
+
+  .members-count strong {
+    font-size: 1.45rem;
+  }
+}
+
+/* ========================================
+   RESPONSIVE: HP SEMPIT
+======================================== */
+
+@media (max-width: 380px) {
+  .organization-page {
+    width: calc(100% - 20px);
+    padding-top: 30px;
+  }
+
+  .core-grid {
+    gap: 8px;
+  }
+
+  .core-grid .person-card {
+    padding: 14px 8px;
+  }
+
+  .core-photo {
+    width: 100%;
+  }
+
+  .core-grid h2 {
+    font-size: 1rem;
+  }
+
+  .position-label {
+    font-size: 0.59rem;
+  }
+
+  .division-grid {
+    gap: 8px;
+  }
+
+  .division-card {
+    padding: 10px;
+  }
+
+  .division-photo {
+    width: 52px;
+  }
+
+  .members-card {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 13px;
+  }
+
+  .members-info {
+    flex-basis: calc(100% - 65px);
+  }
+
+  .members-count {
+    width: 100%;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: 10px 0 0;
+    border-top: 1px solid var(--org-border);
+    border-left: 0;
+  }
+
+  .members-count strong {
+    font-size: 1.2rem;
+  }
+}
+
+/* Kurangi animasi bagi pengguna yang memintanya */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* PEMBINA DI POSISI PALING ATAS */
+
+.advisor-section {
+  display: flex;
+  justify-content: center;
+}
+
+.advisor-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(320px, 70%);
+  padding: 22px;
+  text-align: center;
+  background: linear-gradient(145deg, #e8fff0, #d9f8e4);
+  border-color: #b2e9c4;
+  color: #174b30;
+}
+
+.advisor-photo {
+  width: 112px;
+  max-width: 100%;
+  aspect-ratio: 4 / 5;
+  margin-bottom: 14px;
+  border-radius: 15px;
+}
+
+.advisor-card .position-label {
+  color: #277449;
+}
+
+.advisor-card h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.advisor-role {
+  margin: 6px 0 0;
+  color: #277449;
+  font-size: 0.85rem;
+}
+
+.advisor-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 8px;
+  color: #8eb99b;
+  font-size: 1.35rem;
+}
+
+.advisor-connector span {
+  width: 2px;
+  height: 24px;
+  background: #42694f;
+}
+
+.advisor-connector div {
+  line-height: 1;
+}
+
+@media (max-width: 480px) {
+  .advisor-card {
+    width: min(280px, 82%);
+    padding: 18px;
+  }
+
+  .advisor-photo {
+    width: 96px;
+  }
+}
+
+/* TAB ANGKATAN */
+
+.generation-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 28px auto;
+  padding: 6px;
+  width: fit-content;
+  max-width: 100%;
+  background: var(--org-surface, #111915);
+  border: 1px solid var(--org-border, #25342b);
+  border-radius: 16px;
+}
+
+.generation-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--org-muted, #99a89e);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.generation-tab:hover {
+  color: var(--org-text, #edf4ef);
+  background: #1a2820;
+}
+
+.generation-tab.active {
+  color: #123c26;
+  background: var(--org-accent-light, #d9f8e4);
+  border-color: #9bdfb3;
+}
+
+.generation-tab:focus-visible {
+  outline: 2px solid var(--org-accent, #70d99a);
+  outline-offset: 3px;
+}
+
+.coming-soon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 7px;
+  border-radius: 6px;
+  background: #283a2e;
+  color: #a7e9bb;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.generation-panel[hidden] {
+  display: none !important;
+}
+
+/* PANEL ANGKATAN YANG BELUM LENGKAP */
+
+.generation-placeholder {
+  max-width: 620px;
+  min-height: 280px;
+  margin: 0 auto;
+  padding: 36px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+  background: var(--org-surface, #111915);
+  border: 1px solid var(--org-border, #25342b);
+  border-radius: 22px;
+}
+
+.placeholder-icon {
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  background: #1d3024;
+  border: 1px solid #355540;
+  color: var(--org-accent, #70d99a);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.generation-placeholder h2 {
+  margin: 0;
+  color: var(--org-text, #edf4ef);
+}
+
+.generation-placeholder p {
+  max-width: 440px;
+  margin: 0;
+  color: var(--org-muted, #99a89e);
+  line-height: 1.7;
+}
+
+@media (max-width: 480px) {
+  .generation-tabs {
+    width: 100%;
+    gap: 4px;
+    padding: 5px;
+  }
+
+  .generation-tab {
+    flex: 1;
+    min-width: 0;
+    padding: 11px 7px;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 0.78rem;
+  }
+
+  .generation-placeholder {
+    min-height: 240px;
+    padding: 28px 18px;
+  }
+}

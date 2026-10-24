@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b100e">
+  <title>Settings | CodingSkanetra</title>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/setting.css">
+
+  <script src="../js/theme.js"></script>
+  <script>
+    // Terapkan tema tersimpan sebelum halaman tampil.
+    if (window.CodingSkanetraTheme) {
+      CodingSkanetraTheme.applyTheme(
+        CodingSkanetraTheme.getSavedTheme(),
+        CodingSkanetraTheme.getSavedMode()
+      );
+    }
+  </script>
+</head>
+<body>
+      <header class="navbar">
+        <a class="brand" href="../index.html#beranda" aria-label="Coding Skanetra, beranda">
+        <span class="brand-icon">&lt;/&gt;</span>
+        <span>Coding<span class="brand-accent">Skanetra</span></span>
+        </a>
+        <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+        </button>
+        <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+        <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+        <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+        <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+        <a class="nav-link" href="peringkat.html" data-nav="peringkat">Peringkat</a>
+        <a class="nav-link" href="games.html">Games</a>
+        <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur organisasi">Struktur Organisasi</a>
+        <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
+        <a class="nav-link active" href="setting.html" data-nav="setting">Setting</a>
+        </nav>
+    </header>
+
+  <main class="settings-page container">
+    <section class="settings-intro">
+      <span class="settings-eyebrow">PREFERENCES</span>
+      <h1>Pengaturan <span>Workspace</span></h1>
+      <p>Atur tampilan dan editor sesuai kenyamananmu.</p>
+    </section>
+
+    <div class="settings-layout">
+      <aside class="settings-sidebar">
+        <a href="#appearance" class="settings-nav active">🎨 Appearance</a>
+        <a href="#editor" class="settings-nav">⌨️ Editor</a>
+        <a href="#about" class="settings-nav">ℹ️ About</a>
+      </aside>
+
+      <div class="settings-content">
+        <section class="settings-card" id="appearance">
+          <div class="settings-card-heading">
+            <div>
+              <h2>Appearance</h2>
+              <p>Sesuaikan mode dan warna situs.</p>
+            </div>
+            <span class="settings-symbol">◐</span>
+          </div>
+
+          <label class="settings-label">Mode tampilan</label>
+          <div class="mode-options">
+            <button type="button" class="mode-option" data-mode="dark">
+              <span class="mode-preview dark-preview">◐</span>
+              <span>Dark</span>
+              <span class="mode-check"></span>
+            </button>
+            <button type="button" class="mode-option" data-mode="light">
+              <span class="mode-preview light-preview">☀</span>
+              <span>Light</span>
+              <span class="mode-check"></span>
+            </button>
+          </div>
+
+          <label class="settings-label">Warna tema</label>
+          <div class="theme-options">
+            <button type="button" class="theme-option"
+                    data-theme="emerald">
+              <span class="theme-swatch swatch-emerald"></span>
+              <span>Emerald</span>
+            </button>
+            <button type="button" class="theme-option"
+                    data-theme="ocean">
+              <span class="theme-swatch swatch-ocean"></span>
+              <span>Ocean</span>
+            </button>
+            <button type="button" class="theme-option"
+                    data-theme="amethyst">
+              <span class="theme-swatch swatch-amethyst"></span>
+              <span>Amethyst</span>
+            </button>
+            <button type="button" class="theme-option"
+                    data-theme="rose">
+              <span class="theme-swatch swatch-rose"></span>
+              <span>Rose</span>
+            </button>
+          </div>
+
+          <p class="settings-hint" id="appearance-status"
+             role="status" aria-live="polite">
+            Preferensi tampilan disimpan di browser ini.
+          </p>
+        </section>
+
+        <section class="settings-card" id="editor">
+          <div class="settings-card-heading">
+            <div>
+              <h2>Editor Preferences</h2>
+              <p>Atur kenyamanan saat menulis kode.</p>
+            </div>
+            <span class="settings-symbol">&lt;/&gt;</span>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <label for="editor-font-size">Ukuran font</label>
+              <p>Ukuran teks di editor kode.</p>
+            </div>
+            <select id="editor-font-size">
+              <option value="12">12 px</option>
+              <option value="13">13 px</option>
+              <option value="14">14 px</option>
+              <option value="15">15 px</option>
+              <option value="16">16 px</option>
+              <option value="18">18 px</option>
+              <option value="20">20 px</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <label for="editor-tab-size">Ukuran indentasi</label>
+              <p>Jumlah spasi untuk satu tab.</p>
+            </div>
+            <select id="editor-tab-size">
+              <option value="2">2 spasi</option>
+              <option value="4">4 spasi</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <label for="editor-wrap">Line wrapping</label>
+              <p>Baris panjang turun otomatis.</p>
+            </div>
+            <input id="editor-wrap" type="checkbox">
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <label for="editor-line-numbers">Nomor baris</label>
+              <p>Tampilkan nomor baris kode.</p>
+            </div>
+            <input id="editor-line-numbers" type="checkbox">
+          </div>
+
+          <p class="settings-hint" id="editor-status"
+             role="status" aria-live="polite">
+            Preferensi editor tersimpan secara lokal.
+          </p>
+        </section>
+
+        <section class="settings-card" id="about">
+          <div class="settings-card-heading">
+            <div>
+              <h2>About CodingSkanetra</h2>
+              <p>Informasi dan preferensi situs.</p>
+            </div>
+            <span class="settings-symbol">⌘</span>
+          </div>
+
+          <div class="about-row">
+            <span>Platform</span>
+            <strong>CodingSkanetra</strong>
+          </div>
+          <div class="about-row">
+            <span>Penyimpanan</span>
+            <strong>Browser lokal</strong>
+          </div>
+
+          <div class="settings-reset">
+            <div>
+              <strong>Reset pengaturan</strong>
+              <p>Kembalikan tema dan preferensi editor ke default.</p>
+            </div>
+            <button type="button" class="settings-reset-button"
+                    id="reset-settings">Reset</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© CodingSkanetra — Belajar, membangun, dan berkembang.</p>
+    </div>
+  </footer>
+
+  <script src="../js/setting.js"></script>
+</body>
+</html>

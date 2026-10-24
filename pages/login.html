@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b100e">
+  <title>Login Poin | CodingSkanetra</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/login.css">
+</head>
+<body class="login-body">
+  <main class="login-shell">
+    <a class="login-brand" href="../index.html"><span class="brand-icon">&lt;/&gt;</span> Coding<span class="brand-accent">Skanetra</span></a>
+    <section class="login-card" aria-labelledby="loginTitle">
+      <span class="login-eyebrow">AREA ANGGOTA</span>
+      <h1 id="loginTitle">Masuk ke Peringkat</h1>
+      <p class="login-subtitle">Gunakan ID siswa dan PIN pribadi untuk melihat peringkat serta riwayat poin.</p>
+      <form id="loginForm" autocomplete="on">
+        <label for="studentId">ID siswa</label>
+        <input id="studentId" name="id" type="text" inputmode="text" autocomplete="username" maxlength="40" required>
+        <label for="studentPin">PIN pribadi</label>
+        <input id="studentPin" name="pin" type="password" inputmode="numeric" autocomplete="current-password" minlength="6" maxlength="12" pattern="[0-9]{6,12}" required>
+        <button id="loginButton" type="submit">Masuk</button>
+        <p id="loginMessage" class="login-message" role="status" aria-live="polite"></p>
+      </form>
+      <p class="login-note">Jangan bagikan PIN kepada orang lain. Jika belum memiliki PIN, hubungi pengelola CodingSkanetra.</p>
+    </section>
+  </main>
+  <script src="../js/login.js" defer></script>
+</body>
+</html>

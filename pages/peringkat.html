@@ -1,0 +1,251 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b100e">
+
+  <title>Peringkat Poin | CodingSkanetra</title>
+
+  <link rel="stylesheet" href="../css/peringkat.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+      <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="CodingSkanetra, beranda">
+      <span class="brand-icon" aria-hidden="true">&lt;/&gt;</span>
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+
+    <button
+      class="menu-toggle"
+      id="menu-toggle"
+      type="button"
+      aria-label="Buka navigasi"
+      aria-expanded="false"
+      aria-controls="nav-links"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda">Beranda</a>
+      <a class="nav-link" href="materi.html">Materi</a>
+      <a class="nav-link" href="playground.html">Playground</a>
+      <a class="nav-link active" href="peringkat.html" data-nav="peringkat">Peringkat</a>
+      <a class="nav-link" href="games.html">Games</a>
+      <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur organisasi">Struktur Organisasi</a>
+      <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
+      <a class="nav-link" href="setting.html" data-nav="setting">Setting</a>
+    </nav>
+  </header>
+
+  <main class="ranking-page">
+    <header class="ranking-header">
+      <div class="header-content">
+        <span class="eyebrow">CODINGSKANETRA</span>
+        <h1>Peringkat Poin</h1>
+        <p>Pantau pencapaian dan kontribusi anggota.</p>
+      </div>
+
+      
+      <div class="ranking-header__actions">
+        <button
+          id="logoutButton"
+          class="text-button"
+          type="button"
+        >
+          Keluar
+        </button>
+
+        <button
+          id="refreshButton"
+          class="icon-button"
+          type="button"
+          aria-label="Muat ulang peringkat"
+          title="Muat ulang"
+        >
+          ↻
+        </button>
+      </div>
+
+    </header>
+
+    <!-- Ringkasan data -->
+    <section class="summary-grid" aria-label="Ringkasan peringkat">
+      <article class="summary-card">
+        <span class="summary-label">Total anggota</span>
+        <strong id="totalAnggota">—</strong>
+        <span class="summary-caption">Anggota terdaftar</span>
+      </article>
+
+      <article class="summary-card">
+        <span class="summary-label">Poin tertinggi</span>
+        <strong id="poinTertinggi">—</strong>
+        <span class="summary-caption">Poin anggota teratas</span>
+      </article>
+    </section>
+
+    <!-- Lima besar -->
+    <section class="ranking-section">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">LEADERBOARD</span>
+          <h2>🏆 5 Besar</h2>
+        </div>
+
+        <span id="lastUpdated" class="last-updated">
+          Belum diperbarui
+        </span>
+      </div>
+
+      <div id="topRanking" class="ranking-list">
+        <div class="loading-state">
+          <span class="loading-spinner" aria-hidden="true"></span>
+          <p>Memuat peringkat...</p>
+        </div>
+      </div>
+
+      <div id="topEmpty" class="empty-state" hidden>
+        <p>Belum ada data peringkat yang tersedia.</p>
+      </div>
+
+      <button
+        id="showAllButton"
+        class="primary-button"
+        type="button"
+        hidden
+      >
+        Lihat Selengkapnya
+        <span aria-hidden="true">→</span>
+      </button>
+    </section>
+
+    <!-- Daftar lengkap, disembunyikan sampai tombol ditekan -->
+    <section id="allRankingSection" class="ranking-section" hidden>
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">DAFTAR ANGGOTA</span>
+          <h2>Semua Peringkat</h2>
+        </div>
+
+        <button
+          id="hideAllButton"
+          class="text-button"
+          type="button"
+        >
+          Tutup
+        </button>
+      </div>
+
+      <label class="search-box" for="searchInput">
+        <span aria-hidden="true">⌕</span>
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Cari nama atau ID anggota..."
+          autocomplete="off"
+        >
+        <button
+          id="clearSearchButton"
+          class="clear-search"
+          type="button"
+          aria-label="Hapus pencarian"
+          hidden
+        >
+          ×
+        </button>
+      </label>
+
+      <p id="searchResultCount" class="result-count"></p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Peringkat</th>
+              <th scope="col">Anggota</th>
+              <th scope="col">Kelas</th>
+              <th scope="col">Total poin</th>
+            </tr>
+          </thead>
+
+          <tbody id="allRanking">
+            <tr>
+              <td colspan="4" class="table-message">
+                Data belum dimuat.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="allEmpty" class="empty-state" hidden>
+        <p>Anggota yang kamu cari tidak ditemukan.</p>
+      </div>
+    </section>
+
+    <!-- Pesan error -->
+    <div id="errorMessage" class="error-message" role="alert" hidden>
+      <p>Data peringkat gagal dimuat.</p>
+      <button id="retryButton" class="text-button" type="button">
+        Coba lagi
+      </button>
+    </div>
+
+    <footer class="ranking-footer">
+      <span class="footer-dot"></span>
+      <p>CodingSkanetra · Peringkat Poin Anggota</p>
+    </footer>
+  </main>
+  
+<dialog id="memberModal" class="member-modal" aria-labelledby="memberModalTitle">
+  <div class="member-modal__header">
+    <div>
+      <p class="member-modal__eyebrow">DETAIL ANGGOTA</p>
+      <h2 id="memberModalTitle">Detail Anggota</h2>
+      <p id="memberIdentity" class="member-modal__identity">Memuat data...</p>
+    </div>
+
+    <button
+      type="button"
+      id="closeMemberModal"
+      class="member-modal__close"
+      aria-label="Tutup detail anggota"
+    >×</button>
+  </div>
+
+  <div class="member-modal__stats">
+    <div class="member-modal__stat">
+      <span>ID Anggota</span>
+      <strong id="memberId">—</strong>
+    </div>
+    <div class="member-modal__stat">
+      <span>Kelas</span>
+      <strong id="memberClass">—</strong>
+    </div>
+    <div class="member-modal__stat">
+      <span>Peringkat</span>
+      <strong id="memberRank">—</strong>
+    </div>
+    <div class="member-modal__stat">
+      <span>Total Poin</span>
+      <strong id="memberTotal">—</strong>
+    </div>
+  </div>
+
+  <section class="member-modal__history">
+    <h3>Riwayat Poin</h3>
+    <p id="historyStatus" class="history-status" aria-live="polite">
+      Menunggu data riwayat...
+    </p>
+    <div id="memberHistory" class="member-history"></div>
+  </section>
+</dialog>
+
+  <script src="../js/peringkat.js" defer></script>
+  <script src="../js/theme.js"></script>
+</body>
+</html>
