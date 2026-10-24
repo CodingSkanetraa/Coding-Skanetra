@@ -117,9 +117,9 @@ button {
   width: 36px;
   height: 36px;
 
-  border: 1px solid rgb(112 217 154 / 35%);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
   border-radius: 10px;
-  background: rgb(112 217 154 / 8%);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
 
   color: var(--accent);
   font-size: 0.85rem;
@@ -213,7 +213,7 @@ button {
   flex-shrink: 0;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 12px rgb(112 217 154 / 35%);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
 .hero h1 {
@@ -316,7 +316,7 @@ button {
 
   border: 1px solid #2a3b30;
   border-radius: var(--radius);
-  background: #0e1511;
+  background: var(--code-background);
 
   box-shadow:
     0 30px 80px rgb(0 0 0 / 28%),
@@ -331,11 +331,11 @@ button {
   gap: 12px;
 
   padding: 14px 18px;
-  background: #111a15;
+  background: var(--code-panel-background);
 }
 
 .window-header {
-  border-bottom: 1px solid #25342b;
+  border-bottom: 1px solid var(--border);
 }
 
 .window-dots {
@@ -431,7 +431,7 @@ button {
 
   margin: 25px 0 0 40px;
   padding-top: 18px;
-  border-top: 1px solid #25342b;
+  border-top: 1px solid var(--border);
 
   color: #a9dcb7;
   font-family: Consolas, "Courier New", monospace;
@@ -450,7 +450,7 @@ button {
 }
 
 .window-footer {
-  border-top: 1px solid #25342b;
+  border-top: 1px solid var(--border);
   color: #84958a;
   font-size: 0.7rem;
 }
@@ -593,7 +593,7 @@ button {
 
 .icon-green {
   color: var(--accent);
-  background: rgb(112 217 154 / 7%);
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
 }
 
 .icon-blue {
@@ -675,7 +675,7 @@ button {
       rgb(72 171 105 / 10%),
       transparent 70%
     ),
-    #0e1511;
+    var(--code-background);
 
   font-family: Consolas, "Courier New", monospace;
   font-size: clamp(3.5rem, 8vw, 6rem);
@@ -746,7 +746,7 @@ button {
 
   background: radial-gradient(
     circle,
-    rgb(112 217 154 / 10%),
+    color-mix(in srgb, var(--accent) 10%, transparent),
     transparent 70%
   );
   pointer-events: none;
@@ -821,6 +821,7 @@ button:focus-visible {
     right: 0;
   }
 
+  .section-headings,
   .section-heading {
     align-items: flex-start;
     flex-direction: column;
@@ -836,7 +837,7 @@ button:focus-visible {
     min-height: 250px;
   }
 
-  .about-section {
+  .about-sections {
     gap: 35px;
   }
 }
@@ -898,7 +899,7 @@ button:focus-visible {
 
     padding: 10px 18px 18px;
     border-bottom: 1px solid var(--border);
-    background: #0b100e;
+    background: var(--background);
   }
 
   .nav-links.is-open {
@@ -907,7 +908,7 @@ button:focus-visible {
 
   .nav-link {
     padding: 12px 0;
-    border-bottom: 1px solid #1b2820;
+    border-bottom: 1px solid var(--border);
   }
 
   .nav-cta {
@@ -969,7 +970,7 @@ button:focus-visible {
     min-height: 255px;
   }
 
-  .about-section {
+  .about-sections {
     grid-template-columns: 1fr;
     gap: 30px;
     padding-block: 60px;
@@ -1493,7 +1494,7 @@ body:has(.materi-grid) .materi-grid {
   justify-content: space-between;
   gap: 12px;
   padding: 12px 16px;
-  background: #0b100e;
+  background: var(--background);
   border-bottom: 1px solid var(--border);
 }
 
@@ -1502,7 +1503,7 @@ body:has(.materi-grid) .materi-grid {
   display: flex;
   gap: 6px;
   padding: 10px 12px 0;
-  background: #0b100e;
+  background: var(--background);
   border-bottom: 1px solid var(--border);
 }
 
@@ -1595,7 +1596,7 @@ body:has(.materi-grid) .materi-grid {
   border-bottom: 1px solid var(--border);
   border-radius: 0;
   outline: none;
-  background: #0b100e;
+  background: var(--background);
   color: #d5e9dc;
   font: 14px/1.75 Consolas, "Courier New", monospace;
   tab-size: 2;
@@ -1891,7 +1892,7 @@ body:has(.materi-grid) .materi-grid {
   border-right: 1px solid var(--border);
 }
 .CodeMirror-gutter{
-  background:black;
+  background: var(--editor-gutter-background);
 }
 .CodeMirror-gutter, .CodeMirror-gutters, .CodeMirror-linenumber, .CodeMirror-scroll, .CodeMirror-sizer{
   box-sizing: unset!important;
@@ -2215,7 +2216,7 @@ body:has(.materi-grid) .materi-grid {
 
 .console-panel {
   border-top: 1px solid var(--border);
-  background: #0b100e;
+  background: var(--background);
 }
 
 .console-head {
@@ -2287,7 +2288,7 @@ body:has(.materi-grid) .materi-grid {
   color-scheme: light;
 
   --text-soft: #425b4b;
-  --text-subtle: #64766a;
+  --text-subtle: #526559;
   --text-link: #365c43;
 
   --code-window-border: var(--border);
@@ -2494,3 +2495,275 @@ body:has(.materi-grid) .materi-grid {
 .editor-search-match-active {
   background: rgb(240 140 30 / 55%);
 }
+
+
+/* ==========================================================================
+   TOKEN BERSAMA
+   Dipakai oleh CSS semua halaman. Nilai terang/gelap diatur di sini dan
+   js/theme.js (yang menimpa sebagian lewat tema pilihan pengguna).
+   CSS per-halaman tidak boleh memakai warna hex tetap untuk elemen tema.
+   ========================================================================== */
+:root {
+  --accent-light: #d9f8e4;
+  --danger: #ff8a80;
+  --warning: #f0d77a;
+  --on-accent: #07120b;
+  --overlay: rgb(0 0 0 / 65%);
+
+  --syntax-purple: #d1a5ff;
+  --syntax-yellow: #f4d78b;
+  --syntax-blue: #a9c8ff;
+  --syntax-orange: #e7c47d;
+
+  --gold: #d9b84c;
+  --gold-text: #ffe28a;
+  --silver: #aebbc4;
+  --silver-text: #e2eaf0;
+  --bronze: #c8895b;
+  --bronze-text: #ffc294;
+}
+
+:root[data-mode="light"] {
+  --syntax-purple: #7b3fc4;
+  --syntax-yellow: #8a6400;
+  --syntax-blue: #1f5fb5;
+  --syntax-orange: #9a5b00;
+
+  --gold: #b8860b;
+  --gold-text: #7a5a00;
+  --silver: #7a8a96;
+  --silver-text: #3d4b55;
+  --bronze: #a8622f;
+  --bronze-text: #7a3f17;
+}
+
+
+/* ==========================================================================
+   CONTAINER DASAR
+   Sebelumnya .container dipakai di footer, halaman editor, dan dokumentasi
+   tetapi tidak punya aturan dasar sehingga kontennya menempel ke tepi layar.
+   ========================================================================== */
+.container {
+  width: min(calc(100% - 48px), var(--container));
+  margin-inline: auto;
+}
+
+@media (max-width: 600px) {
+  .container {
+    width: calc(100% - 36px);
+  }
+}
+
+
+/* ==========================================================================
+   NAVBAR RESPONSIF
+   Hamburger aktif di <= 1024px (tablet dan ponsel), karena 8 tautan menu
+   tidak muat satu baris di bawah lebar itu. Semua warna memakai token tema.
+   ========================================================================== */
+.navbar .nav-links {
+  gap: 26px;
+}
+
+@media (max-width: 1180px) {
+  .navbar .nav-links {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 12px 24px;
+  }
+
+  .navbar .menu-toggle {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    justify-content: center;
+    gap: 5px;
+
+    width: 42px;
+    height: 42px;
+    padding: 10px;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface);
+    cursor: pointer;
+    transition: background 160ms ease, border-color 160ms ease;
+  }
+
+  .navbar .menu-toggle:hover,
+  .navbar .menu-toggle[aria-expanded="true"] {
+    border-color: var(--accent-dark);
+    background: var(--surface-hover);
+  }
+
+  .navbar .menu-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .navbar .menu-toggle span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--text);
+    transition: transform 200ms ease, opacity 150ms ease;
+  }
+
+  /* Ikon berubah menjadi tanda X saat menu terbuka. */
+  .navbar .menu-toggle[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .navbar .menu-toggle[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .navbar .menu-toggle[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .navbar .nav-links {
+    position: absolute;
+    top: calc(100% + 1px);
+    right: 0;
+    left: 0;
+
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    margin-left: 0;
+
+    max-height: calc(100vh - 72px);
+    max-height: calc(100dvh - 72px);
+    padding: 6px 24px 16px;
+    overflow-y: auto;
+
+    border-bottom: 1px solid var(--border);
+    background: var(--background);
+    box-shadow: 0 20px 40px var(--shadow);
+  }
+
+  .navbar .nav-links.is-open {
+    display: flex;
+  }
+
+  .navbar .nav-links .nav-link {
+    width: 100%;
+    padding: 13px 4px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.98rem;
+  }
+
+  .navbar .nav-links .nav-link:last-child {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    padding: 12px 18px;
+  }
+
+  .navbar .nav-links {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+}
+
+
+/* ==========================================================================
+   EDITOR KODE (CodeMirror) DI MODE TERANG
+   Tema CodeMirror "material-darker" hanya punya warna untuk latar gelap.
+   Di mode terang, warna token disesuaikan agar tetap terbaca.
+   ========================================================================== */
+:root[data-mode="light"] .cm-s-material-darker.CodeMirror {
+  background: var(--editor-background);
+  color: var(--editor-text);
+}
+
+:root[data-mode="light"] .cm-s-material-darker .CodeMirror-gutters {
+  border-right: 1px solid var(--border);
+  background: var(--editor-gutter-background);
+}
+
+:root[data-mode="light"] .cm-s-material-darker .CodeMirror-linenumber {
+  color: var(--muted);
+}
+
+:root[data-mode="light"] .cm-s-material-darker .CodeMirror-cursor {
+  border-left-color: var(--text);
+}
+
+:root[data-mode="light"] .cm-s-material-darker .CodeMirror-selected,
+:root[data-mode="light"] .cm-s-material-darker .CodeMirror-focused .CodeMirror-selected {
+  background: color-mix(in srgb, var(--accent) 22%, transparent) !important;
+}
+
+:root[data-mode="light"] .cm-s-material-darker .CodeMirror-activeline-background {
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+}
+
+:root[data-mode="light"] .cm-s-material-darker .cm-keyword { color: #7b3fc4; }
+:root[data-mode="light"] .cm-s-material-darker .cm-operator { color: #5b6b61; }
+:root[data-mode="light"] .cm-s-material-darker .cm-variable-2,
+:root[data-mode="light"] .cm-s-material-darker .cm-def { color: #1f5fb5; }
+:root[data-mode="light"] .cm-s-material-darker .cm-variable { color: var(--editor-text); }
+:root[data-mode="light"] .cm-s-material-darker .cm-variable-3,
+:root[data-mode="light"] .cm-s-material-darker .cm-type,
+:root[data-mode="light"] .cm-s-material-darker .cm-builtin { color: #0b7285; }
+:root[data-mode="light"] .cm-s-material-darker .cm-property { color: #1f5fb5; }
+:root[data-mode="light"] .cm-s-material-darker .cm-string,
+:root[data-mode="light"] .cm-s-material-darker .cm-string-2 { color: #1a7f37; }
+:root[data-mode="light"] .cm-s-material-darker .cm-number,
+:root[data-mode="light"] .cm-s-material-darker .cm-atom { color: #b35900; }
+:root[data-mode="light"] .cm-s-material-darker .cm-comment { color: #6b7a70; font-style: italic; }
+:root[data-mode="light"] .cm-s-material-darker .cm-meta { color: #6b7a70; }
+:root[data-mode="light"] .cm-s-material-darker .cm-tag { color: #c2185b; }
+:root[data-mode="light"] .cm-s-material-darker .cm-attribute,
+:root[data-mode="light"] .cm-s-material-darker .cm-qualifier { color: #8a5a00; }
+:root[data-mode="light"] .cm-s-material-darker .cm-bracket { color: #5b6b61; }
+:root[data-mode="light"] .cm-s-material-darker .cm-error { color: #c0392b; }
+
+
+/* Halaman dokumentasi (sementara berisi pengantar singkat) */
+.docs-page {
+  padding: 88px 0 120px;
+}
+
+.docs-page .eyebrow {
+  margin-bottom: 10px;
+}
+
+.docs-page h1 {
+  margin-bottom: 12px;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.15;
+}
+
+.docs-page p {
+  max-width: 560px;
+  color: var(--muted);
+}
+
+.docs-page .button {
+  display: inline-flex;
+  margin-top: 14px;
+}
+
+
+/* Kode pada jendela hero (index) di mode terang: warna pastel untuk latar gelap tidak terbaca. */
+:root[data-mode="light"] .code-purple { color: var(--syntax-purple); }
+:root[data-mode="light"] .code-blue { color: var(--syntax-blue); }
+:root[data-mode="light"] .code-green { color: #16672c; }
+:root[data-mode="light"] .code-orange { color: #9a5b00; }
+
+/* Penyesuaian kecil agar teks kecil di mode terang memenuhi kontras 4,5:1 */
+:root[data-mode="light"] .brand-icon { color: var(--accent-dark); }
+:root[data-mode="light"] .window-filename,
+:root[data-mode="light"] .window-footer > span { color: color-mix(in srgb, var(--text) 85%, var(--background)); }
+:root[data-mode="light"] .window-status { color: var(--accent-dark); }

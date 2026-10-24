@@ -1,16 +1,121 @@
-.login-body{min-height:100vh;background:var(--bg,#0b100e);display:grid;place-items:center;padding:24px;color:var(--text,#f2f5f2)}
-.login-shell{width:min(100%,460px)}
-.login-brand{display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:24px;color:inherit;text-decoration:none;font-weight:800;font-size:1.1rem}
-.login-brand span:last-child{color:var(--accent,#7ee2a8)}
-.login-card{border:1px solid rgba(150,190,165,.2);background:rgba(20,29,24,.96);border-radius:22px;padding:clamp(22px,5vw,36px);box-shadow:0 24px 70px rgba(0,0,0,.22)}
-.login-eyebrow{font-size:.72rem;letter-spacing:.16em;color:var(--accent,#7ee2a8);font-weight:800}
-.login-card h1{font-size:clamp(1.7rem,5vw,2.2rem);margin:10px 0}
-.login-subtitle,.login-note{color:var(--muted,#a6b2aa);line-height:1.6;font-size:.92rem}
-#loginForm{display:grid;gap:9px;margin-top:24px}
-#loginForm label{font-weight:650;font-size:.9rem;margin-top:5px}
-#loginForm input{width:100%;box-sizing:border-box;border:1px solid rgba(150,190,165,.3);background:#0c1310;color:inherit;border-radius:11px;padding:13px 14px;font:inherit;outline:none}
-#loginForm input:focus{border-color:var(--accent,#7ee2a8);box-shadow:0 0 0 3px rgba(126,226,168,.12)}
-#loginButton{margin-top:10px;border:0;border-radius:11px;padding:13px 16px;background:var(--accent,#7ee2a8);color:#102017;font:inherit;font-weight:800;cursor:pointer}
-#loginButton:disabled{opacity:.65;cursor:wait}
-.login-message{min-height:1.3em;margin:3px 0 0;color:#ffaaa5;font-size:.9rem}
-.login-note{border-top:1px solid rgba(150,190,165,.16);padding-top:16px;margin-top:20px;font-size:.82rem}
+/* Halaman login: seluruh warna memakai token tema bersama (lihat js/theme.js). */
+
+.login-body {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 24px;
+  background:
+    radial-gradient(ellipse at 50% -10%, var(--accent-glow), transparent 60%),
+    var(--background);
+  color: var(--text);
+}
+
+.login-shell {
+  width: min(100%, 460px);
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  color: inherit;
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.login-card {
+  padding: clamp(22px, 5vw, 36px);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--card-background);
+  box-shadow: 0 24px 70px var(--shadow);
+}
+
+.login-eyebrow {
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.login-card h1 {
+  margin: 10px 0;
+  font-size: clamp(1.7rem, 5vw, 2.2rem);
+}
+
+.login-subtitle,
+.login-note {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+#loginForm {
+  display: grid;
+  gap: 9px;
+  margin-top: 24px;
+}
+
+#loginForm label {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+#loginForm input {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  outline: none;
+  background: var(--background);
+  color: inherit;
+  font: inherit;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+#loginForm input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+#loginButton {
+  margin-top: 10px;
+  padding: 13px 16px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transition: filter 160ms ease, transform 160ms ease;
+}
+
+#loginButton:hover:not(:disabled) {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+#loginButton:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.login-message {
+  min-height: 1.3em;
+  margin: 3px 0 0;
+  color: var(--danger);
+  font-size: 0.9rem;
+}
+
+.login-note {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 0.82rem;
+}

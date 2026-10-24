@@ -1,53 +1,25 @@
 
 :root {
-  color-scheme: dark;
-
-  --background: #0b100e;
-  --surface: #111915;
-  --surface-hover: #16211a;
-  --text: #edf4ef;
-  --muted: #99a89e;
-  --accent: #70d99a;
-  --accent-dark: #2f9b62;
-  --border: #25342b;
-
-  --container: 1000px;
-  --radius: 16px;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  /* Lebar konten halaman ini. Palet warna memakai token global dari js/theme.js. */
+  --ranking-width: 1000px;
 }
 
 html {
-  scroll-behavior: smooth;
   scroll-padding-top: 24px;
 }
 
-body {
-  min-height: 100vh;
+body:has(.ranking-page) {
   background:
     radial-gradient(
       ellipse at 50% -15%,
-      rgba(47, 155, 98, 0.12),
+      color-mix(in srgb, var(--accent-dark) 12%, transparent),
       transparent 55%
     ),
     var(--background);
-  color: var(--text);
-  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.ranking-page {
   line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
-button,
-input {
-  font: inherit;
-}
-
-button {
-  -webkit-tap-highlight-color: transparent;
 }
 
 button:focus-visible,
@@ -68,7 +40,7 @@ button:disabled {
 /* Layout utama */
 
 .ranking-page {
-  width: min(calc(100% - 40px), var(--container));
+  width: min(calc(100% - 40px), var(--ranking-width));
   margin-inline: auto;
   padding: 48px 0 24px;
 }
@@ -184,8 +156,8 @@ button:disabled {
   border-radius: var(--radius);
   background: linear-gradient(
     145deg,
-    rgba(22, 33, 26, 0.92),
-    rgba(17, 25, 21, 0.96)
+    color-mix(in srgb, var(--surface-hover) 92%, transparent),
+    color-mix(in srgb, var(--surface) 96%, transparent)
   );
 }
 
@@ -195,7 +167,7 @@ button:disabled {
   right: -28px;
   width: 110px;
   height: 110px;
-  border: 1px solid rgba(112, 217, 154, 0.1);
+  border: 1px solid color-mix(in srgb, var(--accent) 10%, transparent);
   border-radius: 50%;
   content: "";
   pointer-events: none;
@@ -230,21 +202,22 @@ button:disabled {
   margin-bottom: 36px;
 }
 
-.section-heading {
+.ranking-page .section-heading {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 18px;
 }
 
-.section-heading h2 {
+.ranking-page .section-heading h2 {
   font-size: clamp(1.25rem, 3vw, 1.6rem);
   font-weight: 700;
   letter-spacing: -0.025em;
 }
 
-.section-heading .eyebrow {
+.ranking-page .section-heading .eyebrow {
   margin-bottom: 4px;
 }
 
@@ -278,26 +251,26 @@ button:disabled {
 }
 
 .ranking-item:hover {
-  border-color: #355541;
+  border-color: color-mix(in srgb, var(--accent) 37%, var(--background));
   background: var(--surface-hover);
   transform: translateY(-2px);
 }
 
 .ranking-item:nth-child(1) {
-  border-color: rgba(240, 201, 103, 0.4);
+  border-color: color-mix(in srgb, var(--gold) 40%, transparent);
   background: linear-gradient(
     110deg,
-    rgba(240, 201, 103, 0.075),
+    color-mix(in srgb, var(--gold) 8%, transparent),
     var(--surface) 65%
   );
 }
 
 .ranking-item:nth-child(2) {
-  border-color: rgba(190, 204, 197, 0.25);
+  border-color: color-mix(in srgb, color-mix(in srgb, var(--accent) 44%, var(--text)) 25%, transparent);
 }
 
 .ranking-item:nth-child(3) {
-  border-color: rgba(191, 135, 94, 0.25);
+  border-color: color-mix(in srgb, var(--bronze) 25%, transparent);
 }
 
 .rank-number {
@@ -308,7 +281,7 @@ button:disabled {
   place-items: center;
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: #18221c;
+  background: color-mix(in srgb, var(--accent) 11%, var(--background));
   color: var(--muted);
   font-size: 1.05rem;
   font-weight: 800;
@@ -316,17 +289,17 @@ button:disabled {
 }
 
 .ranking-item:nth-child(1) .rank-number {
-  border-color: rgba(240, 201, 103, 0.3);
-  background: rgba(240, 201, 103, 0.12);
-  color: #f0c967;
+  border-color: color-mix(in srgb, var(--gold) 30%, transparent);
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+  color: var(--gold-text);
 }
 
 .ranking-item:nth-child(2) .rank-number {
-  color: #c6d2cb;
+  color: color-mix(in srgb, var(--accent) 37%, var(--text));
 }
 
 .ranking-item:nth-child(3) .rank-number {
-  color: #d9a27d;
+  color: var(--bronze-text);
 }
 
 .member-info {
@@ -388,7 +361,7 @@ button:disabled {
   border: 1px solid var(--accent);
   border-radius: 14px;
   background: var(--accent);
-  color: #0b1710;
+  color: color-mix(in srgb, var(--accent) 2%, var(--background));
   cursor: pointer;
   font-weight: 750;
   transition:
@@ -397,7 +370,7 @@ button:disabled {
 }
 
 .primary-button:hover {
-  background: #8be6ac;
+  background: var(--accent);
   transform: translateY(-1px);
 }
 
@@ -462,7 +435,7 @@ button:disabled {
 }
 
 .search-box input::placeholder {
-  color: #75857a;
+  color: color-mix(in srgb, var(--accent) 80%, var(--background));
 }
 
 .search-box input:focus-visible {
@@ -505,7 +478,7 @@ table {
 }
 
 thead {
-  background: #18231c;
+  background: color-mix(in srgb, var(--accent) 11%, var(--background));
 }
 
 th,
@@ -598,10 +571,10 @@ td:last-child {
   gap: 16px;
   margin-bottom: 28px;
   padding: 18px;
-  border: 1px solid rgba(255, 115, 115, 0.3);
+  border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent);
   border-radius: 14px;
-  background: rgba(255, 115, 115, 0.06);
-  color: #ffb3b3;
+  background: color-mix(in srgb, var(--danger) 6%, transparent);
+  color: var(--danger);
   font-size: 0.88rem;
 }
 
@@ -626,7 +599,7 @@ td:last-child {
   height: 7px;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 12px rgba(112, 217, 154, 0.4);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 /* Animasi */
@@ -653,7 +626,7 @@ td:last-child {
 
 @media (max-width: 600px) {
   .ranking-page {
-    width: min(calc(100% - 28px), var(--container));
+    width: min(calc(100% - 28px), var(--ranking-width));
     padding-top: 30px;
   }
 
@@ -716,7 +689,7 @@ td:last-child {
     font-size: 0.83rem;
   }
 
-  .section-heading {
+  .ranking-page .section-heading {
     align-items: flex-end;
   }
 
@@ -770,16 +743,16 @@ td:last-child {
 }
 
 .ranking-item.rank-gold {
-  border-color: #d9b84c;
-  background: linear-gradient(135deg, #292719, var(--surface));
+  border-color: var(--gold);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--gold) 12%, var(--surface)), var(--surface));
 }
 
 .ranking-item.rank-silver {
-  border-color: #aebbc4;
+  border-color: var(--silver);
 }
 
 .ranking-item.rank-bronze {
-  border-color: #c8895b;
+  border-color: var(--bronze);
 }
 
 .rank-medal {
@@ -794,18 +767,18 @@ td:last-child {
 }
 
 .rank-gold .rank-medal {
-  background: #594a1e;
-  color: #ffe28a;
+  background: color-mix(in srgb, var(--gold) 30%, var(--surface));
+  color: var(--gold-text);
 }
 
 .rank-silver .rank-medal {
-  background: #34404a;
-  color: #e2eaf0;
+  background: color-mix(in srgb, var(--silver) 25%, var(--surface));
+  color: var(--silver-text);
 }
 
 .rank-bronze .rank-medal {
-  background: #593b29;
-  color: #ffc294;
+  background: color-mix(in srgb, var(--bronze) 30%, var(--surface));
+  color: var(--bronze-text);
 }
 
 /* ===== MODAL DETAIL ANGGOTA ===== */
@@ -827,7 +800,7 @@ td:last-child {
 }
 
 .member-modal::backdrop {
-  background: rgb(0 0 0 / 72%);
+  background: var(--overlay);
   backdrop-filter: blur(4px);
 }
 
@@ -978,17 +951,17 @@ td:last-child {
 }
 
 #allRanking tr.rank-gold td:first-child {
-  color: #ffe28a;
+  color: var(--gold-text);
   font-weight: 800;
 }
 
 #allRanking tr.rank-silver td:first-child {
-  color: #e2eaf0;
+  color: var(--silver-text);
   font-weight: 800;
 }
 
 #allRanking tr.rank-bronze td:first-child {
-  color: #ffc294;
+  color: var(--bronze-text);
   font-weight: 800;
 }
 
@@ -1023,7 +996,7 @@ dialog.member-modal[open] {
 }
 
 dialog.member-modal::backdrop {
-  background: rgb(0 0 0 / 72%);
+  background: var(--overlay);
   backdrop-filter: blur(4px);
 }
 

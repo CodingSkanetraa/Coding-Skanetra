@@ -229,6 +229,7 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
   async function runOnce(runtime, code, answers, seed) {
     let text = "";
     let pending = null;
+    let textAtPending = 0; // panjang output tepat saat program berhenti meminta input
     let readIndex = 0;
 
     runtime.globals.set("_ck_write", (chunk) => { text += String(chunk); });
@@ -238,7 +239,10 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
         const answer = answers[index];
         return answer === EOF_MARK ? "E" : "L" + answer;
       }
-      if (pending === null) pending = String(promptText || "");
+      if (pending === null) {
+        pending = String(promptText || "");
+        textAtPending = text.length;
+      }
       return undefined; // undefined selalu menjadi None di Python (null bisa berbeda antar versi Pyodide)
     });
     installVisualHelpers(runtime);
@@ -246,12 +250,20 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
 
     // Namespace baru di setiap putaran, supaya variabel putaran sebelumnya tidak ikut terbawa.
     const namespace = runtime.runPython("dict(globals())");
+    // Saat program dihentikan untuk meminta input, Python ikut mencetak traceback "_CkNeedInput"
+    // ke stderr. Semua yang tercetak setelah titik berhenti dibuang, supaya tidak tampil di output.
+    const cleanPending = () => text.slice(0, textAtPending);
+    // Untuk error sungguhan, traceback ditampilkan dari pesan error; hapus salinan di output agar tidak ganda.
+    const cleanError = () => {
+      const at = text.indexOf("Traceback (most recent call last)");
+      return at >= 0 ? text.slice(0, at) : text;
+    };
     try {
       await runtime.runPythonAsync(code, { globals: namespace });
-      return { text, pending, error: null };
+      return { text: pending !== null ? cleanPending() : text, pending, error: null };
     } catch (error) {
-      if (pending !== null) return { text, pending, error: null };
-      return { text, pending: null, error: error && error.message ? error.message : String(error) };
+      if (pending !== null) return { text: cleanPending(), pending, error: null };
+      return { text: cleanError(), pending: null, error: error && error.message ? error.message : String(error) };
     } finally {
       namespace.destroy();
     }

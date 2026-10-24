@@ -21,7 +21,10 @@ const themePresets = {
       codePanelBackground: "#111a15",
       buttonText: "#07120b",
       accentSoft: "rgb(112 217 154 / 8%)",
-      accentGlow: "rgb(112 217 154 / 10%)"
+      accentGlow: "rgb(112 217 154 / 10%)",
+      accentLight: "#d9f8e4",
+      danger: "#ff8a80",
+      warning: "#f0d77a"
     }
   },
 
@@ -44,7 +47,10 @@ const themePresets = {
       codePanelBackground: "#111d2b",
       buttonText: "#07111d",
       accentSoft: "rgb(105 186 255 / 8%)",
-      accentGlow: "rgb(105 186 255 / 10%)"
+      accentGlow: "rgb(105 186 255 / 10%)",
+      accentLight: "#dcefff",
+      danger: "#ff8a80",
+      warning: "#f0d77a"
     }
   },
 
@@ -67,7 +73,10 @@ const themePresets = {
       codePanelBackground: "#1d1527",
       buttonText: "#170b24",
       accentSoft: "rgb(196 154 255 / 8%)",
-      accentGlow: "rgb(196 154 255 / 10%)"
+      accentGlow: "rgb(196 154 255 / 10%)",
+      accentLight: "#efe3ff",
+      danger: "#ff8a80",
+      warning: "#f0d77a"
     }
   },
 
@@ -90,7 +99,10 @@ const themePresets = {
       codePanelBackground: "#25161e",
       buttonText: "#260c16",
       accentSoft: "rgb(255 145 173 / 8%)",
-      accentGlow: "rgb(255 145 173 / 10%)"
+      accentGlow: "rgb(255 145 173 / 10%)",
+      accentLight: "#ffe3ea",
+      danger: "#ff9aa2",
+      warning: "#f0d77a"
     }
   }
 };
@@ -101,8 +113,8 @@ const lightPalettes = {
     surface: "#ffffff",
     surfaceHover: "#eaf4ed",
     text: "#20352a",
-    muted: "#64766a",
-    accent: "#23864d",
+    muted: "#607064",
+    accent: "#217c48",
     accentDark: "#17683a",
     border: "#d6e4da",
     navbarBackground: "rgb(255 255 255 / 92%)",
@@ -113,7 +125,10 @@ const lightPalettes = {
     codePanelBackground: "#e7efe9",
     buttonText: "#ffffff",
     accentSoft: "rgb(35 134 77 / 9%)",
-    accentGlow: "rgb(35 134 77 / 12%)"
+    accentGlow: "rgb(35 134 77 / 12%)",
+    accentLight: "#17683a",
+    danger: "#c0392b",
+    warning: "#966a00"
   },
 
   ocean: {
@@ -121,8 +136,8 @@ const lightPalettes = {
     surface: "#ffffff",
     surfaceHover: "#e7f1fb",
     text: "#20364b",
-    muted: "#637b91",
-    accent: "#247fbd",
+    muted: "#5c6d83",
+    accent: "#2171a8",
     accentDark: "#176397",
     border: "#d4e3f0",
     navbarBackground: "rgb(255 255 255 / 92%)",
@@ -133,7 +148,10 @@ const lightPalettes = {
     codePanelBackground: "#e4eef7",
     buttonText: "#ffffff",
     accentSoft: "rgb(36 127 189 / 9%)",
-    accentGlow: "rgb(36 127 189 / 12%)"
+    accentGlow: "rgb(36 127 189 / 12%)",
+    accentLight: "#176397",
+    danger: "#c0392b",
+    warning: "#966a00"
   },
 
   amethyst: {
@@ -141,8 +159,8 @@ const lightPalettes = {
     surface: "#ffffff",
     surfaceHover: "#f0e8f8",
     text: "#392747",
-    muted: "#81708f",
-    accent: "#8750bd",
+    muted: "#736281",
+    accent: "#854fba",
     accentDark: "#693796",
     border: "#e3d7ee",
     navbarBackground: "rgb(255 255 255 / 92%)",
@@ -153,7 +171,10 @@ const lightPalettes = {
     codePanelBackground: "#ebe2f3",
     buttonText: "#ffffff",
     accentSoft: "rgb(135 80 189 / 9%)",
-    accentGlow: "rgb(135 80 189 / 12%)"
+    accentGlow: "rgb(135 80 189 / 12%)",
+    accentLight: "#693796",
+    danger: "#c0392b",
+    warning: "#966a00"
   },
 
   rose: {
@@ -161,8 +182,8 @@ const lightPalettes = {
     surface: "#ffffff",
     surfaceHover: "#ffeaef",
     text: "#492b35",
-    muted: "#8e6c78",
-    accent: "#c94f76",
+    muted: "#84626e",
+    accent: "#b14766",
     accentDark: "#a9365b",
     border: "#f0d5de",
     navbarBackground: "rgb(255 255 255 / 92%)",
@@ -173,7 +194,10 @@ const lightPalettes = {
     codePanelBackground: "#f5e5eb",
     buttonText: "#ffffff",
     accentSoft: "rgb(201 79 118 / 9%)",
-    accentGlow: "rgb(201 79 118 / 12%)"
+    accentGlow: "rgb(201 79 118 / 12%)",
+    accentLight: "#a9365b",
+    danger: "#c0392b",
+    warning: "#966a00"
   }
 };
 
@@ -251,8 +275,15 @@ function applyTheme(themeName, mode = getSavedMode()) {
     "--console-background": colors.codeBackground,
     "--console-text": colors.text,
 
-    "--hover-border": colors.accentDark
+    "--hover-border": colors.accentDark,
 
+    // Token bersama untuk semua halaman (CSS per-halaman wajib memakai ini, bukan hex tetap).
+    "--accent-light": colors.accentLight,
+    "--danger": colors.danger,
+    "--warning": colors.warning,
+    "--on-accent": colors.buttonText,
+    "--shadow": mode === "light" ? "rgb(30 50 40 / 14%)" : "rgb(0 0 0 / 28%)",
+    "--overlay": mode === "light" ? "rgb(20 30 25 / 40%)" : "rgb(0 0 0 / 65%)"
   };
 
   Object.entries(cssVariables).forEach(([property, value]) => {
@@ -262,6 +293,10 @@ function applyTheme(themeName, mode = getSavedMode()) {
   root.style.colorScheme = mode;
   root.dataset.theme = themeName;
   root.dataset.mode = mode;
+
+  // Warna bilah browser (mobile) ikut tema.
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute("content", colors.background);
 }
 
 function setThemeMode(mode) {
@@ -303,6 +338,13 @@ function setTheme(themeName) {
 // Terapkan tema tersimpan saat file ini dimuat.
 
 applyTheme(getSavedTheme(), getSavedMode());
+
+// Menyinkronkan tema bila diubah dari tab/halaman lain.
+window.addEventListener("storage", (event) => {
+  if (event.key === THEME_STORAGE_KEY || event.key === THEME_MODE_KEY) {
+    applyTheme(getSavedTheme(), getSavedMode());
+  }
+});
 
 window.CodingSkanetraTheme = {
   presets: themePresets,

@@ -1,13 +1,13 @@
 
 :root {
-  --about-bg: #0b100e;
-  --about-surface: #111915;
-  --about-surface-2: #16221a;
-  --about-text: #edf4ef;
-  --about-muted: #99a89e;
-  --about-accent: #70d99a;
-  --about-accent-light: #d9f8e4;
-  --about-border: #25342b;
+  --about-bg: var(--background);
+  --about-surface: var(--surface);
+  --about-surface-2: var(--surface-hover);
+  --about-text: var(--text);
+  --about-muted: var(--muted);
+  --about-accent: var(--accent);
+  --about-accent-light: var(--accent-light);
+  --about-border: var(--border);
 }
 
 html {
@@ -87,17 +87,17 @@ html {
   gap: 12px;
   margin-top: 16px;
   padding: 13px 18px;
-  border: 1px solid #39664a;
+  border: 1px solid color-mix(in srgb, var(--accent) 44%, var(--background));
   border-radius: 12px;
   color: var(--about-accent-light);
-  background: #16271c;
+  background: color-mix(in srgb, var(--accent) 11%, var(--background));
   font-weight: 700;
   transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .about-primary-link:hover {
   transform: translateY(-2px);
-  background: #1d3625;
+  background: color-mix(in srgb, var(--accent) 18%, var(--background));
 }
 
 .about-hero-art {
@@ -113,9 +113,9 @@ html {
   width: 100%;
   max-width: 410px;
   overflow: hidden;
-  border: 1px solid #34473a;
+  border: 1px solid color-mix(in srgb, var(--accent) 33%, var(--background));
   border-radius: 17px;
-  background: #101813;
+  background: color-mix(in srgb, var(--accent) 4%, var(--background));
   box-shadow: 0 28px 80px #0005;
   transform: rotate(2deg);
 }
@@ -132,7 +132,7 @@ html {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #526b59;
+  background: color-mix(in srgb, var(--accent) 56%, var(--background));
 }
 
 .code-window-bar small {
@@ -144,25 +144,25 @@ html {
   margin: 0;
   padding: 26px 20px 32px;
   overflow-x: auto;
-  color: #d9e7dd;
+  color: color-mix(in srgb, var(--accent) 19%, var(--text));
   font: 0.86rem/2 "Consolas", "Courier New", monospace;
 }
 
 .code-purple {
-  color: #d1a5ff;
+  color: var(--syntax-purple);
 }
 
 .code-green {
-  color: #8fe8a9;
+  color: color-mix(in srgb, var(--accent) 79%, var(--text));
 }
 
 .code-yellow {
-  color: #f4d78b;
+  color: var(--syntax-yellow);
 }
 
 .hero-orbit {
   position: absolute;
-  border: 1px solid #70d99a18;
+  border: 1px solid color-mix(in srgb, var(--accent) 9%, transparent);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -212,7 +212,7 @@ html {
   border: 1px solid var(--about-border);
   border-radius: 20px;
   background:
-    radial-gradient(ellipse at top left, #1b3825 0, transparent 55%),
+    radial-gradient(ellipse at top left, color-mix(in srgb, var(--accent) 17%, var(--background)) 0, transparent 55%),
     var(--about-surface);
 }
 
@@ -221,9 +221,9 @@ html {
   place-items: center;
   width: 62px;
   height: 62px;
-  border: 1px solid #3c694a;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--background));
   border-radius: 16px;
-  background: #193322;
+  background: color-mix(in srgb, var(--accent) 15%, var(--background));
   color: var(--about-accent);
   font: 700 1.3rem "Consolas", monospace;
 }
@@ -266,14 +266,14 @@ html {
 
 .team-card:hover {
   transform: translateY(-4px);
-  border-color: #42634c;
+  border-color: color-mix(in srgb, var(--accent) 47%, var(--background));
 }
 
 .creator-card {
   background:
-    radial-gradient(ellipse at top left, #1c3a26, transparent 70%),
+    radial-gradient(ellipse at top left, color-mix(in srgb, var(--accent) 18%, var(--background)), transparent 70%),
     var(--about-surface);
-  border-color: #3a6448;
+  border-color: color-mix(in srgb, var(--accent) 43%, var(--background));
 }
 
 .team-card-top {
@@ -290,9 +290,9 @@ html {
   width: 54px;
   height: 54px;
   flex-shrink: 0;
-  border: 1px solid #355540;
+  border: 1px solid color-mix(in srgb, var(--accent) 37%, var(--background));
   border-radius: 15px;
-  background: #1a2c20;
+  background: color-mix(in srgb, var(--accent) 14%, var(--background));
   color: var(--about-accent);
 }
 
@@ -303,9 +303,9 @@ html {
 
 .role-badge {
   padding: 7px 9px;
-  border: 1px solid #34463a;
+  border: 1px solid color-mix(in srgb, var(--accent) 33%, var(--background));
   border-radius: 7px;
-  color: #a7c6b0;
+  color: color-mix(in srgb, var(--accent) 65%, var(--text));
   font-size: 0.62rem;
   font-weight: 800;
   letter-spacing: 0.06em;
@@ -339,7 +339,7 @@ html {
   gap: 9px;
   padding-top: 15px;
   border-top: 1px solid var(--about-border);
-  color: #b6c5ba;
+  color: color-mix(in srgb, var(--accent) 53%, var(--text));
   font-size: 0.76rem;
 }
 
@@ -373,10 +373,10 @@ html {
   grid-template-columns: 1fr 1fr;
   gap: 36px;
   padding: 34px;
-  border: 1px solid #355541;
+  border: 1px solid color-mix(in srgb, var(--accent) 37%, var(--background));
   border-radius: 22px;
   background:
-    radial-gradient(ellipse at top left, #1a3824, transparent 55%),
+    radial-gradient(ellipse at top left, color-mix(in srgb, var(--accent) 17%, var(--background)), transparent 55%),
     var(--about-surface);
 }
 
@@ -399,8 +399,8 @@ html {
   padding: 8px 10px;
   border: 1px solid var(--about-border);
   border-radius: 8px;
-  color: #c2d4c7;
-  background: #101813a8;
+  color: color-mix(in srgb, var(--accent) 41%, var(--text));
+  background: color-mix(in srgb, color-mix(in srgb, var(--accent) 4%, var(--background)) 66%, transparent);
   font-size: 0.75rem;
 }
 
@@ -419,7 +419,7 @@ html {
   padding: 17px;
   border: 1px solid var(--about-border);
   border-radius: 14px;
-  background: #101813;
+  background: color-mix(in srgb, var(--accent) 4%, var(--background));
   color: var(--about-text);
   transition:
     border-color 0.2s ease,
@@ -427,8 +427,8 @@ html {
 }
 
 .contact-method:hover {
-  border-color: #568363;
-  background: #17241b;
+  border-color: color-mix(in srgb, var(--accent) 64%, var(--background));
+  background: color-mix(in srgb, var(--accent) 10%, var(--background));
 }
 
 .contact-method-icon {
@@ -438,7 +438,7 @@ html {
   height: 44px;
   flex-shrink: 0;
   border-radius: 12px;
-  background: #1b3222;
+  background: color-mix(in srgb, var(--accent) 16%, var(--background));
   color: var(--about-accent);
 }
 
@@ -645,4 +645,8 @@ html {
   .contact-method {
     transition: none;
   }
+}
+
+:root[data-mode="light"] .code-green {
+  color: #16672c;
 }

@@ -5,23 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Editor C++ online CodingSkanetra untuk belajar dasar pemrograman C++.">
   <title>C++ Editor | CodingSkanetra</title>
-  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/theme.js?v=5"></script>
+  <link rel="stylesheet" href="../css/style.css?v=5">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/theme/material-darker.min.css">
-  <link rel="stylesheet" href="../css/editor-python.css?v=4">
+  <link rel="stylesheet" href="../css/editor-python.css?v=5">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/codemirror.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/mode/clike/clike.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/edit/closebrackets.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/edit/matchbrackets.min.js" defer></script>
-  <script src="../js/main.js" defer></script>
-  <script src="../js/terminal.js?v=4" defer></script>
-  <script src="../js/cpp-runner.js?v=4" defer></script>
-  <script src="../js/editor-cpp.js?v=4" defer></script>
+  <script src="../js/main.js?v=5" defer></script>
+  <script src="../js/terminal.js?v=5" defer></script>
+  <script src="../js/cpp-runner.js?v=5" defer></script>
+  <script src="../js/editor-cpp.js?v=5" defer></script>
 </head>
 <body>
   <header class="navbar">
-    <a class="brand" href="../index.html#beranda" aria-label="Coding Skanetra, beranda">
-      <span class="brand-icon">&lt;/&gt;</span>
+    <a class="brand" href="../index.html#beranda" aria-label="CodingSkanetra, beranda">
+      <span class="brand-icon" aria-hidden="true">&lt;/&gt;</span>
       <span>Coding<span class="brand-accent">Skanetra</span></span>
     </a>
     <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
@@ -30,10 +31,10 @@
     <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
       <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
       <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
-      <a class="nav-link active" href="playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link active" href="playground.html" data-nav="playground" aria-current="page">Playground</a>
       <a class="nav-link" href="peringkat.html" data-nav="peringkat">Peringkat</a>
-      <a class="nav-link" href="games.html">Games</a>
-      <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur organisasi">Struktur Organisasi</a>
+      <a class="nav-link" href="games.html" data-nav="games">Games</a>
+      <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
       <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
       <a class="nav-link" href="setting.html" data-nav="setting">Setting</a>
     </nav>
@@ -128,6 +129,5 @@ int main() {
   <footer class="footer">
     <div class="container"><p>© <span id="year"></span> CodingSkanetra. Belajar bersama, berkembang bersama.</p></div>
   </footer>
-  <script src="../js/theme.js"></script>
 </body>
 </html>

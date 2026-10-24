@@ -13,26 +13,27 @@
   <meta name="theme-color" content="#0b100e">
   <title>Coding Skanetra — Build Something</title>
 
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/main.js" defer></script>
+  <script src="js/theme.js?v=5"></script>
+  <link rel="stylesheet" href="css/style.css?v=5">
+  <script src="js/main.js?v=5" defer></script>
 </head>
 
 <body>
   <header class="navbar">
-    <a class="brand" href="index.html#beranda" aria-label="Coding Skanetra, beranda">
-      <span class="brand-icon">&lt;/&gt;</span>
+    <a class="brand" href="index.html#beranda" aria-label="CodingSkanetra, beranda">
+      <span class="brand-icon" aria-hidden="true">&lt;/&gt;</span>
       <span>Coding<span class="brand-accent">Skanetra</span></span>
     </a>
     <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
       <span></span><span></span><span></span>
     </button>
     <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
-      <a class="nav-link" href="index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link active" href="index.html#beranda" data-nav="beranda" aria-current="page">Beranda</a>
       <a class="nav-link" href="pages/materi.html" data-nav="materi">Materi</a>
       <a class="nav-link" href="pages/playground.html" data-nav="playground">Playground</a>
       <a class="nav-link" href="pages/peringkat.html" data-nav="peringkat">Peringkat</a>
-      <a class="nav-link" href="pages/games.html">Games</a>
-      <a class="nav-link" href="pages/struktur-organisasi.html" data-nav="struktur organisasi">Struktur Organisasi</a>
+      <a class="nav-link" href="pages/games.html" data-nav="games">Games</a>
+      <a class="nav-link" href="pages/struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
       <a class="nav-link" href="pages/about.html" data-nav="about">Tentang</a>
       <a class="nav-link" href="pages/setting.html" data-nav="setting">Setting</a>
     </nav>
@@ -184,14 +185,14 @@
 
         <article class="feature-card">
           <div class="feature-icon icon-purple">⌘</div>
-          <p class="card-index">03 / CONNECT</p>
-          <h3>Community</h3>
+          <p class="card-index">03 / GAMES</p>
+          <h3>Code Rush: Robot Escape</h3>
           <p>
-            Mengenal kegiatan, dokumentasi, dan perjalanan
-            belajar anggota Coding Skanetra.
+            Bermain game sederhana selagi 
+            waktu luang.
           </p>
-          <a class="text-link" href="#tentang">
-            Kenali kami <span>↗</span>
+          <a class="text-link" href="pages/games.html">
+            Ayo main <span>↗</span>
           </a>
         </article>
       </div>
@@ -244,6 +245,5 @@
     <p>Learn. Build. Grow.</p>
     <p>© <span id="year"></span> Coding Skanetra</p>
   </footer>
-  <script src="js/theme.js"></script>
 </body>
 </html>

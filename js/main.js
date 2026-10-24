@@ -4,48 +4,51 @@ const menuToggle = document.querySelector("#menu-toggle");
 const navLinks = document.querySelector("#nav-links");
 
 
-// Tandai halaman aktif pada navbar bersama.
-(() => {
-  const path = window.location.pathname;
-  const page = path.split('/').pop();
-  const lessonPages = ['materi.html', 'html-dasar.html', 'css-dasar.html', 'javascript-dasar.html', 'python-dasar.html'];
-  const navKey = lessonPages.includes(page) ? 'materi'
-    : (page === 'playground.html' || page.startsWith('editor-')) ? 'playground'
-    : 'beranda';
-
-  document.querySelectorAll('.nav-links [data-nav]').forEach((link) => {
-    const key = link.dataset.nav;
-    const active = key === navKey;
-    link.classList.toggle('active', active);
-    if (active) link.setAttribute('aria-current', 'page');
-    else link.removeAttribute('aria-current');
-  });
-})();
-
 // Update copyright year automatically.
 if (yearElement) {
   yearElement.textContent = new Date().getFullYear();
 }
 
-// Toggle the mobile navigation.
+// Navigasi mobile (hamburger).
+// Aktif di semua halaman yang memuat navbar. Tautan aktif ditandai langsung di HTML
+// (class "active" + aria-current), jadi tidak perlu ditebak dari URL.
 if (menuToggle && navLinks) {
-  menuToggle.addEventListener("click", () => {
-    const isOpen = navLinks.classList.toggle("is-open");
+  // Harus sama dengan breakpoint hamburger di css/style.css.
+  const desktopQuery = window.matchMedia("(min-width: 1025px)");
 
-    menuToggle.setAttribute("aria-expanded", String(isOpen));
-    menuToggle.setAttribute(
-      "aria-label",
-      isOpen ? "Tutup navigasi" : "Buka navigasi"
-    );
+  function setMenu(open) {
+    navLinks.classList.toggle("is-open", open);
+    menuToggle.setAttribute("aria-expanded", String(open));
+    menuToggle.setAttribute("aria-label", open ? "Tutup navigasi" : "Buka navigasi");
+  }
+
+  menuToggle.addEventListener("click", () => {
+    setMenu(!navLinks.classList.contains("is-open"));
   });
 
-  // Close the menu after a navigation link is selected.
+  // Tutup menu setelah salah satu tautan dipilih.
   navLinks.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      navLinks.classList.remove("is-open");
-      menuToggle.setAttribute("aria-expanded", "false");
-      menuToggle.setAttribute("aria-label", "Buka navigasi");
-    });
+    link.addEventListener("click", () => setMenu(false));
+  });
+
+  // Tutup saat mengetuk di luar menu.
+  document.addEventListener("click", (event) => {
+    if (!navLinks.classList.contains("is-open")) return;
+    if (navLinks.contains(event.target) || menuToggle.contains(event.target)) return;
+    setMenu(false);
+  });
+
+  // Tutup dengan tombol Escape dan kembalikan fokus ke tombol menu.
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && navLinks.classList.contains("is-open")) {
+      setMenu(false);
+      menuToggle.focus();
+    }
+  });
+
+  // Reset saat layar membesar ke tampilan desktop.
+  desktopQuery.addEventListener("change", (event) => {
+    if (event.matches) setMenu(false);
   });
 }
 
