@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Python Dasar | CodingSkanetra</title>
+  <meta
+    name="description"
+    content="Belajar dasar Python bersama CodingSkanetra: variabel, input-output, kondisi, perulangan, dan fungsi."
+  >
+
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/main.js" defer></script>
+</head>
+
+<body>
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="Coding Skanetra, beranda">
+      <span class="brand-icon">&lt;/&gt;</span>
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+      <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link" href="../index.html#tentang" data-nav="tentang">Tentang</a>
+    </nav>
+  </header>
+
+  <main class="lesson-page">
+    <div class="container lesson-layout">
+
+      <aside class="lesson-sidebar">
+        <a href="materi.html" class="back-link">
+          ← Kembali ke Materi
+        </a>
+
+        <p class="eyebrow">LEARNING PATH</p>
+        <h2>Python Dasar</h2>
+
+        <nav class="lesson-nav" aria-label="Daftar materi">
+          <a href="#pengenalan">1. Pengenalan Python</a>
+          <a href="#variabel">2. Variabel dan Tipe Data</a>
+          <a href="#input-output">3. Input dan Output</a>
+          <a href="#kondisi">4. Kondisi</a>
+          <a href="#perulangan">5. Perulangan</a>
+          <a href="#fungsi">6. Fungsi</a>
+          <a href="#latihan">7. Latihan</a>
+        </nav>
+      </aside>
+
+      <article class="lesson-content">
+        <div class="lesson-header">
+          <p class="eyebrow">MATERI PEMULA</p>
+          <h1>Kenalan dengan Python</h1>
+          <p>
+            Bahasa yang sintaksnya ringkas dan mudah dibaca, cocok untuk langkah pertama belajar pemrograman.
+          </p>
+          <span class="lesson-badge">Pemula · 20 menit</span>
+        </div>
+
+        <section id="pengenalan" class="lesson-section">
+          <h2>1. Apa itu Python?</h2>
+
+          <p>
+            <strong>Python</strong> adalah bahasa pemrograman serbaguna yang dipakai untuk web, analisis data, otomasi, hingga kecerdasan buatan. Sintaksnya mirip bahasa sehari-hari sehingga ramah untuk pemula.
+          </p>
+
+          <p>
+            Program Python pertama biasanya hanya satu baris:
+          </p>
+
+          <pre><code>print("Halo, CodingSkanetra!")</code></pre>
+
+          <p>
+            Fungsi <code>print()</code> menampilkan teks atau nilai ke layar.
+          </p>
+        </section>
+
+        <section id="variabel" class="lesson-section">
+          <h2>2. Variabel dan tipe data</h2>
+
+          <p>
+            Di Python, variabel dibuat cukup dengan memberi nama dan nilai. Tidak perlu kata kunci khusus.
+          </p>
+
+          <pre><code>nama = "Kaito"      # str  (teks)
+umur = 17           # int  (bilangan bulat)
+tinggi = 1.65       # float (bilangan desimal)
+aktif = True        # bool (benar/salah)
+
+print(nama, umur, tinggi, aktif)</code></pre>
+
+          <div class="lesson-table-wrap">
+            <table class="lesson-table">
+              <thead>
+                <tr><th>Tipe</th><th>Contoh</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>str</code></td><td><code>"Halo"</code></td></tr>
+                <tr><td><code>int</code></td><td><code>42</code></td></tr>
+                <tr><td><code>float</code></td><td><code>3.14</code></td></tr>
+                <tr><td><code>bool</code></td><td><code>True</code>, <code>False</code></td></tr>
+                <tr><td><code>list</code></td><td><code>["apel", "jeruk"]</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="input-output" class="lesson-section">
+          <h2>3. Input dan output</h2>
+
+          <p>
+            <code>input()</code> membaca teks dari pengguna. Hasilnya selalu berupa <code>str</code>, jadi ubah dengan <code>int()</code> jika ingin dihitung.
+          </p>
+
+          <pre><code>nama = input("Siapa namamu? ")
+print("Halo,", nama)
+
+angka = int(input("Masukkan angka: "))
+print("Dua kali lipatnya:", angka * 2)</code></pre>
+
+          <p>
+            Catatan: di Python Editor pada web ini, <code>input()</code> muncul sebagai kotak dialog browser.
+          </p>
+        </section>
+
+        <section id="kondisi" class="lesson-section">
+          <h2>4. Kondisi</h2>
+
+          <p>
+            Python memakai <strong>indentasi</strong> (spasi di awal baris) untuk menandai isi blok kode. Jangan lupa tanda titik dua <code>:</code> setelah kondisi.
+          </p>
+
+          <pre><code>nilai = 82
+
+if nilai &gt;= 90:
+    print("Sangat baik")
+elif nilai &gt;= 75:
+    print("Lulus")
+else:
+    print("Belum lulus")</code></pre>
+        </section>
+
+        <section id="perulangan" class="lesson-section">
+          <h2>5. Perulangan</h2>
+
+          <pre><code>for i in range(1, 4):
+    print("Perulangan ke-", i)
+
+buah = ["apel", "jeruk", "mangga"]
+for item in buah:
+    print(item)</code></pre>
+
+          <p>
+            <code>range(1, 4)</code> menghasilkan angka 1, 2, dan 3. Angka batas akhir (4) tidak ikut.
+          </p>
+        </section>
+
+        <section id="fungsi" class="lesson-section">
+          <h2>6. Fungsi</h2>
+
+          <p>
+            Fungsi dibuat dengan <code>def</code>. Gunakan <code>return</code> untuk mengembalikan hasil.
+          </p>
+
+          <pre><code>def sapa(nama):
+    return "Halo, " + nama + "!"
+
+print(sapa("Kaito"))
+print(sapa("Skanetra"))</code></pre>
+        </section>
+
+
+        <section id="latihan" class="lesson-section">
+          <h2>7. Latihan Pemahaman</h2>
+
+          <p>
+            Fungsi Python mana yang dipakai untuk <strong>menampilkan</strong> teks ke layar?
+          </p>
+
+          <div
+            class="quiz-options"
+            id="quiz-options"
+            data-correct="a"
+            data-benar="Benar! print() menampilkan teks atau nilai ke layar."
+            data-salah="Belum tepat. Di Python, fungsi untuk menampilkan teks adalah print()."
+          >
+            <button type="button" data-answer="a">print()</button>
+            <button type="button" data-answer="b">echo()</button>
+            <button type="button" data-answer="c">cout()</button>
+          </div>
+
+          <p id="quiz-feedback" class="quiz-feedback" aria-live="polite"></p>
+        </section>
+
+        <div class="lesson-footer">
+          <a href="editor-python.html" class="button button-primary">
+            Coba di Python Editor →
+          </a>
+          <a href="materi.html" class="button button-secondary">
+            Kembali ke Semua Materi
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>
+        © <span id="year"></span> CodingSkanetra.
+        Belajar bersama, berkembang bersama.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

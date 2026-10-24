@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="Coding Skanetra — komunitas belajar pemrograman, berbagi ide, dan membangun karya bersama."
+  >
+
+  <meta name="theme-color" content="#0b100e">
+  <title>Coding Skanetra — Build Something</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+
+<body>
+  <header class="navbar">
+    <a class="brand" href="index.html#beranda" aria-label="Coding Skanetra, beranda">
+      <span class="brand-icon">&lt;/&gt;</span>
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link" href="pages/materi.html" data-nav="materi">Materi</a>
+      <a class="nav-link" href="pages/playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link" href="index.html#tentang" data-nav="tentang">Tentang</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero section-container" id="beranda">
+      <div class="hero-content">
+        <div class="status-label">
+          <span class="status-dot"></span>
+          A PLACE TO LEARN & BUILD
+        </div>
+
+        <h1>
+          Think it.<br>
+          <span class="gradient-text">Code it.</span><br>
+          Make it real.
+        </h1>
+
+        <p class="hero-description">
+          Ruang untuk belajar pemrograman, mengembangkan ide,
+          dan menciptakan sesuatu bersama.
+          Satu baris kode pada satu waktu.
+        </p>
+
+        <div class="hero-actions">
+          <a class="button button-primary" href="#fitur">
+            Jelajahi website <span>→</span>
+          </a>
+          <a class="button button-secondary" href="#tentang">
+            Kenali komunitas
+          </a>
+        </div>
+
+        <div class="hero-note">
+          <span class="note-line"></span>
+          <p>Learn together. Build with purpose.</p>
+        </div>
+      </div>
+
+      <div class="code-window" aria-label="Ilustrasi kode program">
+        <div class="window-header">
+          <div class="window-dots" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <span class="window-filename">hello-world.js</span>
+          <span class="window-status">JS</span>
+        </div>
+
+        <div class="code-body">
+          <div class="code-line">
+            <span class="line-number">01</span>
+            <code><span class="code-purple">const</span> <span class="code-blue">community</span> = {</code>
+          </div>
+          <div class="code-line">
+            <span class="line-number">02</span>
+            <code>&nbsp;&nbsp;name: <span class="code-green">"Coding Skanetra"</span>,</code>
+          </div>
+          <div class="code-line">
+            <span class="line-number">03</span>
+            <code>&nbsp;&nbsp;learn: <span class="code-orange">true</span>,</code>
+          </div>
+          <div class="code-line">
+            <span class="line-number">04</span>
+            <code>&nbsp;&nbsp;build: <span class="code-orange">true</span>,</code>
+          </div>
+          <div class="code-line">
+            <span class="line-number">05</span>
+            <code>&nbsp;&nbsp;grow: <span class="code-orange">true</span></code>
+          </div>
+          <div class="code-line">
+            <span class="line-number">06</span>
+            <code>};</code>
+          </div>
+          <div class="code-line code-spacer">
+            <span class="line-number">07</span>
+            <code>&nbsp;</code>
+          </div>
+          <div class="code-line">
+            <span class="line-number">08</span>
+            <code><span class="code-purple">function</span> <span class="code-blue">startJourney</span>() {</code>
+          </div>
+          <div class="code-line">
+            <span class="line-number">09</span>
+            <code>&nbsp;&nbsp;<span class="code-purple">return</span> <span class="code-green">"Let's build!"</span>;</code>
+          </div>
+          <div class="code-line">
+            <span class="line-number">10</span>
+            <code>}</code>
+          </div>
+          <div class="code-output">
+            <span class="output-symbol">›</span>
+            <span>Let's build!</span>
+            <span class="cursor"></span>
+          </div>
+        </div>
+
+        <div class="window-footer">
+          <span><span class="status-dot"></span> Ready to create</span>
+          <span>UTF-8</span>
+        </div>
+      </div>
+
+      <div class="hero-decoration decoration-one"></div>
+      <div class="hero-decoration decoration-two"></div>
+    </section>
+
+    <section class="feature-section section-container" id="fitur">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">EXPLORE THE POSSIBILITIES</p>
+          <h2>One community.<br><span>Many possibilities.</span></h2>
+        </div>
+
+        <p class="section-description">
+          Belajar hal baru, berbagi pengetahuan, dan mengubah
+          rasa ingin tahu menjadi karya.
+        </p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="feature-icon icon-green">&lt;/&gt;</div>
+          <p class="card-index">01 / LEARN</p>
+          <h3>Learning Hub</h3>
+          <p>
+            Kumpulan materi dan latihan untuk memahami
+            pemrograman dari dasar.
+          </p>
+          <a class="text-link" href="pages/materi.html">
+            Jelajahi materi <span>↗</span>
+          </a>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon icon-blue">{ }</div>
+          <p class="card-index">02 / CREATE</p>
+          <h3>Code Playground</h3>
+          <p>
+            Ruang eksperimen untuk menulis kode dan
+            mencoba ide pemrograman.
+          </p>
+          <a class="text-link" href="pages/playground.html">
+            Buka playground <span>↗</span>
+          </a>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon icon-purple">⌘</div>
+          <p class="card-index">03 / CONNECT</p>
+          <h3>Community</h3>
+          <p>
+            Mengenal kegiatan, dokumentasi, dan perjalanan
+            belajar anggota Coding Skanetra.
+          </p>
+          <a class="text-link" href="#tentang">
+            Kenali kami <span>↗</span>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <section class="about-section section-container" id="tentang">
+      <div class="about-mark" aria-hidden="true">
+        <span>&lt;</span>
+        <span class="mark-green">/</span>
+        <span>&gt;</span>
+      </div>
+
+      <div class="about-content">
+        <p class="eyebrow">MORE THAN JUST CODE</p>
+        <h2>Kita belajar.<br><span>Kita berkembang.</span></h2>
+        <p>
+          Coding bukan hanya tentang menulis baris program.
+          Ada proses berpikir, mencoba, memperbaiki kesalahan,
+          dan belajar dari satu sama lain.
+        </p>
+        <p>
+          Coding Skanetra ingin menjadi ruang untuk menjalani
+          proses itu bersama-sama.
+        </p>
+      </div>
+    </section>
+
+    <section class="cta-section section-container" id="mulai">
+      <div class="cta-panel">
+        <p class="eyebrow">YOUR NEXT LINE STARTS HERE</p>
+        <h2>Punya ide?<br><span>Mulai dari satu baris kode.</span></h2>
+        <p>
+          Jelajahi materi dan temukan hal baru yang bisa
+          kamu bangun dengan pemrograman.
+        </p>
+        <a class="button button-primary" href="#fitur">
+          Mulai menjelajah <span>→</span>
+        </a>
+        <div class="cta-glow" aria-hidden="true"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer section-container">
+    <a class="brand footer-brand" href="#beranda">
+      <span class="brand-icon">&lt;/&gt;</span>
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+
+    <p>Learn. Build. Grow.</p>
+    <p>© <span id="year"></span> Coding Skanetra</p>
+  </footer>
+</body>
+</html>

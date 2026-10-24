@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Materi Belajar | CodingSkanetra</title>
+  <meta
+    name="description"
+    content="Kumpulan materi pemrograman untuk anggota CodingSkanetra."
+  >
+
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/main.js" defer></script>
+</head>
+
+<body>
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="Coding Skanetra, beranda">
+      <span class="brand-icon">&lt;/&gt;</span>
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+      <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link" href="../index.html#tentang" data-nav="tentang">Tentang</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">LEARNING HUB</p>
+          <h1>Belajar, satu baris kode setiap kali.</h1>
+          <p>
+            Temukan materi pemrograman, pelajari konsep dasarnya,
+            lalu kembangkan kemampuanmu melalui latihan.
+          </p>
+        </div>
+
+        <div class="materi-tools">
+          <label class="sr-only" for="search-materi">
+            Cari materi
+          </label>
+          <input
+            type="search"
+            id="search-materi"
+            placeholder="Cari HTML, Python, JavaScript..."
+          >
+
+          <div class="materi-filters" aria-label="Filter tingkat materi">
+            <button class="filter-btn active" data-filter="semua" type="button">
+              Semua
+            </button>
+            <button class="filter-btn" data-filter="pemula" type="button">
+              Pemula
+            </button>
+            <button class="filter-btn" data-filter="menengah" type="button">
+              Menengah
+            </button>
+          </div>
+        </div>
+
+        <div class="materi-grid" id="materi-grid">
+          <article class="materi-card" data-level="pemula">
+            <span class="materi-icon">HTML</span>
+            <p class="materi-level">PEMULA</p>
+            <h2>HTML Dasar</h2>
+            <p>
+              Kenali struktur halaman web, elemen, heading,
+              tautan, gambar, dan formulir.
+            </p>
+            <a href="html-dasar.html" class="materi-link">Pelajari materi →</a>
+          </article>
+
+          <article class="materi-card" data-level="pemula">
+            <span class="materi-icon">CSS</span>
+            <p class="materi-level">PEMULA</p>
+            <h2>CSS Dasar</h2>
+            <p>
+              Atur warna, tipografi, jarak, layout, dan tampilan
+              website agar lebih menarik.
+            </p>
+            <a href="css-dasar.html" class="materi-link">Pelajari materi →</a>
+          </article>
+
+          <article class="materi-card" data-level="pemula">
+            <span class="materi-icon">JS</span>
+            <p class="materi-level">PEMULA</p>
+            <h2>JavaScript Dasar</h2>
+            <p>
+              Pelajari variabel, kondisi, perulangan, fungsi,
+              dan interaksi pada halaman web.
+            </p>
+            <a href="javascript-dasar.html" class="materi-link">Pelajari materi →</a>
+          </article>
+
+          <article class="materi-card" data-level="pemula">
+            <span class="materi-icon">Py</span>
+            <p class="materi-level">PEMULA</p>
+            <h2>Python Dasar</h2>
+            <p>
+              Mulai dari variabel, tipe data, input-output,
+              kondisi, perulangan, hingga fungsi.
+            </p>
+            <a href="python-dasar.html" class="materi-link">Pelajari materi →</a>
+          </article>
+
+          <article class="materi-card" data-level="menengah">
+            <span class="materi-icon">C++</span>
+            <p class="materi-level">MENENGAH</p>
+            <h2>C++ Dasar</h2>
+            <p>
+              Dalami logika pemrograman, fungsi, array,
+              dan pengenalan pemrograman berorientasi objek.
+            </p>
+            <span class="materi-link materi-link-disabled" aria-disabled="true">Segera hadir</span>
+          </article>
+
+          <article class="materi-card" data-level="menengah">
+            <span class="materi-icon">&lt;/&gt;</span>
+            <p class="materi-level">MENENGAH</p>
+            <h2>Proyek Mini</h2>
+            <p>
+              Terapkan pengetahuanmu dengan membuat proyek kecil
+              dan belajar menyelesaikan masalah nyata.
+            </p>
+            <span class="materi-link materi-link-disabled" aria-disabled="true">Segera hadir</span>
+          </article>
+
+
+        </div>
+
+        <p id="hasil-materi" class="hasil-materi" aria-live="polite"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>
+        © <span id="year"></span> CodingSkanetra.
+        Belajar bersama, berkembang bersama.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

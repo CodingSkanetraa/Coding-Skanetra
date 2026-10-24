@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>CSS Dasar | CodingSkanetra</title>
+  <meta
+    name="description"
+    content="Belajar dasar CSS bersama CodingSkanetra: selektor, warna, box model, dan flexbox."
+  >
+
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/main.js" defer></script>
+</head>
+
+<body>
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="Coding Skanetra, beranda">
+      <span class="brand-icon">&lt;/&gt;</span>
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+      <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link" href="../index.html#tentang" data-nav="tentang">Tentang</a>
+    </nav>
+  </header>
+
+  <main class="lesson-page">
+    <div class="container lesson-layout">
+
+      <aside class="lesson-sidebar">
+        <a href="materi.html" class="back-link">
+          ← Kembali ke Materi
+        </a>
+
+        <p class="eyebrow">LEARNING PATH</p>
+        <h2>CSS Dasar</h2>
+
+        <nav class="lesson-nav" aria-label="Daftar materi">
+          <a href="#pengenalan">1. Pengenalan CSS</a>
+          <a href="#selektor">2. Selektor</a>
+          <a href="#warna-teks">3. Warna dan Teks</a>
+          <a href="#box-model">4. Box Model</a>
+          <a href="#flexbox">5. Layout Flexbox</a>
+          <a href="#latihan">6. Latihan</a>
+        </nav>
+      </aside>
+
+      <article class="lesson-content">
+        <div class="lesson-header">
+          <p class="eyebrow">MATERI PEMULA</p>
+          <h1>Kenalan dengan CSS</h1>
+          <p>
+            Atur warna, jarak, dan tata letak supaya halaman HTML-mu terlihat rapi dan menarik.
+          </p>
+          <span class="lesson-badge">Pemula · 15 menit</span>
+        </div>
+
+        <section id="pengenalan" class="lesson-section">
+          <h2>1. Apa itu CSS?</h2>
+
+          <p>
+            <strong>CSS</strong> (Cascading Style Sheets) dipakai untuk mengatur tampilan halaman web: warna, ukuran huruf, jarak, sampai tata letak. HTML menyusun isi halaman, CSS yang mempercantiknya.
+          </p>
+
+          <p>
+            Satu aturan CSS terdiri dari <strong>selektor</strong> (elemen mana yang diatur) dan <strong>deklarasi</strong> (apa yang diubah) di dalam kurung kurawal.
+          </p>
+
+          <pre><code>h1 {
+  color: green;
+  font-size: 32px;
+}</code></pre>
+
+          <p>
+            Pada contoh di atas, <code>h1</code> adalah selektor, <code>color</code> dan <code>font-size</code> adalah properti, sedangkan <code>green</code> dan <code>32px</code> adalah nilainya.
+          </p>
+        </section>
+
+        <section id="selektor" class="lesson-section">
+          <h2>2. Selektor: memilih elemen</h2>
+
+          <p>
+            Ada tiga selektor yang paling sering dipakai:
+          </p>
+
+          <div class="lesson-table-wrap">
+            <table class="lesson-table">
+              <thead>
+                <tr><th>Selektor</th><th>Contoh</th><th>Memilih</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Elemen</td><td><code>p { }</code></td><td>Semua elemen <code>&lt;p&gt;</code>.</td></tr>
+                <tr><td>Class</td><td><code>.kartu { }</code></td><td>Elemen dengan <code>class="kartu"</code>.</td></tr>
+                <tr><td>ID</td><td><code>#judul { }</code></td><td>Elemen dengan <code>id="judul"</code>. ID harus unik.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <pre><code>&lt;p class="kartu"&gt;Halo!&lt;/p&gt;
+
+.kartu {
+  background: #e8f5ee;
+  padding: 16px;
+}</code></pre>
+        </section>
+
+        <section id="warna-teks" class="lesson-section">
+          <h2>3. Warna dan teks</h2>
+
+          <div class="lesson-table-wrap">
+            <table class="lesson-table">
+              <thead>
+                <tr><th>Properti</th><th>Fungsi</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>color</code></td><td>Warna teks.</td></tr>
+                <tr><td><code>background-color</code></td><td>Warna latar elemen.</td></tr>
+                <tr><td><code>font-size</code></td><td>Ukuran huruf.</td></tr>
+                <tr><td><code>font-family</code></td><td>Jenis huruf.</td></tr>
+                <tr><td><code>text-align</code></td><td>Perataan teks: <code>left</code>, <code>center</code>, <code>right</code>.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            Warna bisa ditulis dengan nama (<code>red</code>), kode heksadesimal (<code>#18864b</code>), atau <code>rgb(24, 134, 75)</code>.
+          </p>
+        </section>
+
+        <section id="box-model" class="lesson-section">
+          <h2>4. Box model: jarak dan ruang</h2>
+
+          <p>
+            Setiap elemen HTML adalah sebuah kotak. Dari dalam ke luar, kotak itu terdiri dari <strong>content</strong>, <strong>padding</strong> (jarak isi ke tepi), <strong>border</strong> (garis tepi), dan <strong>margin</strong> (jarak ke elemen lain).
+          </p>
+
+          <pre><code>.kartu {
+  padding: 20px;
+  border: 2px solid #18864b;
+  border-radius: 12px;
+  margin: 16px auto;
+  max-width: 400px;
+}</code></pre>
+
+          <ul>
+            <li><code>padding</code> mengatur ruang di <strong>dalam</strong> border.</li>
+            <li><code>margin</code> mengatur ruang di <strong>luar</strong> border.</li>
+            <li><code>border-radius</code> membuat sudut kotak jadi melengkung.</li>
+          </ul>
+        </section>
+
+        <section id="flexbox" class="lesson-section">
+          <h2>5. Layout dengan Flexbox</h2>
+
+          <p>
+            <strong>Flexbox</strong> memudahkan menata elemen dalam satu baris atau kolom. Cukup beri <code>display: flex</code> pada elemen induk.
+          </p>
+
+          <pre><code>.menu {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}</code></pre>
+
+          <ul>
+            <li><code>gap</code> mengatur jarak antar anak elemen.</li>
+            <li><code>justify-content</code> mengatur posisi sepanjang sumbu utama (mendatar secara bawaan).</li>
+            <li><code>align-items</code> mengatur posisi pada sumbu silang (menurun secara bawaan).</li>
+          </ul>
+        </section>
+
+
+        <section id="latihan" class="lesson-section">
+          <h2>6. Latihan Pemahaman</h2>
+
+          <p>
+            Properti CSS mana yang dipakai untuk mengubah <strong>warna teks</strong>?
+          </p>
+
+          <div
+            class="quiz-options"
+            id="quiz-options"
+            data-correct="b"
+            data-benar="Benar! Properti color mengatur warna teks, sedangkan background-color mengatur warna latar."
+            data-salah="Belum tepat. Ingat: color mengatur warna teks."
+          >
+            <button type="button" data-answer="a">background-color</button>
+            <button type="button" data-answer="b">color</button>
+            <button type="button" data-answer="c">font-size</button>
+          </div>
+
+          <p id="quiz-feedback" class="quiz-feedback" aria-live="polite"></p>
+        </section>
+
+        <div class="lesson-footer">
+          <a href="editor-html.html" class="button button-primary">
+            Coba di Web Editor →
+          </a>
+          <a href="materi.html" class="button button-secondary">
+            Kembali ke Semua Materi
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>
+        © <span id="year"></span> CodingSkanetra.
+        Belajar bersama, berkembang bersama.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pilih editor coding untuk berlatih di CodingSkanetra.">
+  <meta name="theme-color" content="#0b100e">
+  <title>Playground | CodingSkanetra</title>
+
+  <!-- CSS utama untuk menjaga identitas visual dan navbar tetap konsisten -->
+  <link rel="stylesheet" href="../css/style.css">
+  <!-- CSS khusus halaman katalog Playground -->
+  <link rel="stylesheet" href="../css/playground.css">
+  <script src="../js/main.js" defer></script>
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="CodingSkanetra, beranda">
+      <span class="brand-icon" aria-hidden="true">&lt;/&gt;</span>
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+
+    <button
+      class="menu-toggle"
+      id="menu-toggle"
+      type="button"
+      aria-label="Buka navigasi"
+      aria-expanded="false"
+      aria-controls="nav-links"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda">Beranda</a>
+      <a class="nav-link" href="materi.html">Materi</a>
+      <a class="nav-link active" href="playground.html" aria-current="page">Playground</a>
+      <a class="nav-link" href="../index.html#tentang">Tentang</a>
+    </nav>
+  </header>
+
+  <main class="playground-catalog">
+    <section class="playground-hero" aria-labelledby="playground-title">
+      <p class="playground-eyebrow"><span class="eyebrow-dot"></span> RUANG EKSPERIMEN KODE</p>
+      <h1 id="playground-title">Pilih alatmu.<br><span>Mulai berkarya.</span></h1>
+      <p class="playground-intro">
+        Tempat untuk mencoba ide, berlatih logika, dan membangun sesuatu baris demi baris.
+        Pilih editor yang ingin kamu gunakan.
+      </p>
+      <div class="playground-meta" aria-label="Informasi Playground">
+        <span><span class="meta-check">✓</span> Belajar langsung</span>
+        <span><span class="meta-check">✓</span> Bertahap dan praktis</span>
+      </div>
+    </section>
+
+    <section class="editor-catalog" aria-label="Daftar editor">
+      <article class="editor-card editor-card-featured">
+        <div class="editor-card-top">
+          <div class="editor-symbol html-symbol" aria-hidden="true">&lt;/&gt;</div>
+          <span class="editor-status status-available"><span></span> TERSEDIA</span>
+        </div>
+        <p class="editor-language">HTML <span>+</span> CSS <span>+</span> JS</p>
+        <h2>Web Editor</h2>
+        <p class="editor-description">
+          Tulis struktur halaman, atur tampilannya, lalu hidupkan dengan JavaScript.
+          Jalankan kode, lihat pratinjau dan console, lalu unduh hasilnya.
+        </p>
+        <ul class="editor-features">
+          <li>Tab HTML, CSS, dan JavaScript dalam satu editor</li>
+          <li>Pratinjau langsung dengan panel Console</li>
+          <li>Unduh kode atau proyek lengkap</li>
+        </ul>
+        <a class="editor-action" href="editor-html.html">
+          Buka Web Editor <span aria-hidden="true">↗</span>
+        </a>
+      </article>
+
+      <article class="editor-card">
+        <div class="editor-card-top">
+          <div class="editor-symbol python-symbol" aria-hidden="true">Py</div>
+          <span class="editor-status status-available"><span></span> TERSEDIA</span>
+        </div>
+        <p class="editor-language">PYTHON</p>
+        <h2>Python Editor</h2>
+        <p class="editor-description">
+          Ruang latihan untuk sintaks Python, variabel, percabangan, perulangan,
+          fungsi, dan pemrograman berorientasi objek.
+        </p>
+        <ul class="editor-features">
+          <li>Jalankan kode Python langsung di browser</li>
+          <li>Mode Console dan mode Visual (gambar di kanvas)</li>
+          <li>Contoh konsep dasar sekali klik</li>
+        </ul>
+        <a class="editor-action" href="editor-python.html">
+          Buka Python Editor <span aria-hidden="true">↗</span>
+        </a>
+      </article>
+
+      <article class="editor-card">
+        <div class="editor-card-top">
+          <div class="editor-symbol cpp-symbol" aria-hidden="true">C++</div>
+          <span class="editor-status status-available"><span></span> TERSEDIA</span>
+        </div>
+        <p class="editor-language">C PLUS PLUS</p>
+        <h2>C++ Editor</h2>
+        <p class="editor-description">
+          Belajar dasar C++, menyusun program, dan memahami logika pemrograman.
+          Kode dikompilasi dengan g++ sungguhan.
+        </p>
+        <ul class="editor-features">
+          <li>Kompilasi dan jalankan kode C++17 online</li>
+          <li>Kotak input untuk latihan <code>cin</code></li>
+          <li>Contoh konsep dasar sekali klik</li>
+        </ul>
+        <a class="editor-action" href="editor-cpp.html">
+          Buka C++ Editor <span aria-hidden="true">↗</span>
+        </a>
+      </article>
+    </section>
+
+    <aside class="playground-note">
+      <div class="note-icon" aria-hidden="true">i</div>
+      <p><strong>Dibangun selangkah demi selangkah.</strong> Web Editor (HTML, CSS &amp; JavaScript), Python, dan C++ tersedia sekarang. Editor C++ membutuhkan koneksi internet untuk mengompilasi kode.</p>
+    </aside>
+  </main>
+
+  <footer class="playground-footer">
+    <div class="footer-inner">
+      <a class="footer-brand" href="../index.html#beranda">&lt;/&gt; Coding<span>Skanetra</span></a>
+      <p>© <span id="year"></span> CodingSkanetra. Belajar bersama, berkembang bersama.</p>
+    </div>
+  </footer>
+</body>
+</html>

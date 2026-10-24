@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>HTML Dasar | CodingSkanetra</title>
+  <meta
+    name="description"
+    content="Belajar dasar HTML bersama CodingSkanetra."
+  >
+
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/main.js" defer></script>
+</head>
+
+<body>
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="Coding Skanetra, beranda">
+      <span class="brand-icon">&lt;/&gt;</span>
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+      <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link" href="../index.html#tentang" data-nav="tentang">Tentang</a>
+    </nav>
+  </header>
+
+  <main class="lesson-page">
+    <div class="container lesson-layout">
+
+      <aside class="lesson-sidebar">
+        <a href="materi.html" class="back-link">
+          ← Kembali ke Materi
+        </a>
+
+        <p class="eyebrow">LEARNING PATH</p>
+        <h2>HTML Dasar</h2>
+
+        <nav class="lesson-nav" aria-label="Daftar materi">
+          <a href="#pengenalan">1. Pengenalan HTML</a>
+          <a href="#struktur">2. Struktur Dokumen</a>
+          <a href="#elemen">3. Elemen Dasar</a>
+          <a href="#latihan">4. Latihan</a>
+        </nav>
+      </aside>
+
+      <article class="lesson-content">
+        <div class="lesson-header">
+          <p class="eyebrow">MATERI PEMULA</p>
+          <h1>Kenalan dengan HTML</h1>
+          <p>
+            Pelajari bagaimana sebuah halaman web disusun,
+            mulai dari judul hingga paragraf.
+          </p>
+          <span class="lesson-badge">Pemula · 10 menit</span>
+        </div>
+
+        <section id="pengenalan" class="lesson-section">
+          <h2>1. Apa itu HTML?</h2>
+
+          <p>
+            HTML adalah singkatan dari
+            <strong>HyperText Markup Language</strong>.
+            HTML digunakan untuk menyusun struktur dan konten
+            halaman web.
+          </p>
+
+          <p>
+            Bayangkan sebuah website sebagai rumah:
+            HTML menyusun bagian-bagiannya, CSS mengatur tampilannya,
+            sedangkan JavaScript menambahkan interaksi.
+          </p>
+        </section>
+
+        <section id="struktur" class="lesson-section">
+          <h2>2. Struktur Dokumen HTML</h2>
+
+          <p>Setiap dokumen HTML umumnya memiliki struktur seperti ini:</p>
+
+          <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="id"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Website Pertamaku&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Halo, dunia!&lt;/h1&gt;
+    &lt;p&gt;Ini website pertamaku.&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <ul>
+            <li><code>&lt;!DOCTYPE html&gt;</code> menyatakan dokumen menggunakan HTML modern.</li>
+            <li><code>&lt;html&gt;</code> menjadi elemen utama dokumen.</li>
+            <li><code>&lt;head&gt;</code> memuat informasi tentang halaman.</li>
+            <li><code>&lt;body&gt;</code> memuat konten yang tampil di halaman.</li>
+          </ul>
+        </section>
+
+        <section id="elemen" class="lesson-section">
+          <h2>3. Elemen HTML Dasar</h2>
+
+          <div class="lesson-table-wrap">
+            <table class="lesson-table">
+              <thead>
+                <tr>
+                  <th>Elemen</th>
+                  <th>Fungsi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>&lt;h1&gt;</code></td>
+                  <td>Judul utama halaman atau bagian.</td>
+                </tr>
+                <tr>
+                  <td><code>&lt;p&gt;</code></td>
+                  <td>Paragraf teks.</td>
+                </tr>
+                <tr>
+                  <td><code>&lt;a&gt;</code></td>
+                  <td>Tautan menuju halaman atau lokasi lain.</td>
+                </tr>
+                <tr>
+                  <td><code>&lt;img&gt;</code></td>
+                  <td>Menampilkan gambar.</td>
+                </tr>
+                <tr>
+                  <td><code>&lt;ul&gt;</code> dan <code>&lt;li&gt;</code></td>
+                  <td>Membuat daftar berpoin.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="latihan" class="lesson-section">
+          <h2>4. Latihan Pemahaman</h2>
+
+          <p>
+            Menurutmu, elemen mana yang digunakan untuk membuat
+            paragraf pada halaman web?
+          </p>
+
+          <div
+            class="quiz-options"
+            id="quiz-options"
+            data-correct="b"
+            data-benar="Benar! Elemen <p> digunakan untuk membuat paragraf."
+            data-salah="Belum tepat. Coba ingat lagi: elemen <p> digunakan untuk paragraf."
+          >
+            <button type="button" data-answer="a">&lt;h1&gt;</button>
+            <button type="button" data-answer="b">&lt;p&gt;</button>
+            <button type="button" data-answer="c">&lt;body&gt;</button>
+          </div>
+
+          <p id="quiz-feedback" class="quiz-feedback" aria-live="polite"></p>
+        </section>
+
+        <div class="lesson-footer">
+          <a href="materi.html" class="btn btn-primary">
+            Kembali ke Semua Materi
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>
+        © <span id="year"></span> CodingSkanetra.
+        Belajar bersama, berkembang bersama.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

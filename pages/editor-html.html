@@ -1,0 +1,382 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML, CSS &amp; JS Editor | CodingSkanetra</title>
+
+  <link rel="stylesheet" href="../css/style.css">
+  
+    <!-- CodeMirror: CSS dasar dan tema -->
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/codemirror.min.css"
+    >
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/theme/material-darker.min.css"
+    >
+
+    <!-- Mesin editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/codemirror.min.js" defer></script>
+
+    <!-- Pewarnaan HTML dan CSS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/mode/xml/xml.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/mode/css/css.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/mode/javascript/javascript.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/mode/htmlmixed/htmlmixed.min.js" defer></script>
+
+    <!-- Bantuan penutup tag dan tanda kurung -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/edit/closetag.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/edit/closebrackets.min.js" defer></script>
+    
+    <!-- Fitur pencarian CodeMirror -->
+    <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/search/searchcursor.min.js"
+    defer
+    ></script>
+    <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/search/search.min.js"
+    defer
+    ></script>
+
+  <script src="../js/main.js" defer></script>
+  <script src="../js/playground.js?v=3" defer></script>
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="Coding Skanetra, beranda">
+      <span class="brand-icon">&lt;/&gt;</span>
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+      <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link" href="../index.html#tentang" data-nav="tentang">Tentang</a>
+    </nav>
+  </header>
+
+
+<main class="playground-page">
+  <div class="container">
+    <section class="playground-heading">
+      <p class="eyebrow">CODE PLAYGROUND</p>
+      <h1>Tulis kode. Lihat hasilnya.</h1>
+      <p>
+        Eksperimen dengan HTML, CSS, dan JavaScript langsung di browser.
+        Ubah kode, lalu jalankan untuk melihat hasilnya.
+      </p>
+    </section>
+
+    <section class="playground-workspace">
+      <div class="editor-panel">
+        <div class="editor-tabs" role="tablist" aria-label="Bahasa editor">
+          <button
+            id="tab-html"
+            class="editor-tab active"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="panel-html"
+          >
+            <span class="panel-dot"></span>
+            HTML
+          </button>
+
+          <button
+            id="tab-css"
+            class="editor-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panel-css"
+            tabindex="-1"
+          >
+            <span class="panel-dot css-dot"></span>
+            CSS
+          </button>
+
+          <button
+            id="tab-js"
+            class="editor-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panel-js"
+            tabindex="-1"
+          >
+            <span class="panel-dot js-dot"></span>
+            JS
+          </button>
+        </div>
+
+        <div
+          id="panel-html"
+          class="editor-tab-panel"
+          role="tabpanel"
+          aria-labelledby="tab-html"
+        >
+
+
+        <div class="editor-canvas">
+<textarea id="html-code"
+class="code-editor"
+spellcheck="false"
+autocapitalize="off"
+autocomplete="off"
+autocorrect="off"
+aria-label="Editor kode HTML"
+><main class="card">
+    <h1>Halo, CodingSkanetra!</h1>
+    <p>Ini halaman pertamaku di Playground.</p>
+    <button>Mulai Berkarya</button>
+</main></textarea>
+        <div class="editor-search" hidden>
+            <input
+            type="search"
+            class="editor-search-input"
+            placeholder="Cari kode..."
+            aria-label="Cari kode HTML"
+            >
+            <span class="editor-search-count">0/0</span>
+            <button type="button" class="editor-search-prev">↑</button>
+            <button type="button" class="editor-search-next">↓</button>
+            <button type="button" class="editor-search-close">×</button>
+        </div>
+        </div>
+        </div>
+
+        <div
+          id="panel-css"
+          class="editor-tab-panel"
+          role="tabpanel"
+          aria-labelledby="tab-css"
+          hidden
+        >
+
+        <div class="editor-canvas">
+          <textarea
+            id="css-code"
+            class="code-editor css-editor"
+            spellcheck="false"
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            aria-label="Editor kode CSS"
+          >body {
+  font-family: Arial, sans-serif;
+  background: #f0f7f2;
+  color: #17251c;
+  padding: 24px;
+}
+
+.card {
+  max-width: 420px;
+  margin: 30px auto;
+  padding: 28px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px #183c2515;
+}
+
+h1 {
+  color: #18864b;
+}
+
+button {
+  padding: 10px 16px;
+  background: #18864b;
+  color: white;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}</textarea>
+        <div class="editor-search" hidden>
+            <input
+            type="search"
+            class="editor-search-input"
+            placeholder="Cari kode..."
+            aria-label="Cari kode CSS"
+            >
+            <span class="editor-search-count">0/0</span>
+            <button type="button" class="editor-search-prev">↑</button>
+            <button type="button" class="editor-search-next">↓</button>
+            <button type="button" class="editor-search-close">×</button>
+        </div>
+        </div>
+        </div>
+
+
+        <div
+          id="panel-js"
+          class="editor-tab-panel"
+          role="tabpanel"
+          aria-labelledby="tab-js"
+          hidden
+        >
+
+        <div class="editor-canvas">
+          <textarea
+            id="js-code"
+            class="code-editor js-editor"
+            spellcheck="false"
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            aria-label="Editor kode JavaScript"
+          >const tombol = document.querySelector("button");
+
+console.log("Halaman siap.");
+
+tombol.addEventListener("click", () => {
+  console.log("Tombol diklik!");
+  tombol.textContent = "Sudah diklik ✓";
+});</textarea>
+        <div class="editor-search" hidden>
+            <input
+            type="search"
+            class="editor-search-input"
+            placeholder="Cari kode..."
+            aria-label="Cari kode JavaScript"
+            >
+            <span class="editor-search-count">0/0</span>
+            <button type="button" class="editor-search-prev">↑</button>
+            <button type="button" class="editor-search-next">↓</button>
+            <button type="button" class="editor-search-close">×</button>
+        </div>
+        </div>
+        </div>
+
+
+        <div class="editor-actions">
+        <button id="run-code" class="btn btn-primary" type="button">
+            ▶ Jalankan
+        </button>
+
+        <button id="reset-code" class="playground-reset" type="button">
+            Reset
+        </button>
+
+        <div class="download-menu">
+            <button
+            id="download-toggle"
+            class="playground-reset download-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="download-options"
+            >
+            ⭳ Unduh ▾
+            </button>
+
+            <div id="download-options" class="download-options" hidden>
+            <button type="button" data-download="html">
+                Unduh HTML
+                <span>index.html</span>
+            </button>
+
+            <button type="button" data-download="css">
+                Unduh CSS
+                <span>style.css</span>
+            </button>
+
+            <button type="button" data-download="js">
+                Unduh JavaScript
+                <span>script.js</span>
+            </button>
+
+            <button type="button" data-download="project">
+                Unduh proyek lengkap
+                <span>proyek.html</span>
+            </button>
+            </div>
+        </div>
+
+        <span id="editor-status" aria-live="polite">
+            Siap dijalankan
+        </span>
+        </div>
+
+      </div>
+
+      <div class="preview-panel">
+
+        
+        <div class="panel-heading">
+        <h2>Live Preview</h2>
+
+        <div class="preview-controls">
+            <button
+            type="button"
+            id="enlarge-preview"
+            class="preview-toggle"
+            aria-pressed="false"
+            >
+            ⛶ Perbesar
+            </button>
+
+            <button
+            type="button"
+            id="hide-preview"
+            class="preview-toggle"
+            aria-label="Sembunyikan preview"
+            >
+            Sembunyikan
+            </button>
+        </div>
+        </div>
+
+
+
+        <iframe
+          id="code-preview"
+          class="code-preview"
+          title="Pratinjau hasil HTML, CSS, dan JavaScript"
+          sandbox="allow-scripts allow-modals"
+          referrerpolicy="no-referrer"
+        ></iframe>
+
+        <div class="console-panel">
+          <div class="console-head">
+            <span>Console</span>
+            <button type="button" id="console-clear" class="preview-toggle">Bersihkan</button>
+          </div>
+          <div id="web-console" class="console-output" role="log" aria-live="polite" aria-label="Output console JavaScript"></div>
+        </div>
+
+        <p class="preview-note">
+          Hasil ditampilkan dalam lingkungan terpisah. Tab JS bisa mengubah halaman (DOM),
+          dan <code>console.log</code> muncul di panel Console. Jika program berjalan tanpa henti
+          (misalnya perulangan tak berujung), muat ulang halaman ini.
+        </p>
+      </div>
+    </section>
+
+      <section class="playground-tips">
+        <h2>Coba eksperimen kecil</h2>
+        <ul>
+          <li>Ubah tulisan di dalam elemen <code>&lt;h1&gt;</code>.</li>
+          <li>Ganti nilai <code>background</code> pada CSS.</li>
+          <li>Ubah <code>border-radius</code> untuk mengatur sudut kartu.</li>
+          <li>Buka tab <strong>JS</strong>, ubah teks yang muncul saat tombol diklik, lalu lihat <code>console.log</code> di panel Console.</li>
+          <li>Tekan <strong>Jalankan</strong> untuk melihat perubahannya.</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>
+        © <span id="year"></span> CodingSkanetra.
+        Belajar bersama, berkembang bersama.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

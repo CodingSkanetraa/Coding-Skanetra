@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>JavaScript Dasar | CodingSkanetra</title>
+  <meta
+    name="description"
+    content="Belajar dasar JavaScript bersama CodingSkanetra: variabel, kondisi, perulangan, fungsi, dan DOM."
+  >
+
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/main.js" defer></script>
+</head>
+
+<body>
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="Coding Skanetra, beranda">
+      <span class="brand-icon">&lt;/&gt;</span>
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+      <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link" href="../index.html#tentang" data-nav="tentang">Tentang</a>
+    </nav>
+  </header>
+
+  <main class="lesson-page">
+    <div class="container lesson-layout">
+
+      <aside class="lesson-sidebar">
+        <a href="materi.html" class="back-link">
+          ← Kembali ke Materi
+        </a>
+
+        <p class="eyebrow">LEARNING PATH</p>
+        <h2>JavaScript Dasar</h2>
+
+        <nav class="lesson-nav" aria-label="Daftar materi">
+          <a href="#pengenalan">1. Pengenalan</a>
+          <a href="#variabel">2. Variabel dan Tipe Data</a>
+          <a href="#kondisi">3. Kondisi</a>
+          <a href="#perulangan">4. Perulangan</a>
+          <a href="#fungsi">5. Fungsi</a>
+          <a href="#dom">6. Interaksi (DOM)</a>
+          <a href="#latihan">7. Latihan</a>
+        </nav>
+      </aside>
+
+      <article class="lesson-content">
+        <div class="lesson-header">
+          <p class="eyebrow">MATERI PEMULA</p>
+          <h1>Kenalan dengan JavaScript</h1>
+          <p>
+            Bikin halaman web jadi interaktif: menyimpan data, mengambil keputusan, dan merespons klik.
+          </p>
+          <span class="lesson-badge">Pemula · 20 menit</span>
+        </div>
+
+        <section id="pengenalan" class="lesson-section">
+          <h2>1. Apa itu JavaScript?</h2>
+
+          <p>
+            <strong>JavaScript</strong> adalah bahasa pemrograman yang berjalan di browser. Jika HTML adalah kerangka dan CSS adalah tampilan, JavaScript adalah yang membuat halaman bisa bereaksi: tombol yang bisa diklik, formulir yang divalidasi, dan sebagainya.
+          </p>
+
+          <p>
+            Cara paling mudah untuk menampilkan hasil adalah <code>console.log()</code>:
+          </p>
+
+          <pre><code>console.log("Halo, CodingSkanetra!");</code></pre>
+        </section>
+
+        <section id="variabel" class="lesson-section">
+          <h2>2. Variabel dan tipe data</h2>
+
+          <p>
+            Variabel adalah wadah untuk menyimpan nilai. Gunakan <code>let</code> untuk nilai yang bisa berubah dan <code>const</code> untuk nilai yang tetap.
+          </p>
+
+          <pre><code>const nama = "Kaito";   // teks (string)
+let umur = 17;          // angka (number)
+let aktif = true;       // benar/salah (boolean)
+
+umur = 18;              // boleh, karena let
+console.log(nama, umur, aktif);</code></pre>
+
+          <div class="lesson-table-wrap">
+            <table class="lesson-table">
+              <thead>
+                <tr><th>Tipe</th><th>Contoh</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>String</td><td><code>"Halo"</code></td></tr>
+                <tr><td>Number</td><td><code>42</code>, <code>3.14</code></td></tr>
+                <tr><td>Boolean</td><td><code>true</code>, <code>false</code></td></tr>
+                <tr><td>Array</td><td><code>["apel", "jeruk"]</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="kondisi" class="lesson-section">
+          <h2>3. Kondisi: mengambil keputusan</h2>
+
+          <p>
+            Gunakan <code>if</code>, <code>else if</code>, dan <code>else</code> untuk menjalankan kode berdasarkan kondisi.
+          </p>
+
+          <pre><code>const nilai = 82;
+
+if (nilai &gt;= 90) {
+  console.log("Sangat baik");
+} else if (nilai &gt;= 75) {
+  console.log("Lulus");
+} else {
+  console.log("Belum lulus");
+}</code></pre>
+
+          <p>
+            Operator perbandingan yang sering dipakai: <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>===</code> (sama persis), dan <code>!==</code> (tidak sama).
+          </p>
+        </section>
+
+        <section id="perulangan" class="lesson-section">
+          <h2>4. Perulangan</h2>
+
+          <p>
+            Perulangan menjalankan kode yang sama berkali-kali.
+          </p>
+
+          <pre><code>for (let i = 1; i &lt;= 3; i++) {
+  console.log("Perulangan ke-" + i);
+}
+
+const buah = ["apel", "jeruk", "mangga"];
+for (const item of buah) {
+  console.log(item);
+}</code></pre>
+        </section>
+
+        <section id="fungsi" class="lesson-section">
+          <h2>5. Fungsi</h2>
+
+          <p>
+            Fungsi mengelompokkan kode agar bisa dipakai ulang.
+          </p>
+
+          <pre><code>function sapa(nama) {
+  return "Halo, " + nama + "!";
+}
+
+console.log(sapa("Kaito"));
+console.log(sapa("Skanetra"));</code></pre>
+        </section>
+
+        <section id="dom" class="lesson-section">
+          <h2>6. Interaksi dengan halaman (DOM)</h2>
+
+          <p>
+            <strong>DOM</strong> adalah representasi halaman HTML yang bisa diubah lewat JavaScript. Contoh berikut mengubah teks saat tombol diklik:
+          </p>
+
+          <pre><code>&lt;button id="tombol"&gt;Klik aku&lt;/button&gt;
+&lt;p id="pesan"&gt;&lt;/p&gt;
+
+&lt;script&gt;
+  const tombol = document.querySelector("#tombol");
+  const pesan = document.querySelector("#pesan");
+
+  tombol.addEventListener("click", () =&gt; {
+    pesan.textContent = "Halo dari JavaScript!";
+  });
+&lt;/script&gt;</code></pre>
+
+          <p>
+            Kamu bisa mencoba kode non-DOM di <strong>JavaScript Editor</strong> pada menu Playground.
+          </p>
+        </section>
+
+
+        <section id="latihan" class="lesson-section">
+          <h2>7. Latihan Pemahaman</h2>
+
+          <p>
+            Kata kunci mana yang dipakai untuk variabel yang nilainya <strong>tidak boleh diubah</strong> lagi?
+          </p>
+
+          <div
+            class="quiz-options"
+            id="quiz-options"
+            data-correct="c"
+            data-benar="Benar! const dipakai untuk nilai yang tidak akan ditetapkan ulang."
+            data-salah="Belum tepat. let dan var boleh diubah nilainya; yang tidak boleh adalah const."
+          >
+            <button type="button" data-answer="a">let</button>
+            <button type="button" data-answer="b">var</button>
+            <button type="button" data-answer="c">const</button>
+          </div>
+
+          <p id="quiz-feedback" class="quiz-feedback" aria-live="polite"></p>
+        </section>
+
+        <div class="lesson-footer">
+          <a href="editor-html.html" class="button button-primary">
+            Coba di Web Editor (tab JS) →
+          </a>
+          <a href="materi.html" class="button button-secondary">
+            Kembali ke Semua Materi
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>
+        © <span id="year"></span> CodingSkanetra.
+        Belajar bersama, berkembang bersama.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

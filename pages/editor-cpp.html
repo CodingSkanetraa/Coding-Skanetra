@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Editor C++ online CodingSkanetra untuk belajar dasar pemrograman C++.">
+  <title>C++ Editor | CodingSkanetra</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/theme/material-darker.min.css">
+  <link rel="stylesheet" href="../css/editor-python.css?v=3">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/codemirror.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/mode/clike/clike.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/edit/closebrackets.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/edit/matchbrackets.min.js" defer></script>
+  <script src="../js/main.js" defer></script>
+  <script src="../js/cpp-runner.js?v=3" defer></script>
+  <script src="../js/editor-cpp.js?v=3" defer></script>
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="Coding Skanetra, beranda">
+      <span class="brand-icon">&lt;/&gt;</span>
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+      <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link" href="../index.html#tentang" data-nav="tentang">Tentang</a>
+    </nav>
+  </header>
+
+  <main class="py-editor-page">
+    <div class="container">
+      <section class="py-editor-heading">
+        <p class="eyebrow">CODINGSKANETRA LAB · C++</p>
+        <h1>C++ Editor</h1>
+        <p>Tulis kode C++, kompilasi, dan lihat hasilnya. Kode dikompilasi dengan g++ di server online, jadi class dan STL tersedia.</p>
+      </section>
+
+      <section class="py-editor-layout" aria-label="C++ editor dan output">
+        <div class="py-code-panel">
+          <div class="py-panel-top">
+            <div class="py-file-label"><span class="py-status-dot"></span> main.cpp</div>
+            <span class="py-language-label">C++17 · g++ online</span>
+          </div>
+          <textarea id="cpp-code" aria-label="Kode C++" spellcheck="false">// Selamat datang di C++ Editor CodingSkanetra!
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    string nama = "Kaito";
+    cout &lt;&lt; "Halo, " &lt;&lt; nama &lt;&lt; "!" &lt;&lt; endl;
+    return 0;
+}
+</textarea>
+          <label class="cpp-stdin-label" for="cpp-stdin">Input program (isi sebelum menjalankan, untuk <code>cin</code>, <code>getline</code>, <code>scanf</code>)</label>
+          <textarea id="cpp-stdin" class="cpp-stdin" rows="3" spellcheck="false" placeholder="Tulis semua masukan di sini, urut sesuai cin. Pisahkan dengan spasi atau baris baru. Contoh: Kaito 17"></textarea>
+          <div class="py-actions">
+            <button id="cpp-run" class="btn btn-primary" type="button"><span aria-hidden="true">▶</span> Kompilasi &amp; Jalankan</button>
+            <button id="cpp-reset" class="py-btn-secondary" type="button">Reset</button>
+            <button id="cpp-clear" class="py-btn-secondary" type="button">Bersihkan output</button>
+            <span id="cpp-status" class="py-status-text" role="status" aria-live="polite">Siap dijalankan</span>
+          </div>
+        </div>
+
+        <div class="py-output-panel">
+          <div class="py-panel-top">
+            <div class="py-file-label"><span class="py-output-dot"></span> Output</div>
+            <span class="py-runtime-status">Ctrl + Enter untuk menjalankan</span>
+          </div>
+          <pre id="cpp-output" class="py-output" aria-live="polite">Output program akan muncul di sini.</pre>
+          <div class="py-output-note">Kompilasi memakai layanan gratis Wandbox, jadi butuh koneksi internet dan bisa memakan beberapa detik. Jangan kirim data pribadi lewat editor ini.</div>
+        </div>
+      </section>
+
+      <section class="py-basics" aria-labelledby="cpp-basics-title">
+        <div class="py-basics-heading">
+          <p class="eyebrow">MULAI BELAJAR</p>
+          <h2 id="cpp-basics-title">Konsep dasar C++</h2>
+          <p>Pilih contoh untuk memasukkan kode ke editor, lalu tekan Kompilasi &amp; Jalankan.</p>
+        </div>
+        <div class="py-example-grid">
+          <button class="py-example-card" type="button" data-example="print">
+            <span class="py-example-number">01</span><strong>Output</strong>
+            <code>cout &lt;&lt; "Halo dunia!";</code><span>Menampilkan teks atau nilai.</span>
+          </button>
+          <button class="py-example-card" type="button" data-example="variables">
+            <span class="py-example-number">02</span><strong>Variabel</strong>
+            <code>int umur = 17;</code><span>Menyimpan data dengan tipe tertentu.</span>
+          </button>
+          <button class="py-example-card" type="button" data-example="input">
+            <span class="py-example-number">03</span><strong>Input</strong>
+            <code>cin &gt;&gt; nama;</code><span>Membaca masukan (isi kotak Input program).</span>
+          </button>
+          <button class="py-example-card" type="button" data-example="condition">
+            <span class="py-example-number">04</span><strong>Percabangan</strong>
+            <code>if (nilai &gt;= 75) { }</code><span>Memilih aksi berdasarkan kondisi.</span>
+          </button>
+          <button class="py-example-card" type="button" data-example="loop">
+            <span class="py-example-number">05</span><strong>Perulangan</strong>
+            <code>for (int i = 1; i &lt;= 3; i++)</code><span>Menjalankan instruksi berulang.</span>
+          </button>
+          <button class="py-example-card" type="button" data-example="function">
+            <span class="py-example-number">06</span><strong>Fungsi</strong>
+            <code>int tambah(int a, int b)</code><span>Mengelompokkan kode yang bisa dipakai ulang.</span>
+          </button>
+          <button class="py-example-card" type="button" data-example="array">
+            <span class="py-example-number">07</span><strong>Array &amp; Vector</strong>
+            <code>vector&lt;string&gt; buah;</code><span>Menyimpan beberapa nilai dalam satu koleksi.</span>
+          </button>
+          <button class="py-example-card" type="button" data-example="class">
+            <span class="py-example-number">08</span><strong>Class</strong>
+            <code>class Siswa { };</code><span>Pengenalan pemrograman berorientasi objek.</span>
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container"><p>© <span id="year"></span> CodingSkanetra. Belajar bersama, berkembang bersama.</p></div>
+  </footer>
+</body>
+</html>

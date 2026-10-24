@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Editor Python online CodingSkanetra untuk belajar dasar pemrograman Python.">
+  <title>Python Editor | CodingSkanetra</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/theme/material-darker.min.css">
+  <link rel="stylesheet" href="../css/editor-python.css?v=3">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/codemirror.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/mode/python/python.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/edit/closebrackets.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/edit/matchbrackets.min.js" defer></script>
+  <script src="../js/main.js" defer></script>
+  <script src="../js/editor-python.js?v=3" defer></script>
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="Coding Skanetra, beranda">
+      <span class="brand-icon">&lt;/&gt;</span>
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+      <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link" href="../index.html#tentang" data-nav="tentang">Tentang</a>
+    </nav>
+  </header>
+
+  <main class="py-editor-page">
+    <div class="container">
+      <section class="py-editor-heading">
+        <p class="eyebrow">CODINGSKANETRA LAB · PYTHON</p>
+        <h1>Python Editor</h1>
+        <p>Tulis kode Python, jalankan, dan lihat hasilnya langsung di browser. Cocok untuk latihan konsep dasar pemrograman.</p>
+      </section>
+
+      <section class="py-editor-layout" aria-label="Python editor dan output">
+        <div class="py-code-panel">
+          <div class="py-panel-top">
+            <div class="py-file-label"><span class="py-status-dot"></span> main.py</div>
+            <span class="py-language-label">Python 3 · Browser</span>
+          </div>
+          <div class="py-mode-switch" role="group" aria-label="Mode output Python">
+            <button id="py-mode-console" class="py-mode-button is-active" type="button" aria-pressed="true">Console</button>
+            <button id="py-mode-visual" class="py-mode-button" type="button" aria-pressed="false">Visual</button>
+          </div>
+          <textarea id="python-code" aria-label="Kode Python"># Selamat datang di Python Editor CodingSkanetra!
+print("Hai, Kaito")
+</textarea>
+          <label class="py-stdin-label" for="py-stdin">Input program (opsional, untuk <code>input()</code>)</label>
+          <textarea id="py-stdin" class="py-stdin" rows="2" spellcheck="false" placeholder="Satu baris untuk setiap input(). Kosongkan jika ingin diminta lewat kotak dialog saat program berjalan."></textarea>
+          <div class="py-actions">
+            <button id="py-run" class="btn btn-primary" type="button"><span aria-hidden="true">▶</span> Jalankan</button>
+            <button id="py-reset" class="py-btn-secondary" type="button">Reset</button>
+            <button id="py-clear" class="py-btn-secondary" type="button">Bersihkan output</button>
+            <span id="py-status" class="py-status-text" role="status" aria-live="polite">Siap dijalankan</span>
+          </div>
+        </div>
+
+        <div class="py-output-panel">
+          <div class="py-panel-top">
+            <div class="py-file-label"><span class="py-output-dot"></span> Output</div>
+            <span id="py-runtime-status" class="py-runtime-status">Runtime belum dimuat</span>
+          </div>
+          <pre id="py-output" class="py-output" aria-live="polite">Output program akan muncul di sini.</pre>
+          <div id="py-visual-wrap" class="py-visual-wrap" hidden>
+            <canvas id="py-canvas" width="640" height="400" aria-label="Kanvas hasil visual Python"></canvas>
+            <p class="py-visual-hint">Mode Visual memakai fungsi gambar bawaan CodingSkanetra: <code>lingkaran()</code>, <code>persegi()</code>, <code>garis()</code>, dan <code>teks()</code>.</p>
+          </div>
+          <div class="py-output-note">Program berjalan di browser. Mode Visual menyediakan kanvas gambar yang bisa dikendalikan dari Python.</div>
+        </div>
+      </section>
+
+      <section class="py-basics" aria-labelledby="py-basics-title">
+        <div class="py-basics-heading">
+          <p class="eyebrow">MULAI BELAJAR</p>
+          <h2 id="py-basics-title">Konsep dasar Python</h2>
+          <p>Pilih contoh untuk memasukkan kode ke editor, lalu tekan Jalankan.</p>
+        </div>
+        <div class="py-example-grid">
+          <button class="py-example-card" type="button" data-example="print">
+            <span class="py-example-number">01</span><strong>Output</strong>
+            <code>print("Halo dunia!")</code><span>Menampilkan teks atau nilai.</span>
+          </button>
+          <button class="py-example-card" type="button" data-example="variables">
+            <span class="py-example-number">02</span><strong>Variabel</strong>
+            <code>nama = "Kaito"</code><span>Menyimpan data untuk digunakan.</span>
+          </button>
+          <button class="py-example-card" type="button" data-example="condition">
+            <span class="py-example-number">03</span><strong>Percabangan</strong>
+            <code>if nilai >= 75:</code><span>Memilih aksi berdasarkan kondisi.</span>
+          </button>
+          <button class="py-example-card" type="button" data-example="loop">
+            <span class="py-example-number">04</span><strong>Perulangan</strong>
+            <code>for i in range(3):</code><span>Menjalankan instruksi berulang.</span>
+          </button>
+          <button class="py-example-card" type="button" data-example="function">
+            <span class="py-example-number">05</span><strong>Fungsi</strong>
+            <code>def sapa(nama):</code><span>Mengelompokkan kode yang bisa dipakai ulang.</span>
+          </button>
+          <button class="py-example-card" type="button" data-example="list">
+            <span class="py-example-number">06</span><strong>List</strong>
+            <code>buah = ["apel", "jeruk"]</code><span>Menyimpan beberapa nilai dalam satu koleksi.</span>
+          </button>
+          <button class="py-example-card" type="button" data-example="input">
+            <span class="py-example-number">07</span><strong>Input teks</strong>
+            <code>nama = input("Nama? ")</code><span>Membaca ketikan pengguna.</span>
+          </button>
+          <button class="py-example-card" type="button" data-example="number">
+            <span class="py-example-number">08</span><strong>Input angka</strong>
+            <code>int(input("Angka: "))</code><span>Mengubah input menjadi bilangan.</span>
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container"><p>© <span id="year"></span> CodingSkanetra. Belajar bersama, berkembang bersama.</p></div>
+  </footer>
+</body>
+</html>
