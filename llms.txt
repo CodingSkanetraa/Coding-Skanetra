@@ -1,0 +1,25 @@
+# Coding Skanetra
+
+> Komunitas belajar pemrograman SMK Negeri Situraja. Berisi materi HTML, CSS,
+> JavaScript, Python, dan C++, editor kode online, peringkat poin anggota,
+> dan game Code Rush: Robot Escape. Bahasa: Indonesia.
+
+## Belajar dan berlatih
+- [Materi](https://codingskanetra.vercel.app/pages/materi.html): daftar materi pemrograman dasar
+- [HTML Dasar](https://codingskanetra.vercel.app/pages/html-dasar.html): struktur halaman web, elemen, tautan, gambar, formulir
+- [CSS Dasar](https://codingskanetra.vercel.app/pages/css-dasar.html): selektor, warna, box model, flexbox
+- [JavaScript Dasar](https://codingskanetra.vercel.app/pages/javascript-dasar.html): variabel, kondisi, perulangan, fungsi, DOM
+- [Python Dasar](https://codingskanetra.vercel.app/pages/python-dasar.html): variabel, input-output, kondisi, perulangan, fungsi
+- [Playground](https://codingskanetra.vercel.app/pages/playground.html): pilihan editor kode online
+- [Editor Web](https://codingskanetra.vercel.app/pages/editor-html.html): HTML, CSS, dan JavaScript dengan pratinjau langsung
+- [Editor Python](https://codingskanetra.vercel.app/pages/editor-python.html): menjalankan Python di browser
+- [Editor C++](https://codingskanetra.vercel.app/pages/editor-cpp.html): kompilasi dan jalankan C++
+
+## Komunitas
+- [Struktur Organisasi](https://codingskanetra.vercel.app/pages/struktur-organisasi.html): pengurus dan anggota
+- [Tentang](https://codingskanetra.vercel.app/pages/about.html): tentang proyek, pembuat, dan kontak
+- [Games](https://codingskanetra.vercel.app/pages/games.html): Code Rush: Robot Escape
+
+## Catatan
+- Halaman Peringkat memerlukan login anggota dan tidak untuk diindeks.
+- Instagram: https://www.instagram.com/codingskanetra.official
