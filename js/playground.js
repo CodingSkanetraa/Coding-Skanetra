@@ -464,15 +464,77 @@ ${html}
     consoleOutput.scrollTop = consoleOutput.scrollHeight;
   }
 
+  // Penyimpanan untuk preview. Preview berjalan di iframe terisolasi (tanpa allow-same-origin),
+  // jadi localStorage asli tidak bisa dipakai di sana. Sebagai gantinya, iframe memakai
+  // localStorage tiruan yang datanya disimpan oleh halaman ini, dengan kunci khusus agar tidak
+  // bercampur dengan data situs (tema, skor game, dsb.).
+  const KUNCI_PENYIMPANAN = "codingskanetra-preview-storage";
+  const BATAS_PENYIMPANAN = 512 * 1024; // karakter, kira-kira 512 KB
+  const BATAS_ENTRI = 200;
+
+  function bacaPenyimpanan() {
+    try {
+      const data = JSON.parse(localStorage.getItem(KUNCI_PENYIMPANAN) || "{}");
+      if (!data || typeof data !== "object" || Array.isArray(data)) return {};
+      const bersih = Object.create(null);
+      Object.keys(data).forEach((k) => { if (typeof data[k] === "string") bersih[k] = data[k]; });
+      return bersih;
+    } catch (e) {
+      return Object.create(null);
+    }
+  }
+
+  function tulisPenyimpanan(data) {
+    try {
+      if (Object.keys(data).length) localStorage.setItem(KUNCI_PENYIMPANAN, JSON.stringify(data));
+      else localStorage.removeItem(KUNCI_PENYIMPANAN);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function ukuranPenyimpanan(data) {
+    return Object.keys(data).reduce((total, k) => total + k.length + data[k].length, 0);
+  }
+
+  function tanganiPenyimpanan(data) {
+    const simpan = bacaPenyimpanan();
+    if (data.op === "clear") {
+      tulisPenyimpanan(Object.create(null));
+    } else if (typeof data.key === "string" && data.op === "remove") {
+      delete simpan[data.key];
+      tulisPenyimpanan(simpan);
+    } else if (typeof data.key === "string" && data.op === "set" && typeof data.value === "string") {
+      const sebelum = Object.prototype.hasOwnProperty.call(simpan, data.key);
+      simpan[data.key] = data.value;
+      if (ukuranPenyimpanan(simpan) > BATAS_PENYIMPANAN || (!sebelum && Object.keys(simpan).length > BATAS_ENTRI)) return;
+      tulisPenyimpanan(simpan);
+    }
+  }
+
   // Hanya terima pesan dari iframe preview yang sedang aktif.
   window.addEventListener("message", (event) => {
     if (!preview || event.source !== preview.contentWindow) return;
     const data = event.data;
-    if (!data || data.ck !== "console" || typeof data.text !== "string") return;
+    if (!data || typeof data !== "object") return;
+    if (data.ck === "storage") {
+      tanganiPenyimpanan(data);
+      return;
+    }
+    if (data.ck !== "console" || typeof data.text !== "string") return;
     tambahBarisConsole(["log", "warn", "error"].includes(data.level) ? data.level : "log", data.text);
   });
 
   consoleClear.addEventListener("click", bersihkanConsole);
+
+  const storageClear = document.querySelector("#storage-clear");
+  if (storageClear) {
+    storageClear.addEventListener("click", () => {
+      tulisPenyimpanan(Object.create(null));
+      status.textContent = "Penyimpanan preview dihapus. Jalankan ulang untuk melihat efeknya.";
+    });
+  }
 
   // Skrip yang dipasang sebelum kode pengguna: meneruskan console.* dan error ke halaman utama.
   const SKRIP_CONSOLE = `(function () {
@@ -498,6 +560,59 @@ ${html}
   window.addEventListener("unhandledrejection", function (e) { kirim("error", "Promise ditolak: " + format(e.reason)); });
 })();`;
 
+  // localStorage / sessionStorage tiruan untuk di dalam iframe. Disisipkan sebelum kode pengguna.
+  // __DATA__ diganti dengan salinan data tersimpan (JSON satu baris).
+  const SKRIP_PENYIMPANAN = `(function () {
+  var BATAS = __BATAS__;
+  var awal = __DATA__;
+  var buatPenyimpanan = function (data, simpanKeLuar) {
+    var isi = Object.create(null);
+    Object.keys(data).forEach(function (k) { if (typeof data[k] === "string") isi[k] = data[k]; });
+    var ukuran = function () { var n = 0; for (var k in isi) n += k.length + isi[k].length; return n; };
+    var api = {
+      getItem: function (k) { k = String(k); return k in isi ? isi[k] : null; },
+      setItem: function (k, v) {
+        k = String(k); v = String(v);
+        var lama = k in isi ? isi[k] : null;
+        var tambahan = k.length + v.length - (lama === null ? 0 : k.length + lama.length);
+        if (ukuran() + tambahan > BATAS) {
+          var galat = new Error("Penyimpanan penuh (batas sekitar 512 KB).");
+          galat.name = "QuotaExceededError";
+          throw galat;
+        }
+        isi[k] = v;
+        simpanKeLuar({ op: "set", key: k, value: v });
+      },
+      removeItem: function (k) { k = String(k); if (k in isi) { delete isi[k]; simpanKeLuar({ op: "remove", key: k }); } },
+      clear: function () { isi = Object.create(null); simpanKeLuar({ op: "clear" }); },
+      key: function (i) { var kunci = Object.keys(isi); i = Number(i); return i >= 0 && i < kunci.length ? kunci[i] : null; }
+    };
+    return new Proxy(api, {
+      get: function (t, p) {
+        if (p === "length") return Object.keys(isi).length;
+        if (typeof p === "string" && Object.prototype.hasOwnProperty.call(api, p)) return api[p];
+        if (p === Symbol.toStringTag) return "Storage";
+        return typeof p === "string" && p in isi ? isi[p] : undefined;
+      },
+      set: function (t, p, v) { if (typeof p === "string") api.setItem(p, v); return true; },
+      deleteProperty: function (t, p) { if (typeof p === "string") api.removeItem(p); return true; },
+      has: function (t, p) { return typeof p === "string" && (p in isi || Object.prototype.hasOwnProperty.call(api, p) || p === "length"); },
+      ownKeys: function () { return Object.keys(isi); },
+      getOwnPropertyDescriptor: function (t, p) {
+        return typeof p === "string" && p in isi ? { value: isi[p], writable: true, enumerable: true, configurable: true } : undefined;
+      }
+    });
+  };
+  var pasang = function (nama, penyimpanan) {
+    try { Object.defineProperty(window, nama, { configurable: true, get: function () { return penyimpanan; } }); } catch (e) {}
+  };
+  pasang("localStorage", buatPenyimpanan(awal, function (pesan) {
+    pesan.ck = "storage";
+    try { parent.postMessage(pesan, "*"); } catch (e) {}
+  }));
+  pasang("sessionStorage", buatPenyimpanan({}, function () {}));
+})();`;
+
   // 6. Fungsi menjalankan HTML, CSS, dan JavaScript
   function bangunDokumen() {
     const html = htmlEditor.getValue();
@@ -517,13 +632,21 @@ ${css}
 ${html}
 `;
 
-    // Skrip console dipasang lebih dulu. Nomor baris error dihitung relatif terhadap kode JS pengguna:
-    // mengganti __OFFSET__ dengan angka tidak mengubah jumlah baris, jadi hitungannya tetap tepat.
+    // Skrip penyimpanan dan console dipasang lebih dulu. Nomor baris error dihitung relatif terhadap
+    // kode JS pengguna. Semua penggantian di bawah tidak menambah baris (JSON satu baris), jadi hitungannya tetap tepat.
+    const dataTersimpan = JSON.stringify(bacaPenyimpanan())
+      .replace(/</g, "\\u003c")
+      .replace(/\u2028/g, "\\u2028")
+      .replace(/\u2029/g, "\\u2029");
+    const skripPenyimpanan = SKRIP_PENYIMPANAN
+      .replace("__BATAS__", String(BATAS_PENYIMPANAN))
+      .replace("__DATA__", () => dataTersimpan);
     const sambungan = "\n</script>\n<script>\n";
-    const offset = (awal + "<script>\n" + SKRIP_CONSOLE + sambungan).split("\n").length - 1;
+    const awalSkrip = awal + "<script>\n" + skripPenyimpanan + sambungan;
+    const offset = (awalSkrip + SKRIP_CONSOLE + sambungan).split("\n").length - 1;
     const skrip = SKRIP_CONSOLE.replace("__OFFSET__", String(offset));
 
-    return awal + "<script>\n" + skrip + sambungan + js + "\n</script>\n</body>\n</html>";
+    return awalSkrip + skrip + sambungan + js + "\n</script>\n</body>\n</html>";
   }
 
   function jalankanKode() {

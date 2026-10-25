@@ -343,21 +343,25 @@ tombol.addEventListener("click", () => {
           id="code-preview"
           class="code-preview"
           title="Pratinjau hasil HTML, CSS, dan JavaScript"
-          sandbox="allow-scripts allow-modals"
+          sandbox="allow-scripts allow-modals allow-forms"
           referrerpolicy="no-referrer"
         ></iframe>
 
         <div class="console-panel">
           <div class="console-head">
             <span>Console</span>
-            <button type="button" id="console-clear" class="preview-toggle">Bersihkan</button>
+            <span class="console-actions">
+              <button type="button" id="storage-clear" class="preview-toggle" title="Hapus data localStorage yang disimpan oleh preview">Hapus penyimpanan</button>
+              <button type="button" id="console-clear" class="preview-toggle">Bersihkan</button>
+            </span>
           </div>
           <div id="web-console" class="console-output" role="log" aria-live="polite" aria-label="Output console JavaScript"></div>
         </div>
 
         <p class="preview-note">
           Hasil ditampilkan dalam lingkungan terpisah. Tab JS bisa mengubah halaman (DOM),
-          dan <code>console.log</code> muncul di panel Console. Jika program berjalan tanpa henti
+          dan <code>console.log</code> muncul di panel Console. <code>localStorage</code> bisa dipakai dan datanya tersimpan di browser ini
+          (hapus lewat tombol Hapus penyimpanan). Jika program berjalan tanpa henti
           (misalnya perulangan tak berujung), muat ulang halaman ini.
         </p>
       </div>
