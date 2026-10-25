@@ -59,13 +59,14 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
       autoCloseBrackets: true,
       matchBrackets: true,
       extraKeys: {
-        Tab: (cm) => cm.replaceSelection("    ", "end"),
+        Tab: (cm) => cm.execCommand("insertSoftTab"),
         "Shift-Tab": (cm) => cm.execCommand("indentLess"),
         "Ctrl-Enter": () => runCode(),
         "Cmd-Enter": () => runCode()
       }
     });
     editor.setSize("100%", "390px");
+    if (window.CodingSkanetraEditorPrefs) window.CodingSkanetraEditorPrefs.pasang(editor);
   }
 
   function getCode() {
@@ -385,6 +386,23 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
     setCode(visualExample);
     status.textContent = "Contoh Visual dimuat.";
   });
+
+  // Unduh kode yang sedang diedit sebagai file Python (.py), baik dari mode Console maupun Visual.
+  const downloadButton = document.querySelector("#py-download");
+  if (downloadButton) {
+    downloadButton.addEventListener("click", () => {
+      const blob = new Blob(["\uFEFF", getCode()], { type: "text/x-python;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = outputMode === "visual" ? "main-visual.py" : "main.py";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      status.textContent = "File Python berhasil disiapkan untuk diunduh.";
+    });
+  }
 
   runButton.addEventListener("click", runCode);
   if (consoleModeButton) consoleModeButton.addEventListener("click", () => setOutputMode("console"));

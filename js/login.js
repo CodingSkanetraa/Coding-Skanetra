@@ -27,7 +27,7 @@ form.addEventListener('submit', async (event) => {
     if (!response.ok || result.sukses !== true) throw new Error(result.pesan || 'ID atau PIN tidak sesuai.');
     window.location.replace('/pages/peringkat.html');
   } catch (error) {
-    message.textContent = error.message || 'Login gagal. Periksa koneksi lalu coba lagi.';
+    message.textContent = error.message || 'Gagal masuk. Periksa koneksi lalu coba lagi.';
     button.disabled = false;
     button.textContent = 'Masuk';
   }

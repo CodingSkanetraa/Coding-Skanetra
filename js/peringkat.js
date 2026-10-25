@@ -744,7 +744,7 @@ if (logoutButton) {
       });
 
       if (!response.ok) {
-        throw new Error("Logout gagal.");
+        throw new Error("Gagal keluar.");
       }
 
       window.location.replace("/pages/login.html");

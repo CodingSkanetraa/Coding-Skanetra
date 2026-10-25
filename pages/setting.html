@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0b100e">
-  <title>Settings | CodingSkanetra</title>
+  <title>Pengaturan | CodingSkanetra</title>
 
   <link rel="icon" type="image/png" href="../favicon.png">
   <script src="../js/theme.js?v=5"></script>
@@ -26,7 +26,7 @@
 <body>
   <header class="navbar">
     <a class="brand" href="../index.html#beranda" aria-label="CodingSkanetra, beranda">
-      <span class="brand-icon" aria-hidden="true">&lt;/&gt;</span>
+      <img class="brand-logo" src="../assets/images/logo-eskul.png" alt="" width="38" height="44">
       <span>Coding<span class="brand-accent">Skanetra</span></span>
     </a>
     <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
@@ -40,13 +40,13 @@
       <a class="nav-link" href="games.html" data-nav="games">Games</a>
       <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
       <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
-      <a class="nav-link active" href="setting.html" data-nav="setting" aria-current="page">Setting</a>
+      <a class="nav-link active" href="setting.html" data-nav="setting" aria-current="page">Pengaturan</a>
     </nav>
   </header>
 
   <main class="settings-page container">
     <section class="settings-intro">
-      <span class="settings-eyebrow">PREFERENCES</span>
+      <span class="settings-eyebrow">Pengaturan</span>
       <h1>Pengaturan <span>Workspace</span></h1>
       <p>Atur tampilan dan editor sesuai kenyamananmu.</p>
     </section>
@@ -55,7 +55,7 @@
       <aside class="settings-sidebar">
         <a href="#appearance" class="settings-nav active">🎨 Appearance</a>
         <a href="#editor" class="settings-nav">⌨️ Editor</a>
-        <a href="#about" class="settings-nav">ℹ️ About</a>
+        <a href="#about" class="settings-nav">ℹ️ Tentang</a>
       </aside>
 
       <div class="settings-content">
@@ -115,7 +115,7 @@
         <section class="settings-card" id="editor">
           <div class="settings-card-heading">
             <div>
-              <h2>Editor Preferences</h2>
+              <h2>Pengaturan editor</h2>
               <p>Atur kenyamanan saat menulis kode.</p>
             </div>
             <span class="settings-symbol">&lt;/&gt;</span>
@@ -166,14 +166,14 @@
 
           <p class="settings-hint" id="editor-status"
              role="status" aria-live="polite">
-            Preferensi editor tersimpan secara lokal.
+            Pengaturan editor tersimpan secara lokal.
           </p>
         </section>
 
         <section class="settings-card" id="about">
           <div class="settings-card-heading">
             <div>
-              <h2>About CodingSkanetra</h2>
+              <h2>Tentang CodingSkanetra</h2>
               <p>Informasi dan preferensi situs.</p>
             </div>
             <span class="settings-symbol">⌘</span>
@@ -190,11 +190,11 @@
 
           <div class="settings-reset">
             <div>
-              <strong>Reset pengaturan</strong>
-              <p>Kembalikan tema dan preferensi editor ke default.</p>
+              <strong>Atur ulang pengaturan</strong>
+              <p>Kembalikan tema dan preferensi editor ke bawaan.</p>
             </div>
             <button type="button" class="settings-reset-button"
-                    id="reset-settings">Reset</button>
+                    id="reset-settings">Atur ulang</button>
           </div>
         </section>
       </div>

@@ -9,13 +9,7 @@ html {
 }
 
 body:has(.ranking-page) {
-  background:
-    radial-gradient(
-      ellipse at 50% -15%,
-      color-mix(in srgb, var(--accent-dark) 12%, transparent),
-      transparent 55%
-    ),
-    var(--background);
+  background: var(--background);
 }
 
 .ranking-page {
@@ -92,13 +86,13 @@ button:disabled {
   color: var(--accent);
   font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.01em;
 }
 
 .ranking-header h1 {
   font-size: clamp(1.9rem, 5vw, 2.8rem);
   font-weight: 750;
-  letter-spacing: -0.045em;
+  letter-spacing: 0;
   line-height: 1.2;
 }
 
@@ -115,7 +109,7 @@ button:disabled {
   height: 46px;
   place-items: center;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 8px;
   background: var(--surface);
   color: var(--accent);
   cursor: pointer;
@@ -154,11 +148,7 @@ button:disabled {
   padding: 24px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: linear-gradient(
-    145deg,
-    color-mix(in srgb, var(--surface-hover) 92%, transparent),
-    color-mix(in srgb, var(--surface) 96%, transparent)
-  );
+  background: var(--surface);
 }
 
 .summary-card::after {
@@ -186,7 +176,7 @@ button:disabled {
   color: var(--text);
   font-size: clamp(1.8rem, 4vw, 2.5rem);
   font-weight: 750;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
   line-height: 1.25;
   overflow-wrap: anywhere;
   font-variant-numeric: tabular-nums;
@@ -214,7 +204,7 @@ button:disabled {
 .ranking-page .section-heading h2 {
   font-size: clamp(1.25rem, 3vw, 1.6rem);
   font-weight: 700;
-  letter-spacing: -0.025em;
+  letter-spacing: 0;
 }
 
 .ranking-page .section-heading .eyebrow {
@@ -258,11 +248,7 @@ button:disabled {
 
 .ranking-item:nth-child(1) {
   border-color: color-mix(in srgb, var(--gold) 40%, transparent);
-  background: linear-gradient(
-    110deg,
-    color-mix(in srgb, var(--gold) 8%, transparent),
-    var(--surface) 65%
-  );
+  background: var(--surface);
 }
 
 .ranking-item:nth-child(2) {
@@ -280,7 +266,7 @@ button:disabled {
   height: 48px;
   place-items: center;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 8px;
   background: color-mix(in srgb, var(--accent) 11%, var(--background));
   color: var(--muted);
   font-size: 1.05rem;
@@ -359,7 +345,7 @@ button:disabled {
   margin-top: 18px;
   padding: 13px 20px;
   border: 1px solid var(--accent);
-  border-radius: 14px;
+  border-radius: 8px;
   background: var(--accent);
   color: color-mix(in srgb, var(--accent) 2%, var(--background));
   cursor: pointer;
@@ -408,7 +394,7 @@ button:disabled {
   min-height: 52px;
   padding: 0 16px;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 8px;
   background: var(--surface);
   color: var(--muted);
   transition: border-color 0.2s ease;
@@ -572,7 +558,7 @@ td:last-child {
   margin-bottom: 28px;
   padding: 18px;
   border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent);
-  border-radius: 14px;
+  border-radius: 8px;
   background: color-mix(in srgb, var(--danger) 6%, transparent);
   color: var(--danger);
   font-size: 0.88rem;
@@ -646,7 +632,7 @@ td:last-child {
 
   .summary-card {
     padding: 17px 14px;
-    border-radius: 14px;
+    border-radius: 8px;
   }
 
   .summary-card strong {
@@ -664,14 +650,14 @@ td:last-child {
   .ranking-item {
     gap: 12px;
     padding: 14px 12px;
-    border-radius: 14px;
+    border-radius: 8px;
   }
 
   .rank-number {
     flex-basis: 40px;
     width: 40px;
     height: 40px;
-    border-radius: 12px;
+    border-radius: 6px;
     font-size: 0.92rem;
   }
 
@@ -744,7 +730,7 @@ td:last-child {
 
 .ranking-item.rank-gold {
   border-color: var(--gold);
-  background: linear-gradient(135deg, color-mix(in srgb, var(--gold) 12%, var(--surface)), var(--surface));
+  background: color-mix(in srgb, var(--gold) 9%, var(--surface));
 }
 
 .ranking-item.rank-silver {
@@ -822,7 +808,7 @@ td:last-child {
   color: var(--accent);
   font-size: 0.75rem;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.01em;
 }
 
 .member-modal__identity {
@@ -859,7 +845,7 @@ td:last-child {
   min-width: 0;
   padding: 15px;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 6px;
   background: var(--background);
 }
 

@@ -45,13 +45,14 @@ document.addEventListener("DOMContentLoaded", () => {
       autoCloseBrackets: true,
       matchBrackets: true,
       extraKeys: {
-        Tab: (cm) => cm.replaceSelection("    ", "end"),
+        Tab: (cm) => cm.execCommand("insertSoftTab"),
         "Shift-Tab": (cm) => cm.execCommand("indentLess"),
         "Ctrl-Enter": () => runCode(),
         "Cmd-Enter": () => runCode()
       }
     });
     editor.setSize("100%", "390px");
+    if (window.CodingSkanetraEditorPrefs) window.CodingSkanetraEditorPrefs.pasang(editor);
   } else {
     // Cadangan bila CodeMirror gagal dimuat: textarea biasa tetap bisa dipakai.
     textarea.style.cssText = "width:100%;height:390px;box-sizing:border-box;padding:12px;border:0;background:#000;color:#e6e6e6;font:14px/1.65 Consolas,Monaco,monospace;resize:vertical";
@@ -186,6 +187,23 @@ document.addEventListener("DOMContentLoaded", () => {
       abortController = null;
       if (token === session) runButton.disabled = false;
     }
+  }
+
+  // Unduh kode C++ yang sedang diedit sebagai file sumber (.cpp).
+  const downloadButton = document.querySelector("#cpp-download");
+  if (downloadButton) {
+    downloadButton.addEventListener("click", () => {
+      const blob = new Blob(["\uFEFF", getCode()], { type: "text/x-c++src;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "main.cpp";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      status.textContent = "File C++ berhasil disiapkan untuk diunduh.";
+    });
   }
 
   runButton.addEventListener("click", runCode);

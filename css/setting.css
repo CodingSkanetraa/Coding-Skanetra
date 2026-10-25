@@ -55,7 +55,7 @@
 .settings-nav {
   padding: 13px 15px;
   border: 1px solid transparent;
-  border-radius: 12px;
+  border-radius: 6px;
   color: var(--muted);
   text-decoration: none;
   transition: .2s ease;
@@ -105,7 +105,7 @@
   width: 42px;
   height: 42px;
   flex-shrink: 0;
-  border-radius: 12px;
+  border-radius: 6px;
   background: var(--accent-soft);
   color: var(--accent);
   font-weight: 700;
@@ -132,7 +132,7 @@
   gap: 12px;
   padding: 13px;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 6px;
   background: var(--background);
   color: var(--text);
   font: inherit;

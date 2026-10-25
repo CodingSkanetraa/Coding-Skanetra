@@ -8,8 +8,8 @@
 
   const defaults = {
     fontSize: 14,
-    tabSize: 2,
-    lineWrapping: true,
+    tabSize: 4,
+    lineWrapping: false,
     lineNumbers: true
   };
 
@@ -157,7 +157,7 @@
         "Preferensi editor dikembalikan ke default.";
     } catch {
       $("#editor-status").textContent =
-        "Reset gagal. Periksa izin penyimpanan browser.";
+        "Gagal mengatur ulang. Periksa izin penyimpanan browser.";
     }
   });
 

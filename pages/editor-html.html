@@ -44,12 +44,13 @@
     ></script>
 
   <script src="../js/main.js?v=5" defer></script>
+  <script src="../js/editor-prefs.js?v=5" defer></script>
   <script src="../js/playground.js?v=5" defer></script>
 </head>
 <body>
   <header class="navbar">
     <a class="brand" href="../index.html#beranda" aria-label="CodingSkanetra, beranda">
-      <span class="brand-icon" aria-hidden="true">&lt;/&gt;</span>
+      <img class="brand-logo" src="../assets/images/logo-eskul.png" alt="" width="38" height="44">
       <span>Coding<span class="brand-accent">Skanetra</span></span>
     </a>
     <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
@@ -63,7 +64,7 @@
       <a class="nav-link" href="games.html" data-nav="games">Games</a>
       <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
       <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
-      <a class="nav-link" href="setting.html" data-nav="setting">Setting</a>
+      <a class="nav-link" href="setting.html" data-nav="setting">Pengaturan</a>
     </nav>
   </header>
 
@@ -71,7 +72,7 @@
 <main class="playground-page">
   <div class="container">
     <section class="playground-heading">
-      <p class="eyebrow">CODE PLAYGROUND</p>
+      <p class="eyebrow">Playground</p>
       <h1>Tulis kode. Lihat hasilnya.</h1>
       <p>
         Eksperimen dengan HTML, CSS, dan JavaScript langsung di browser.
@@ -330,7 +331,7 @@ tombol.addEventListener("click", () => {
             type="button"
             id="hide-preview"
             class="preview-toggle"
-            aria-label="Sembunyikan preview"
+            aria-label="Sembunyikan pratinjau"
             >
             Sembunyikan
             </button>

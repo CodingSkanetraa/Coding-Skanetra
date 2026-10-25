@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Editor Python online CodingSkanetra untuk belajar dasar pemrograman Python.">
-  <title>Python Editor | CodingSkanetra</title>
+  <title>Editor Python | CodingSkanetra</title>
   <link rel="icon" type="image/png" href="../favicon.png">
   <script src="../js/theme.js?v=5"></script>
   <link rel="stylesheet" href="../css/style.css?v=5">
@@ -17,12 +17,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/edit/matchbrackets.min.js" defer></script>
   <script src="../js/main.js?v=5" defer></script>
   <script src="../js/terminal.js?v=5" defer></script>
+  <script src="../js/editor-prefs.js?v=5" defer></script>
   <script src="../js/editor-python.js?v=5" defer></script>
 </head>
 <body>
   <header class="navbar">
     <a class="brand" href="../index.html#beranda" aria-label="CodingSkanetra, beranda">
-      <span class="brand-icon" aria-hidden="true">&lt;/&gt;</span>
+      <img class="brand-logo" src="../assets/images/logo-eskul.png" alt="" width="38" height="44">
       <span>Coding<span class="brand-accent">Skanetra</span></span>
     </a>
     <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
@@ -36,15 +37,15 @@
       <a class="nav-link" href="games.html" data-nav="games">Games</a>
       <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
       <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
-      <a class="nav-link" href="setting.html" data-nav="setting">Setting</a>
+      <a class="nav-link" href="setting.html" data-nav="setting">Pengaturan</a>
     </nav>
   </header>
 
   <main class="py-editor-page">
     <div class="container">
       <section class="py-editor-heading">
-        <p class="eyebrow">CODINGSKANETRA LAB · PYTHON</p>
-        <h1>Python Editor</h1>
+        <p class="eyebrow">Lab Python</p>
+        <h1>Editor Python</h1>
         <p>Tulis kode Python, jalankan, dan lihat hasilnya langsung di browser. Cocok untuk latihan konsep dasar pemrograman.</p>
       </section>
 
@@ -58,13 +59,14 @@
             <button id="py-mode-console" class="py-mode-button is-active" type="button" aria-pressed="true">Console</button>
             <button id="py-mode-visual" class="py-mode-button" type="button" aria-pressed="false">Visual</button>
           </div>
-          <textarea id="python-code" aria-label="Kode Python"># Selamat datang di Python Editor CodingSkanetra!
+          <textarea id="python-code" aria-label="Kode Python"># Selamat datang di Editor Python CodingSkanetra!
 print("Hai, Kaito")
 </textarea>
           <div class="py-actions">
             <button id="py-run" class="btn btn-primary" type="button"><span aria-hidden="true">▶</span> Jalankan</button>
-            <button id="py-reset" class="py-btn-secondary" type="button">Reset</button>
+            <button id="py-reset" class="py-btn-secondary" type="button">Atur ulang</button>
             <button id="py-clear" class="py-btn-secondary" type="button">Bersihkan output</button>
+            <button id="py-download" class="py-btn-secondary" type="button" title="Unduh kode Python yang sedang ditulis">⭳ Unduh .py</button>
             <span id="py-status" class="py-status-text" role="status" aria-live="polite">Siap dijalankan</span>
           </div>
         </div>
@@ -85,7 +87,7 @@ print("Hai, Kaito")
 
       <section class="py-basics" aria-labelledby="py-basics-title">
         <div class="py-basics-heading">
-          <p class="eyebrow">MULAI BELAJAR</p>
+          <p class="eyebrow">Mulai belajar</p>
           <h2 id="py-basics-title">Konsep dasar Python</h2>
           <p>Pilih contoh untuk memasukkan kode ke editor, lalu tekan Jalankan.</p>
         </div>

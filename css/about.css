@@ -51,7 +51,7 @@ html {
   color: var(--about-accent);
   font-size: 0.74rem;
   font-weight: 800;
-  letter-spacing: 0.13em;
+  letter-spacing: 0.01em;
 }
 
 .status-dot,
@@ -67,7 +67,7 @@ html {
   margin: 22px 0 18px;
   font-size: clamp(2.3rem, 5vw, 4.1rem);
   line-height: 1.1;
-  letter-spacing: -0.055em;
+  letter-spacing: 0;
 }
 
 .about-hero h1 span {
@@ -88,7 +88,7 @@ html {
   margin-top: 16px;
   padding: 13px 18px;
   border: 1px solid color-mix(in srgb, var(--accent) 44%, var(--background));
-  border-radius: 12px;
+  border-radius: 6px;
   color: var(--about-accent-light);
   background: color-mix(in srgb, var(--accent) 11%, var(--background));
   font-weight: 700;
@@ -193,7 +193,7 @@ html {
 .contact-copy h2 {
   margin: 12px 0;
   font-size: clamp(1.8rem, 4vw, 2.6rem);
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
 }
 
 .section-heading > p,
@@ -210,10 +210,8 @@ html {
   gap: 22px;
   padding: 28px;
   border: 1px solid var(--about-border);
-  border-radius: 20px;
-  background:
-    radial-gradient(ellipse at top left, color-mix(in srgb, var(--accent) 17%, var(--background)) 0, transparent 55%),
-    var(--about-surface);
+  border-radius: 10px;
+  background: var(--about-surface);
 }
 
 .project-icon {
@@ -222,7 +220,7 @@ html {
   width: 62px;
   height: 62px;
   border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--background));
-  border-radius: 16px;
+  border-radius: 8px;
   background: color-mix(in srgb, var(--accent) 15%, var(--background));
   color: var(--about-accent);
   font: 700 1.3rem "Consolas", monospace;
@@ -270,9 +268,7 @@ html {
 }
 
 .creator-card {
-  background:
-    radial-gradient(ellipse at top left, color-mix(in srgb, var(--accent) 18%, var(--background)), transparent 70%),
-    var(--about-surface);
+  background: var(--about-surface);
   border-color: color-mix(in srgb, var(--accent) 43%, var(--background));
 }
 
@@ -308,7 +304,7 @@ html {
   color: color-mix(in srgb, var(--accent) 65%, var(--text));
   font-size: 0.62rem;
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.01em;
   text-align: center;
 }
 
@@ -374,10 +370,8 @@ html {
   gap: 36px;
   padding: 34px;
   border: 1px solid color-mix(in srgb, var(--accent) 37%, var(--background));
-  border-radius: 22px;
-  background:
-    radial-gradient(ellipse at top left, color-mix(in srgb, var(--accent) 17%, var(--background)), transparent 55%),
-    var(--about-surface);
+  border-radius: 10px;
+  background: var(--about-surface);
 }
 
 .contact-copy h2 {
@@ -418,7 +412,7 @@ html {
   min-width: 0;
   padding: 17px;
   border: 1px solid var(--about-border);
-  border-radius: 14px;
+  border-radius: 8px;
   background: color-mix(in srgb, var(--accent) 4%, var(--background));
   color: var(--about-text);
   transition:
@@ -437,7 +431,7 @@ html {
   width: 44px;
   height: 44px;
   flex-shrink: 0;
-  border-radius: 12px;
+  border-radius: 6px;
   background: color-mix(in srgb, var(--accent) 16%, var(--background));
   color: var(--about-accent);
 }

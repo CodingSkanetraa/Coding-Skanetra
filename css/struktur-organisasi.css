@@ -18,13 +18,7 @@
 
 body:has(.organization-page) {
   min-width: 320px;
-  background:
-    radial-gradient(
-      ellipse at 50% 0%,
-      color-mix(in srgb, var(--accent-dark) 14%, transparent),
-      transparent 50%
-    ),
-    var(--background);
+  background: var(--background);
 }
 
 .organization-page {
@@ -55,7 +49,7 @@ body:has(.organization-page) {
   color: var(--org-accent);
   font-size: 0.76rem;
   font-weight: 800;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.01em;
 }
 
 .heading-label::before,
@@ -70,7 +64,7 @@ body:has(.organization-page) {
   margin: 0;
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 800;
-  letter-spacing: -0.045em;
+  letter-spacing: 0;
   line-height: 1.15;
 }
 
@@ -127,13 +121,7 @@ body:has(.organization-page) {
 }
 
 .vice-card {
-  background:
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, color-mix(in srgb, var(--accent) 59%, var(--background)) 16%, transparent),
-      transparent 65%
-    ),
-    color-mix(in srgb, var(--accent) 9%, var(--background));
+  background: color-mix(in srgb, var(--accent) 9%, var(--background));
   border-color: color-mix(in srgb, var(--accent) 43%, var(--background));
 }
 
@@ -143,12 +131,7 @@ body:has(.organization-page) {
 }
 
 .chair-card {
-  background:
-    linear-gradient(
-      145deg,
-      var(--text),
-      var(--org-accent-light)
-    );
+  background: var(--org-accent-light);
   border-color: color-mix(in srgb, var(--accent) 49%, var(--text));
   color: color-mix(in srgb, var(--accent) 22%, var(--background));
   box-shadow: 0 12px 35px color-mix(in srgb, var(--accent-dark) 10%, transparent);
@@ -171,7 +154,7 @@ body:has(.organization-page) {
   max-width: 100%;
   aspect-ratio: 4 / 5;
   margin-bottom: 20px;
-  border-radius: 16px;
+  border-radius: 8px;
 }
 
 .person-photo {
@@ -188,7 +171,7 @@ body:has(.organization-page) {
   color: var(--org-accent);
   font-size: 0.68rem;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.01em;
 }
 
 .chair-card .position-label {
@@ -291,7 +274,7 @@ body:has(.organization-page) {
 .division-photo {
   width: 76px;
   aspect-ratio: 1;
-  border-radius: 14px;
+  border-radius: 8px;
 }
 
 .division-info {
@@ -352,13 +335,7 @@ body:has(.organization-page) {
   padding: 22px;
   border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--background));
   border-radius: var(--org-radius);
-  background:
-    linear-gradient(
-      110deg,
-      color-mix(in srgb, color-mix(in srgb, var(--accent) 44%, var(--background)) 15%, transparent),
-      transparent 70%
-    ),
-    var(--org-surface);
+  background: var(--org-surface);
 }
 
 .members-icon {
@@ -368,7 +345,7 @@ body:has(.organization-page) {
   height: 54px;
   place-items: center;
   border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--background));
-  border-radius: 16px;
+  border-radius: 8px;
   background: color-mix(in srgb, var(--accent) 16%, var(--background));
   color: var(--org-accent);
 }
@@ -503,7 +480,7 @@ body:has(.organization-page) {
 
   .division-photo {
     width: 62px;
-    border-radius: 12px;
+    border-radius: 6px;
   }
 
   .division-info h2 {
@@ -641,7 +618,7 @@ body:has(.organization-page) {
   width: min(320px, 70%);
   padding: 22px;
   text-align: center;
-  background: linear-gradient(145deg, var(--text), var(--accent-light));
+  background: var(--accent-light);
   border-color: color-mix(in srgb, var(--accent) 49%, var(--text));
   color: color-mix(in srgb, var(--accent) 22%, var(--background));
 }
@@ -712,7 +689,7 @@ body:has(.organization-page) {
   max-width: 100%;
   background: var(--org-surface, var(--surface));
   border: 1px solid var(--org-border, var(--border));
-  border-radius: 16px;
+  border-radius: 8px;
 }
 
 .generation-tab {
@@ -783,7 +760,7 @@ body:has(.organization-page) {
   text-align: center;
   background: var(--org-surface, var(--surface));
   border: 1px solid var(--org-border, var(--border));
-  border-radius: 22px;
+  border-radius: 10px;
 }
 
 .placeholder-icon {
@@ -791,7 +768,7 @@ body:has(.organization-page) {
   height: 76px;
   display: grid;
   place-items: center;
-  border-radius: 20px;
+  border-radius: 10px;
   background: color-mix(in srgb, var(--accent) 16%, var(--background));
   border: 1px solid color-mix(in srgb, var(--accent) 37%, var(--background));
   color: var(--org-accent, var(--accent));

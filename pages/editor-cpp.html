@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Editor C++ online CodingSkanetra untuk belajar dasar pemrograman C++.">
-  <title>C++ Editor | CodingSkanetra</title>
+  <title>Editor C++ | CodingSkanetra</title>
   <link rel="icon" type="image/png" href="../favicon.png">
   <script src="../js/theme.js?v=5"></script>
   <link rel="stylesheet" href="../css/style.css?v=5">
@@ -18,12 +18,13 @@
   <script src="../js/main.js?v=5" defer></script>
   <script src="../js/terminal.js?v=5" defer></script>
   <script src="../js/cpp-runner.js?v=5" defer></script>
+  <script src="../js/editor-prefs.js?v=5" defer></script>
   <script src="../js/editor-cpp.js?v=5" defer></script>
 </head>
 <body>
   <header class="navbar">
     <a class="brand" href="../index.html#beranda" aria-label="CodingSkanetra, beranda">
-      <span class="brand-icon" aria-hidden="true">&lt;/&gt;</span>
+      <img class="brand-logo" src="../assets/images/logo-eskul.png" alt="" width="38" height="44">
       <span>Coding<span class="brand-accent">Skanetra</span></span>
     </a>
     <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
@@ -37,15 +38,15 @@
       <a class="nav-link" href="games.html" data-nav="games">Games</a>
       <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
       <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
-      <a class="nav-link" href="setting.html" data-nav="setting">Setting</a>
+      <a class="nav-link" href="setting.html" data-nav="setting">Pengaturan</a>
     </nav>
   </header>
 
   <main class="py-editor-page">
     <div class="container">
       <section class="py-editor-heading">
-        <p class="eyebrow">CODINGSKANETRA LAB · C++</p>
-        <h1>C++ Editor</h1>
+        <p class="eyebrow">Lab C++</p>
+        <h1>Editor C++</h1>
         <p>Tulis kode C++, kompilasi, dan lihat hasilnya. Kode dikompilasi dengan g++ di server online, jadi class dan STL tersedia.</p>
       </section>
 
@@ -55,7 +56,7 @@
             <div class="py-file-label"><span class="py-status-dot"></span> main.cpp</div>
             <span class="py-language-label">C++17 · g++ online</span>
           </div>
-          <textarea id="cpp-code" aria-label="Kode C++" spellcheck="false">// Selamat datang di C++ Editor CodingSkanetra!
+          <textarea id="cpp-code" aria-label="Kode C++" spellcheck="false">// Selamat datang di Editor C++ CodingSkanetra!
 #include &lt;iostream&gt;
 using namespace std;
 
@@ -67,8 +68,9 @@ int main() {
 </textarea>
           <div class="py-actions">
             <button id="cpp-run" class="btn btn-primary" type="button"><span aria-hidden="true">▶</span> Kompilasi &amp; Jalankan</button>
-            <button id="cpp-reset" class="py-btn-secondary" type="button">Reset</button>
+            <button id="cpp-reset" class="py-btn-secondary" type="button">Atur ulang</button>
             <button id="cpp-clear" class="py-btn-secondary" type="button">Bersihkan output</button>
+            <button id="cpp-download" class="py-btn-secondary" type="button" title="Unduh kode C++ yang sedang ditulis">⭳ Unduh .cpp</button>
             <span id="cpp-status" class="py-status-text" role="status" aria-live="polite">Siap dijalankan</span>
           </div>
         </div>
@@ -85,7 +87,7 @@ int main() {
 
       <section class="py-basics" aria-labelledby="cpp-basics-title">
         <div class="py-basics-heading">
-          <p class="eyebrow">MULAI BELAJAR</p>
+          <p class="eyebrow">Mulai belajar</p>
           <h2 id="cpp-basics-title">Konsep dasar C++</h2>
           <p>Pilih contoh untuk memasukkan kode ke editor, lalu tekan Kompilasi &amp; Jalankan.</p>
         </div>

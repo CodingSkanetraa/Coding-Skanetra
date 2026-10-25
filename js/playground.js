@@ -138,6 +138,11 @@ document.addEventListener("DOMContentLoaded", () => {
   cssEditor.setSize("100%", "100%");
   jsEditor.setSize("100%", "100%");
 
+  // Terapkan Pengaturan editor (ukuran font, indentasi, nomor baris, line wrapping)
+  if (window.CodingSkanetraEditorPrefs) {
+    [htmlEditor, cssEditor, jsEditor].forEach((cm) => window.CodingSkanetraEditorPrefs.pasang(cm));
+  }
+
   // Pembuka kotak pencarian untuk setiap editor (diisi di bawah)
   const pembukaPencarian = new Map();
   function bukaPencarian(editor) {
