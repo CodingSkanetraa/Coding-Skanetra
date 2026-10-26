@@ -34,7 +34,7 @@
 .CodeMirror-scroll{background: var(--editor-background);}
 @media (max-width: 820px) { .py-editor-layout { grid-template-columns: 1fr; } .py-output { min-height: 220px; max-height: 300px; } .py-code-panel .CodeMirror { height: 330px; } .py-example-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .py-editor-page { padding: 28px 0 44px; } .py-editor-heading { text-align: left; } .py-editor-heading > p:last-child { margin-left: 0; } .py-example-grid { grid-template-columns: 1fr; } .py-status-text { width: 100%; margin-left: 0; } .py-panel-top { align-items: flex-start; flex-direction: column; justify-content: center; padding: 10px 13px; gap: 5px; } }
-
+.py-output-note{display: none;}
 
 /* Mode Console / Visual untuk output Python */
 .py-mode-switch {
