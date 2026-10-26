@@ -109,6 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
     runButton.disabled = false;
     status.textContent = message;
     output.classList.toggle("is-error", Boolean(isError));
+    if (isError && window.CodingSkanetraError) window.CodingSkanetraError.tampilkan(output, "cpp", output.textContent || "");
   }
 
   // Menyusun teks output dari hasil kompilasi/eksekusi.
@@ -274,6 +275,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     saver.refresh();
     if (restoredNote) status.textContent = restoredNote;
+  }
+
+  // Tombol Bagikan dan Mode fokus (js/editor-alat.js).
+  if (window.CodingSkanetraAlat && saveButton) {
+    window.CodingSkanetraAlat.daftar({
+      jenis: "cpp",
+      tombolSimpan: saveButton,
+      ambil: () => ({ k: getCode() }),
+      terapkan: (d) => setCode(String((d && d.k) || ""), { quiet: true }),
+      beritahu: (pesan) => { status.textContent = pesan; }
+    });
   }
 
   const year = document.querySelector("#year");

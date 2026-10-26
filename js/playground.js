@@ -460,6 +460,17 @@ ${html}
     baris.textContent = (level === "error" ? "✖ " : level === "warn" ? "⚠ " : "") + teks;
     consoleOutput.appendChild(baris);
 
+    if (level === "error" && window.CodingSkanetraError) {
+      const info = window.CodingSkanetraError.jelaskan("js", teks);
+      if (info) {
+        const saran = document.createElement("div");
+        saran.className = "console-line console-hint";
+        saran.textContent = "💡 " + info.judul + ". " + info.isi + " Coba: " + info.saran;
+        consoleOutput.appendChild(saran);
+        document.dispatchEvent(new CustomEvent("skani:ucap", { detail: { jenis: "semangat", teks: info.singkat } }));
+      }
+    }
+
     if (jumlahBarisConsole === MAKS_BARIS_CONSOLE) {
       const batas = document.createElement("div");
       batas.className = "console-line console-warn";
@@ -757,6 +768,22 @@ ${html}
       });
     });
     saver.refresh();
+  }
+
+  // Tombol Bagikan dan Mode fokus (js/editor-alat.js).
+  if (window.CodingSkanetraAlat && saveButton) {
+    window.CodingSkanetraAlat.daftar({
+      jenis: "web",
+      tombolSimpan: saveButton,
+      ambil: () => ({ h: htmlEditor.getValue(), c: cssEditor.getValue(), s: jsEditor.getValue() }),
+      terapkan: (d) => {
+        htmlEditor.setValue(String((d && d.h) || ""));
+        cssEditor.setValue(String((d && d.c) || ""));
+        jsEditor.setValue(String((d && d.s) || ""));
+        pilihTab("html");
+      },
+      beritahu: (pesan) => { status.textContent = pesan; }
+    });
   }
 
   // 11. Kondisi awal

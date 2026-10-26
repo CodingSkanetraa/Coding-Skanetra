@@ -14,6 +14,8 @@
   <script src="../js/theme.js?v=5"></script>
   <link rel="stylesheet" href="../css/style.css?v=5">
   <link rel="stylesheet" href="../css/setting.css?v=5">
+  <link rel="stylesheet" href="../css/gerak.css?v=1">
+  <link rel="stylesheet" href="../css/maskot.css?v=1">
 
   <script>
     // Terapkan tema tersimpan sebelum halaman tampil.
@@ -25,6 +27,8 @@
     }
   </script>
   <script src="../js/main.js?v=5" defer></script>
+  <script src="../js/gerak.js?v=1" defer></script>
+  <script src="../js/maskot.js?v=3" defer></script>
 </head>
 <body>
   <header class="navbar">
@@ -107,6 +111,14 @@
               <span class="theme-swatch swatch-rose"></span>
               <span>Rose</span>
             </button>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <label for="maskot-aktif">Maskot Skani</label>
+              <p>Tampilkan Skani di beranda, editor, dan kuis.</p>
+            </div>
+            <input id="maskot-aktif" type="checkbox" checked>
           </div>
 
           <p class="settings-hint" id="appearance-status"

@@ -1,0 +1,113 @@
+/* Bagikan, mode fokus, dan penjelasan error ramah (editor Python, C++, HTML) */
+
+.alat-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--accent-dark);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.alat-banner.galat { border-color: #d9805f; }
+.alat-banner-tutup {
+  flex: none;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+}
+.alat-banner-tutup:hover { color: var(--text); border-color: var(--accent-dark); }
+
+/* Dialog Bagikan */
+.alat-dialog {
+  margin: auto;
+  width: min(520px, calc(100vw - 32px));
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+}
+.alat-dialog::backdrop { background: rgb(0 0 0 / 55%); }
+.alat-dialog h2 { margin: 0 0 6px; font-size: 1.2rem; }
+.alat-dialog label { display: block; margin: 14px 0 6px; font-size: 0.88rem; color: var(--muted); }
+.alat-dialog input,
+.alat-dialog textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--text);
+  font: inherit;
+}
+.alat-dialog textarea { font: 0.8rem/1.45 ui-monospace, Menlo, Consolas, monospace; resize: none; word-break: break-all; }
+.alat-dialog input:focus-visible,
+.alat-dialog textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.alat-info, .alat-catatan { margin: 6px 0 0; color: var(--muted); font-size: 0.9rem; line-height: 1.55; }
+.alat-catatan.peringatan { color: #e9b872; }
+.alat-aksi { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+
+/* Penjelasan error ramah */
+.error-ramah {
+  margin: 10px 0 0;
+  padding: 12px 14px;
+  border: 1px solid var(--accent-dark);
+  border-left-width: 4px;
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+.error-ramah strong { display: block; margin-bottom: 4px; color: var(--accent); }
+.error-ramah p { margin: 4px 0 0; }
+.error-ramah .er-saran { color: var(--text); }
+.error-ramah .er-baris { display: inline-block; margin-top: 8px; color: var(--muted); font-size: 0.85rem; }
+.console-line.console-hint {
+  color: var(--accent);
+  border-left: 3px solid var(--accent-dark);
+  padding-left: 8px;
+  white-space: pre-wrap;
+}
+
+/* Mode fokus */
+html.mode-fokus { overflow-x: hidden; }
+html.mode-fokus .navbar,
+html.mode-fokus .footer,
+html.mode-fokus .py-editor-heading,
+html.mode-fokus .py-basics,
+html.mode-fokus .playground-heading { display: none !important; }
+html.mode-fokus main { padding-top: 14px; padding-bottom: 14px; }
+html.mode-fokus .py-editor-layout .CodeMirror,
+html.mode-fokus .py-code-panel .CodeMirror { height: calc(100dvh - 190px) !important; min-height: 240px; }
+html.mode-fokus .py-output { max-height: calc(100dvh - 130px); min-height: 200px; }
+html.mode-fokus .playground-workspace { min-height: calc(100dvh - 40px); height: calc(100dvh - 40px); }
+
+.alat-keluar-fokus {
+  position: fixed;
+  top: 10px;
+  right: 12px;
+  z-index: 80;
+  padding: 7px 12px;
+  border: 1px solid var(--accent-dark);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font: 0.85rem/1 inherit;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 35%);
+}
+.alat-keluar-fokus:hover { border-color: var(--accent); }
+
+@media print { .alat-keluar-fokus, .alat-banner { display: none; } }

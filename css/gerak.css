@@ -1,0 +1,53 @@
+/* Gerak halus untuk seluruh situs: kartu muncul saat digulir, sentuhan hover, transisi halaman.
+   Semua memakai opacity/translate supaya ringan, dan mati otomatis jika pengguna memilih "kurangi gerakan". */
+
+@view-transition { navigation: auto; }
+
+::view-transition-old(root) { animation: 140ms ease-in both gerak-keluar; }
+::view-transition-new(root) { animation: 260ms ease-out both gerak-masuk; }
+
+@keyframes gerak-keluar { to { opacity: 0; } }
+@keyframes gerak-masuk  { from { opacity: 0; } }
+
+/* Muncul perlahan saat masuk layar */
+.gerak-muncul:not(.tampil) { opacity: 0; }
+
+.gerak-muncul.tampil {
+  animation: gerak-muncul 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: calc(var(--urut, 0) * 70ms);
+}
+
+@keyframes gerak-muncul {
+  from { opacity: 0; translate: 0 16px; }
+}
+
+/* Kartu naik sedikit saat disentuh (hanya perangkat dengan kursor) */
+@media (hover: hover) {
+  .gerak-kartu {
+    transition: translate 0.22s cubic-bezier(0.2, 0.7, 0.2, 1),
+                border-color 0.2s ease,
+                background-color 0.2s ease,
+                box-shadow 0.22s ease;
+  }
+
+  .gerak-kartu:hover {
+    translate: 0 -4px;
+    border-color: var(--accent-dark);
+    box-shadow: 0 10px 26px rgb(0 0 0 / 22%);
+  }
+}
+
+.gerak-kartu:active { translate: 0 -1px; }
+
+/* Tombol terasa ditekan */
+.button { transition: translate 0.15s ease, background-color 0.18s ease, filter 0.18s ease; }
+.button:active { translate: 0 1px; }
+
+
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  .gerak-muncul:not(.tampil) { opacity: 1; }
+  .gerak-muncul.tampil { animation: none; }
+  .gerak-kartu:hover { translate: none; box-shadow: none; }
+}

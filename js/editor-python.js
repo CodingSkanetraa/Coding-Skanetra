@@ -386,6 +386,7 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
           term.show(printed + result.error);
           output.classList.add("is-error");
           status.textContent = "Terjadi error.";
+          if (window.CodingSkanetraError) window.CodingSkanetraError.tampilkan(output, "python", result.error);
         } else {
           term.show(result.text.trimEnd() || "Program selesai tanpa output.");
           // Mode Visual: tampilkan teks print() hanya bila ada.
@@ -406,6 +407,7 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
       term.show(message);
       output.classList.add("is-error");
       status.textContent = "Terjadi error.";
+      if (window.CodingSkanetraError) window.CodingSkanetraError.tampilkan(output, "python", message);
     } finally {
       if (token === session) runButton.disabled = false;
     }
@@ -636,6 +638,20 @@ animasi(jalan)`
     }
     saver.refresh();
     if (restoredNote) status.textContent = restoredNote;
+  }
+
+  // Tombol Bagikan dan Mode fokus (js/editor-alat.js).
+  if (window.CodingSkanetraAlat && saveButton) {
+    window.CodingSkanetraAlat.daftar({
+      jenis: "py",
+      tombolSimpan: saveButton,
+      ambil: () => ({ m: outputMode, k: getCode() }),
+      terapkan: (d) => {
+        setOutputMode(d && d.m === "visual" ? "visual" : "console");
+        setCode(String((d && d.k) || ""), { quiet: true });
+      },
+      beritahu: (pesan) => { status.textContent = pesan; }
+    });
   }
 
   // Tahun footer bila main.js tidak mengisinya.
