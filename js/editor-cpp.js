@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const initialCode = textarea.value;
   let editor = null;
   let abortController = null;
+  let saver = null; // pengelola tombol Simpan (lihat bagian "Simpan kode" di bawah)
   let session = 0;
 
   const examples = {
@@ -68,12 +69,23 @@ document.addEventListener("DOMContentLoaded", () => {
     return editor ? editor.getValue() : textarea.value;
   }
 
-  function setCode(code) {
+  function setCode(code, options) {
     if (editor) {
       editor.setValue(code);
-      editor.focus();
+      if (!(options && options.quiet)) editor.focus();
     } else {
       textarea.value = code;
+    }
+    if (saver) saver.refresh();
+  }
+
+  // Kode yang pernah disimpan dimuat otomatis saat halaman dibuka.
+  let restoredNote = "";
+  if (window.CodeStorage) {
+    const saved = window.CodeStorage.read("cpp");
+    if (saved && typeof saved.data === "string") {
+      setCode(saved.data, { quiet: true });
+      restoredNote = "Kode tersimpan dimuat (disimpan " + window.CodeStorage.formatTime(saved.savedAt) + ").";
     }
   }
 
@@ -238,6 +250,31 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
+  // ---------- Simpan kode di browser ini ----------
+  // Tombol Simpan (atau Ctrl + S) menyimpan kode di browser ini dan memuatnya lagi saat halaman dibuka.
+  const saveButton = document.querySelector("#cpp-save");
+  if (saveButton && window.CodeStorage) {
+    saver = window.CodeStorage.bindButton({
+      button: saveButton,
+      getKey: () => "cpp",
+      getData: getCode,
+      notify: (pesan) => { status.textContent = pesan; },
+      successMessage: () => "Kode C++ disimpan di browser ini."
+    });
+    if (editor) {
+      editor.on("change", () => saver.refresh());
+      editor.addKeyMap({
+        "Ctrl-S": () => { saver.save(); },
+        "Cmd-S": () => { saver.save(); }
+      });
+    } else {
+      textarea.addEventListener("input", () => saver.refresh());
+      window.CodeStorage.bindShortcut(textarea, saver.save);
+    }
+    saver.refresh();
+    if (restoredNote) status.textContent = restoredNote;
+  }
 
   const year = document.querySelector("#year");
   if (year && !year.textContent) year.textContent = new Date().getFullYear();

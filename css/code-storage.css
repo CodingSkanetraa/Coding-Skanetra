@@ -1,0 +1,16 @@
+/* Tombol "Simpan" pada editor: titik kuning = ada perubahan yang belum disimpan. */
+button[data-save].is-dirty::after {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 8px;
+  border-radius: 50%;
+  background: var(--warning);
+  vertical-align: middle;
+}
+
+button[data-save].is-saved {
+  border-color: var(--accent);
+  color: var(--accent);
+}

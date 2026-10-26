@@ -728,6 +728,37 @@ ${html}
     htmlEditor.focus();
   });
 
-  // 10. Kondisi awal
+  // 10. Simpan kode di browser ini
+  // Tombol Simpan (atau Ctrl + S) menyimpan isi ketiga tab (HTML, CSS, JS) sekaligus.
+  // Kode tersimpan dimuat otomatis saat halaman dibuka. Reset tidak menghapus simpanan.
+  const saveButton = document.querySelector("#save-code");
+  if (saveButton && window.CodeStorage) {
+    const saved = window.CodeStorage.read("html-playground");
+    if (saved && saved.data && typeof saved.data === "object") {
+      if (typeof saved.data.html === "string") htmlEditor.setValue(saved.data.html);
+      if (typeof saved.data.css === "string") cssEditor.setValue(saved.data.css);
+      if (typeof saved.data.js === "string") jsEditor.setValue(saved.data.js);
+      status.textContent = "Kode tersimpan dimuat (disimpan " + window.CodeStorage.formatTime(saved.savedAt) + ").";
+    }
+
+    const saver = window.CodeStorage.bindButton({
+      button: saveButton,
+      getKey: () => "html-playground",
+      getData: () => ({ html: htmlEditor.getValue(), css: cssEditor.getValue(), js: jsEditor.getValue() }),
+      notify: (pesan) => { status.textContent = pesan; },
+      successMessage: () => "Kode HTML, CSS, dan JS disimpan di browser ini."
+    });
+
+    [htmlEditor, cssEditor, jsEditor].forEach((editor) => {
+      editor.on("change", () => saver.refresh());
+      editor.addKeyMap({
+        "Ctrl-S": () => { saver.save(); },
+        "Cmd-S": () => { saver.save(); }
+      });
+    });
+    saver.refresh();
+  }
+
+  // 11. Kondisi awal
   pilihTab("html");
 });

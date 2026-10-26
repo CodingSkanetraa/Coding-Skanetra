@@ -19,6 +19,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <script src="../js/theme.js?v=5"></script>
   <link rel="stylesheet" href="../css/style.css?v=5">
+  <link rel="stylesheet" href="../css/code-storage.css?v=8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/theme/material-darker.min.css">
   <link rel="stylesheet" href="../css/editor-python.css?v=5">
@@ -30,7 +31,8 @@
   <script src="../js/terminal.js?v=5" defer></script>
   <script src="../js/cpp-runner.js?v=5" defer></script>
   <script src="../js/editor-prefs.js?v=5" defer></script>
-  <script src="../js/editor-cpp.js?v=5" defer></script>
+  <script src="../js/code-storage.js?v=8" defer></script>
+  <script src="../js/editor-cpp.js?v=8" defer></script>
 </head>
 <body>
   <header class="navbar">
@@ -79,6 +81,7 @@ int main() {
 </textarea>
           <div class="py-actions">
             <button id="cpp-run" class="btn btn-primary" type="button"><span aria-hidden="true">▶</span> Kompilasi &amp; Jalankan</button>
+            <button id="cpp-save" class="py-btn-secondary" type="button" data-save title="Simpan kode di browser ini (Ctrl + S)">💾 Simpan</button>
             <button id="cpp-reset" class="py-btn-secondary" type="button">Atur ulang</button>
             <button id="cpp-clear" class="py-btn-secondary" type="button">Bersihkan output</button>
             <button id="cpp-download" class="py-btn-secondary" type="button" title="Unduh kode C++ yang sedang ditulis">⭳ Unduh .cpp</button>

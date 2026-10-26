@@ -19,9 +19,10 @@
   <meta name="twitter:card" content="summary_large_image">
   <script src="../js/theme.js?v=5"></script>
   <link rel="stylesheet" href="../css/style.css?v=5">
+  <link rel="stylesheet" href="../css/code-storage.css?v=8">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/theme/material-darker.min.css">
-  <link rel="stylesheet" href="../css/editor-python.css?v=5">
+  <link rel="stylesheet" href="../css/editor-python.css?v=7">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/codemirror.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/mode/python/python.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/edit/closebrackets.min.js" defer></script>
@@ -29,7 +30,9 @@
   <script src="../js/main.js?v=5" defer></script>
   <script src="../js/terminal.js?v=5" defer></script>
   <script src="../js/editor-prefs.js?v=5" defer></script>
-  <script src="../js/editor-python.js?v=5" defer></script>
+  <script src="../js/python-visual.js?v=6" defer></script>
+  <script src="../js/code-storage.js?v=8" defer></script>
+  <script src="../js/editor-python.js?v=8" defer></script>
 </head>
 <body>
   <header class="navbar">
@@ -75,6 +78,7 @@ print("Hai, Kaito")
 </textarea>
           <div class="py-actions">
             <button id="py-run" class="btn btn-primary" type="button"><span aria-hidden="true">▶</span> Jalankan</button>
+            <button id="py-save" class="py-btn-secondary" type="button" data-save title="Simpan kode di browser ini (Ctrl + S)">💾 Simpan</button>
             <button id="py-reset" class="py-btn-secondary" type="button">Atur ulang</button>
             <button id="py-clear" class="py-btn-secondary" type="button">Bersihkan output</button>
             <button id="py-download" class="py-btn-secondary" type="button" title="Unduh kode Python yang sedang ditulis">⭳ Unduh .py</button>
@@ -89,10 +93,32 @@ print("Hai, Kaito")
           </div>
           <pre id="py-output" class="py-output" aria-live="polite">Output program akan muncul di sini.</pre>
           <div id="py-visual-wrap" class="py-visual-wrap" hidden>
-            <canvas id="py-canvas" width="640" height="400" aria-label="Kanvas hasil visual Python"></canvas>
-            <p class="py-visual-hint">Mode Visual memakai fungsi gambar bawaan CodingSkanetra: <code>lingkaran()</code>, <code>persegi()</code>, <code>garis()</code>, dan <code>teks()</code>.</p>
+            <div class="py-canvas-stage">
+              <canvas id="py-canvas" width="640" height="400" aria-label="Kanvas hasil visual Python"></canvas>
+            </div>
+            <div class="py-visual-bar">
+              <button id="py-restart" class="py-btn-secondary py-fs-only" type="button">↻ Jalankan ulang</button>
+              <button id="py-stop-animation" class="py-btn-secondary" type="button" hidden>⏹ Hentikan animasi</button>
+              <button id="py-fullscreen" class="py-btn-secondary" type="button" aria-pressed="false">⛶ Layar penuh</button>
+            </div>
+            <details class="py-visual-ref">
+              <summary>Daftar fungsi Visual</summary>
+              <p class="py-visual-hint">Kanvas berukuran 640 × 400. Titik (0, 0) ada di pojok kiri atas. Untuk gerakan, pakai <code>animasi()</code>, jangan <code>while True</code>.</p>
+              <dl>
+                <dt>Bentuk</dt>
+                <dd><code>bersihkan(warna)</code> · <code>lingkaran(x, y, radius, warna, tepi, tebal)</code> · <code>persegi(x, y, lebar, tinggi, warna, tepi, tebal)</code> · <code>elips(x, y, radius_x, radius_y, ...)</code> · <code>segitiga(x1, y1, x2, y2, x3, y3, ...)</code> · <code>poligon([(x, y), ...], ...)</code> · <code>garis(x1, y1, x2, y2, warna, tebal)</code> · <code>busur(x, y, radius, sudut_awal, sudut_akhir)</code> · <code>teks(isi, x, y, warna, ukuran, rata, tebal)</code></dd>
+                <dd class="py-ref-note">Isi <code>warna=None</code> dan <code>tepi="white"</code> untuk bentuk yang hanya bergaris tepi. Konstanta <code>LEBAR</code> dan <code>TINGGI</code> berisi ukuran kanvas.</dd>
+                <dt>Warna</dt>
+                <dd><code>rgb(merah, hijau, biru)</code> · <code>hsl(rona, jenuh, terang)</code> · <code>warna_acak()</code></dd>
+                <dt>Kura-kura</dt>
+                <dd>Mulai di tengah, menghadap kanan. <code>maju(jarak)</code> · <code>mundur(jarak)</code> · <code>kiri(derajat)</code> · <code>kanan(derajat)</code> · <code>hadap(derajat)</code> · <code>pergi_ke(x, y)</code> · <code>lompat(x, y)</code> · <code>ke_tengah()</code> · <code>angkat_pena()</code> · <code>turunkan_pena()</code> · <code>warna_pena(warna)</code> · <code>tebal_pena(tebal)</code> · <code>mulai_isi(warna)</code> · <code>selesai_isi()</code> · <code>posisi_kura()</code> · <code>arah_kura()</code></dd>
+                <dt>Animasi</dt>
+                <dd><code>animasi(fungsi, fps)</code> memanggil fungsimu berulang kali. <code>berhenti_animasi()</code> · <code>waktu()</code> (detik sejak program dijalankan)</dd>
+                <dt>Mouse dan keyboard</dt>
+                <dd>Klik kanvas dulu agar tombol terbaca. <code>mouse_x()</code> · <code>mouse_y()</code> · <code>mouse_ditekan()</code> · <code>mouse_klik()</code> · <code>tombol("kiri")</code> (juga <code>"kanan"</code>, <code>"atas"</code>, <code>"bawah"</code>, <code>"spasi"</code>, <code>"enter"</code>, dan huruf seperti <code>"a"</code>)</dd>
+              </dl>
+            </details>
           </div>
-          <div class="py-output-note">Program berjalan di browser. Kalau programmu memakai <code>input()</code>, ketik jawabannya langsung di kotak output ini lalu tekan Enter (Ctrl + D untuk mengakhiri input). Mode Visual menyediakan kanvas gambar yang bisa dikendalikan dari Python.</div>
         </div>
       </section>
 
@@ -134,6 +160,44 @@ print("Hai, Kaito")
           <button class="py-example-card" type="button" data-example="number">
             <span class="py-example-number">08</span><strong>Input angka</strong>
             <code>int(input("Angka: "))</code><span>Mengubah input menjadi bilangan.</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="py-basics py-visual-gallery" aria-labelledby="py-visual-title">
+        <div class="py-basics-heading">
+          <p class="eyebrow">Mode Visual</p>
+          <h2 id="py-visual-title">Menggambar dan membuat game kecil</h2>
+          <p>Pilih contoh, lalu tekan Jalankan. Ubah angkanya untuk melihat apa yang berubah.</p>
+        </div>
+        <div class="py-example-grid">
+          <button class="py-example-card" type="button" data-visual-example="wajah">
+            <span class="py-example-number">01</span><strong>Wajah</strong>
+            <code>lingkaran(320, 180, 90)</code><span>Bentuk dasar dan teks di kanvas.</span>
+          </button>
+          <button class="py-example-card" type="button" data-visual-example="spiral">
+            <span class="py-example-number">02</span><strong>Spiral</strong>
+            <code>maju(i * 2.5)</code><span>Kura-kura dan perulangan.</span>
+          </button>
+          <button class="py-example-card" type="button" data-visual-example="bunga">
+            <span class="py-example-number">03</span><strong>Bunga</strong>
+            <code>warna_pena(hsl(...))</code><span>Perulangan bersarang dan warna.</span>
+          </button>
+          <button class="py-example-card" type="button" data-visual-example="bintang">
+            <span class="py-example-number">04</span><strong>Bintang</strong>
+            <code>poligon(titik, ...)</code><span>Menghitung titik dengan matematika.</span>
+          </button>
+          <button class="py-example-card" type="button" data-visual-example="bola">
+            <span class="py-example-number">05</span><strong>Bola memantul</strong>
+            <code>animasi(gerak)</code><span>Animasi dengan fungsi yang dipanggil berulang.</span>
+          </button>
+          <button class="py-example-card" type="button" data-visual-example="mouse">
+            <span class="py-example-number">06</span><strong>Ikuti mouse</strong>
+            <code>mouse_x(), mouse_klik()</code><span>Membaca mouse di dalam animasi.</span>
+          </button>
+          <button class="py-example-card" type="button" data-visual-example="game">
+            <span class="py-example-number">07</span><strong>Tangkap bintang</strong>
+            <code>tombol("kiri")</code><span>Game kecil dengan tombol panah dan skor.</span>
           </button>
         </div>
       </section>

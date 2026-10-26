@@ -26,7 +26,29 @@ document.addEventListener("DOMContentLoaded", () => {
   let pyodide = null;
   let pyodideLoading = null;
   let outputMode = "console";
-  const canvasContext = canvas ? canvas.getContext("2d") : null;
+  let saver = null; // pengelola tombol Simpan (lihat bagian "Simpan kode" di bawah)
+  const stopAnimationButton = document.querySelector("#py-stop-animation");
+  const fullscreenButton = document.querySelector("#py-fullscreen");
+  const restartButton = document.querySelector("#py-restart");
+  const outputPanel = document.querySelector(".py-output-panel");
+  const visualExampleButtons = document.querySelectorAll("[data-visual-example]");
+
+  // Gambar, animasi, mouse, dan keyboard untuk mode Visual ada di python-visual.js.
+  const visualApi = canvas && window.CodingSkanetraVisual
+    ? window.CodingSkanetraVisual.create({
+        canvas,
+        onAnimationChange: (aktif) => {
+          if (stopAnimationButton) stopAnimationButton.hidden = !aktif;
+          if (aktif) status.textContent = "Animasi berjalan. Klik kanvas untuk memakai mouse dan keyboard.";
+        },
+        onError: (pesan) => {
+          output.hidden = false;
+          output.classList.add("is-error");
+          term.show("Error pada animasi:\n" + pesan);
+          status.textContent = "Animasi berhenti karena error.";
+        }
+      })
+    : null;
 
   const visualExample = `# Gambar sederhana dengan Python
 bersihkan("#101814")
@@ -73,10 +95,11 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
     return editor ? editor.getValue() : textarea.value;
   }
 
-  function setCode(code) {
+  function setCode(code, options) {
     if (editor) editor.setValue(code);
     else textarea.value = code;
-    if (editor) editor.focus();
+    if (editor && !(options && options.quiet)) editor.focus();
+    if (saver) saver.refresh();
   }
 
   // Setiap mode punya kode sendiri (seperti tab HTML dan CSS di editor web):
@@ -84,8 +107,41 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
   const modeCodes = { console: initialCode, visual: visualExample };
   const modeDefaults = { console: initialCode, visual: visualExample };
 
+  // Kode yang pernah disimpan dimuat otomatis, terpisah untuk tiap mode.
+  const saveKeys = { console: "python-console", visual: "python-visual" };
+  let restoredNote = "";
+  if (window.CodeStorage) {
+    const savedConsole = window.CodeStorage.read(saveKeys.console);
+    const savedVisual = window.CodeStorage.read(saveKeys.visual);
+    if (savedVisual && typeof savedVisual.data === "string") modeCodes.visual = savedVisual.data;
+    if (savedConsole && typeof savedConsole.data === "string") {
+      modeCodes.console = savedConsole.data;
+      setCode(savedConsole.data, { quiet: true });
+    }
+    if (savedConsole || savedVisual) {
+      const terbaru = Math.max(savedConsole ? savedConsole.savedAt : 0, savedVisual ? savedVisual.savedAt : 0);
+      restoredNote = "Kode tersimpan dimuat (disimpan " + window.CodeStorage.formatTime(terbaru) + ").";
+    }
+  }
+
+  // Layar penuh untuk kanvas Visual: panel output menutupi seluruh layar (seperti di editor web).
+  function setFullscreen(on) {
+    if (!outputPanel) return;
+    const aktif = Boolean(on);
+    outputPanel.classList.toggle("is-fullscreen", aktif);
+    document.documentElement.classList.toggle("py-fs-open", aktif);
+    if (fullscreenButton) {
+      fullscreenButton.textContent = aktif ? "✕ Keluar layar penuh" : "⛶ Layar penuh";
+      fullscreenButton.setAttribute("aria-pressed", String(aktif));
+    }
+    // Fokus ke kanvas agar tombol keyboard langsung terbaca oleh program.
+    if (aktif && canvas) canvas.focus({ preventScroll: true });
+    else if (fullscreenButton) fullscreenButton.focus({ preventScroll: true });
+  }
+
   function setOutputMode(mode) {
     if (mode !== outputMode) {
+      setFullscreen(false);
       cancelSession();
       modeCodes[outputMode] = getCode();
       outputMode = mode;
@@ -102,46 +158,17 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
     }
     output.hidden = visual;
     if (visualWrap) visualWrap.hidden = !visual;
-    if (visual && canvasContext) {
-      canvasContext.fillStyle = "#101814";
-      canvasContext.fillRect(0, 0, canvas.width, canvas.height);
-    }
+    if (visual) clearCanvas();
     if (visual && editor) editor.refresh();
   }
 
-  function clearCanvas(color = "#101814") {
-    if (!canvasContext || !canvas) return;
-    canvasContext.fillStyle = color;
-    canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+  function clearCanvas(color) {
+    if (visualApi) visualApi.clear(color);
   }
 
   function installVisualHelpers(runtime) {
-    if (!canvasContext) return;
-    runtime.globals.set("bersihkan", (warna = "#101814") => clearCanvas(warna));
-    runtime.globals.set("lingkaran", (x, y, radius, warna = "#74d49a") => {
-      canvasContext.beginPath();
-      canvasContext.arc(Number(x), Number(y), Math.max(0, Number(radius)), 0, Math.PI * 2);
-      canvasContext.fillStyle = String(warna);
-      canvasContext.fill();
-    });
-    runtime.globals.set("persegi", (x, y, lebar, tinggi, warna = "#74d49a") => {
-      canvasContext.fillStyle = String(warna);
-      canvasContext.fillRect(Number(x), Number(y), Number(lebar), Number(tinggi));
-    });
-    runtime.globals.set("garis", (x1, y1, x2, y2, warna = "#ffffff", tebal = 3) => {
-      canvasContext.beginPath();
-      canvasContext.moveTo(Number(x1), Number(y1));
-      canvasContext.lineTo(Number(x2), Number(y2));
-      canvasContext.strokeStyle = String(warna);
-      canvasContext.lineWidth = Math.max(1, Number(tebal));
-      canvasContext.stroke();
-    });
-    runtime.globals.set("teks", (isi, x, y, warna = "#ffffff", ukuran = 20) => {
-      canvasContext.fillStyle = String(warna);
-      canvasContext.font = `${Math.max(8, Number(ukuran))}px sans-serif`;
-      canvasContext.textAlign = "center";
-      canvasContext.fillText(String(isi), Number(x), Number(y));
-    });
+    if (!visualApi) return;
+    visualApi.install(runtime);
   }
 
   // ---------- Input program: input() ----------
@@ -273,6 +300,7 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
   function cancelSession() {
     session++;
     term.cancel();
+    if (visualApi) visualApi.stop();
     runButton.disabled = false;
   }
 
@@ -314,6 +342,7 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
 
     const token = ++session;
     term.cancel();
+    if (visualApi) visualApi.stop();
     const code = getCode();
     const seed = Math.floor(Math.random() * 2147483647);
     const answers = [];
@@ -361,7 +390,9 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
           term.show(result.text.trimEnd() || "Program selesai tanpa output.");
           // Mode Visual: tampilkan teks print() hanya bila ada.
           if (outputMode === "visual") output.hidden = !result.text.trim();
-          status.textContent = "Program selesai.";
+          status.textContent = visualApi && visualApi.isAnimating()
+            ? "Animasi berjalan. Klik kanvas untuk memakai mouse dan keyboard."
+            : "Program selesai.";
         }
         break;
       }
@@ -386,6 +417,147 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
     setCode(visualExample);
     status.textContent = "Contoh Visual dimuat.";
   });
+
+
+  // Contoh untuk mode Visual. Judul dan deskripsi kartunya ada di editor-python.html.
+  const visualExamples = {
+    wajah: visualExample,
+    spiral: `# Spiral dengan kura-kura
+# Kura-kura mulai di tengah kanvas dan menghadap kanan.
+bersihkan("#101814")
+warna_pena("#74d49a")
+tebal_pena(2)
+
+for i in range(120):
+    maju(i * 2.5)
+    kiri(91)`,
+    bunga: `# Pola bunga: kotak yang diputar sedikit demi sedikit
+bersihkan("#101814")
+tebal_pena(2)
+lompat(250, 250)
+
+for i in range(36):
+    warna_pena(hsl(i * 10, 80, 60))
+    for sisi in range(4):
+        maju(90)
+        kiri(90)
+    kiri(10)`,
+    bintang: `# Bintang dari poligon dan matematika
+import math
+
+bersihkan("#101814")
+titik = []
+for i in range(10):
+    jari = 130 if i % 2 == 0 else 55
+    sudut = math.radians(-90 + i * 36)
+    titik.append((320 + jari * math.cos(sudut), 200 + jari * math.sin(sudut)))
+
+poligon(titik, "#f3bd59", "#ffffff", 3)
+teks("Bintang", 320, 385, "#99a89e", 16)`,
+    bola: `# Bola memantul: fungsi dipanggil berulang oleh animasi()
+x, y = 100, 100
+dx, dy = 4, 3
+
+def gerak():
+    global x, y, dx, dy
+    x += dx
+    y += dy
+    if x < 20 or x > LEBAR - 20:
+        dx = -dx
+    if y < 20 or y > TINGGI - 20:
+        dy = -dy
+    bersihkan("#101814")
+    lingkaran(x, y, 20, "#74d49a")
+
+animasi(gerak)`,
+    mouse: `# Lingkaran yang mengejar mouse
+# Gerakkan mouse di atas kanvas. Klik untuk mengganti warna.
+x, y = 320, 200
+warna = "#f3bd59"
+
+def gerak():
+    global x, y, warna
+    x += (mouse_x() - x) * 0.1
+    y += (mouse_y() - y) * 0.1
+    if mouse_klik():
+        warna = warna_acak()
+    bersihkan("#101814")
+    lingkaran(x, y, 24, warna)
+    teks("Gerakkan mouse, lalu klik", 320, 380, "#99a89e", 16)
+
+animasi(gerak)`,
+    game: `# Game kecil: tangkap bintang
+# Klik kanvas dulu, lalu gerakkan dengan tombol panah.
+import random
+
+px, py = 320, 200
+bx, by = 500, 120
+skor = 0
+
+def jalan():
+    global px, py, bx, by, skor
+    if tombol("kiri"):
+        px -= 5
+    if tombol("kanan"):
+        px += 5
+    if tombol("atas"):
+        py -= 5
+    if tombol("bawah"):
+        py += 5
+    px = max(15, min(LEBAR - 15, px))
+    py = max(15, min(TINGGI - 15, py))
+
+    if (px - bx) ** 2 + (py - by) ** 2 < 25 ** 2:
+        skor += 1
+        bx = random.randint(30, LEBAR - 30)
+        by = random.randint(30, TINGGI - 30)
+
+    bersihkan("#101814")
+    lingkaran(bx, by, 10, "#f3bd59")
+    lingkaran(px, py, 15, "#74d49a")
+    teks("Skor: " + str(skor), 60, 30, "#ffffff", 20)
+
+animasi(jalan)`
+  };
+
+  visualExampleButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const kode = visualExamples[button.dataset.visualExample];
+      if (!kode) return;
+      setOutputMode("visual");
+      setCode(kode);
+      modeCodes.visual = kode;
+      clearCanvas();
+      const judul = button.querySelector("strong");
+      status.textContent = "Contoh " + (judul ? judul.textContent : "Visual") + " dimuat. Tekan Jalankan.";
+      const editorPanel = document.querySelector(".py-editor-layout");
+      if (editorPanel) editorPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+
+  if (fullscreenButton) {
+    fullscreenButton.addEventListener("click", () => {
+      setFullscreen(!outputPanel.classList.contains("is-fullscreen"));
+    });
+  }
+
+  // Jalankan ulang tanpa keluar dari layar penuh (tombol Jalankan ada di panel kode).
+  if (restartButton) {
+    restartButton.addEventListener("click", () => runButton.click());
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && outputPanel && outputPanel.classList.contains("is-fullscreen")) {
+      setFullscreen(false);
+    }
+  });
+
+  if (stopAnimationButton) {
+    stopAnimationButton.addEventListener("click", () => {
+      if (visualApi) visualApi.stop();
+      status.textContent = "Animasi dihentikan.";
+    });
+  }
 
   // Unduh kode yang sedang diedit sebagai file Python (.py), baik dari mode Console maupun Visual.
   const downloadButton = document.querySelector("#py-download");
@@ -417,7 +589,7 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
     output.classList.remove("is-error");
     term.show("Output program akan muncul di sini.");
     if (outputMode === "visual") output.hidden = true;
-    if (canvasContext) clearCanvas();
+    clearCanvas();
     status.textContent = "Kode mode " + (outputMode === "visual" ? "Visual" : "Console") + " dikembalikan ke contoh awal.";
   });
   clearButton.addEventListener("click", () => {
@@ -438,6 +610,33 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
       }
     });
   });
+
+  // ---------- Simpan kode di browser ini ----------
+  // Tombol Simpan (atau Ctrl + S) menyimpan kode mode yang sedang aktif; Console dan Visual
+  // punya simpanan sendiri-sendiri. Kode tersimpan dimuat otomatis saat halaman dibuka.
+  const saveButton = document.querySelector("#py-save");
+  if (saveButton && window.CodeStorage) {
+    saver = window.CodeStorage.bindButton({
+      button: saveButton,
+      getKey: () => saveKeys[outputMode],
+      getData: getCode,
+      notify: (pesan) => { status.textContent = pesan; },
+      successMessage: () =>
+        "Kode mode " + (outputMode === "visual" ? "Visual" : "Console") + " disimpan di browser ini."
+    });
+    if (editor) {
+      editor.on("change", () => saver.refresh());
+      editor.addKeyMap({
+        "Ctrl-S": () => { saver.save(); },
+        "Cmd-S": () => { saver.save(); }
+      });
+    } else {
+      textarea.addEventListener("input", () => saver.refresh());
+      window.CodeStorage.bindShortcut(textarea, saver.save);
+    }
+    saver.refresh();
+    if (restoredNote) status.textContent = restoredNote;
+  }
 
   // Tahun footer bila main.js tidak mengisinya.
   const year = document.querySelector("#year");

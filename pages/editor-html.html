@@ -21,6 +21,7 @@
 
   <script src="../js/theme.js?v=5"></script>
   <link rel="stylesheet" href="../css/style.css?v=5">
+  <link rel="stylesheet" href="../css/code-storage.css?v=8">
   
     <!-- CodeMirror: CSS dasar dan tema -->
     <link
@@ -57,7 +58,8 @@
 
   <script src="../js/main.js?v=5" defer></script>
   <script src="../js/editor-prefs.js?v=5" defer></script>
-  <script src="../js/playground.js?v=5" defer></script>
+  <script src="../js/code-storage.js?v=8" defer></script>
+  <script src="../js/playground.js?v=8" defer></script>
 </head>
 <body>
   <header class="navbar">
@@ -275,6 +277,10 @@ tombol.addEventListener("click", () => {
         <div class="editor-actions">
         <button id="run-code" class="btn btn-primary" type="button">
             ▶ Jalankan
+        </button>
+
+        <button id="save-code" class="playground-reset" type="button" data-save title="Simpan kode di browser ini (Ctrl + S)">
+            💾 Simpan
         </button>
 
         <button id="reset-code" class="playground-reset" type="button">
