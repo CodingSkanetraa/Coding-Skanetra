@@ -265,13 +265,10 @@ function applyTheme(themeName, mode = getSavedMode()) {
     : "#a9dcb7",
 
     "--panel-heading-background": colors.surfaceHover,
-    "--editor-background": mode === "light"
-    ? "#f8faf9"
-    : colors.codeBackground,
-    "--editor-text": colors.text,
-    "--editor-gutter-background": mode === "light"
-    ? "#eaf0ec"
-    : "#080d0b",
+    // Editor kode selalu gelap, tidak ikut tema atau mode terang/gelap.
+    "--editor-background": "#0b100e",
+    "--editor-text": "#d5e9dc",
+    "--editor-gutter-background": "#080d0b",
     "--console-background": colors.codeBackground,
     "--console-text": colors.text,
 

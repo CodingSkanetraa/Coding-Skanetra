@@ -2325,9 +2325,9 @@ body:has(.materi-grid) .materi-grid {
   --code-output-text: #286d42;
 
   --panel-heading-background: var(--surface-hover);
-  --editor-background: #f8faf9;
-  --editor-text: #263d2e;
-  --editor-gutter-background: #eaf0ec;
+  --editor-background: #0b100e;
+  --editor-text: #d5e9dc;
+  --editor-gutter-background: #080d0b;
   --console-background: var(--surface);
   --console-text: var(--text);
 
@@ -2483,35 +2483,35 @@ body:has(.materi-grid) .materi-grid {
 }
 
 .editor-tab-panel .CodeMirror-linenumber {
-  color: var(--muted);
+  color: #7d8a82;
 }
 
 /* Pencarian editor: warna tetap terbaca di kedua mode */
 .editor-tab-panel .CodeMirror-dialog,
 .editor-search {
-  color: var(--text);
-  background: var(--surface);
-  border-color: var(--border);
-  box-shadow: 0 8px 24px var(--shadow);
+  color: #d6dbe3;
+  background: #171b20;
+  border-color: #384351;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 35%);
 }
 
 .editor-tab-panel .CodeMirror-dialog input,
 .editor-search-input {
-  color: var(--text);
-  background: var(--background);
-  border-color: var(--border);
+  color: #edf4ef;
+  background: #0b100e;
+  border-color: #384351;
 }
 
 .editor-tab-panel .CodeMirror-dialog button,
 .editor-search button {
-  color: var(--text);
-  background: var(--surface-hover);
-  border-color: var(--border);
+  color: #d6dbe3;
+  background: #232a31;
+  border-color: #384351;
 }
 
 .editor-tab-panel .CodeMirror-dialog button:hover,
 .editor-search button:hover {
-  background: var(--surface-hover);
+  background: #2d363f;
 }
 
 /* Sorotan pencarian tetap kontras */
@@ -2703,58 +2703,6 @@ body:has(.materi-grid) .materi-grid {
 }
 
 
-/* ==========================================================================
-   EDITOR KODE (CodeMirror) DI MODE TERANG
-   Tema CodeMirror "material-darker" hanya punya warna untuk latar gelap.
-   Di mode terang, warna token disesuaikan agar tetap terbaca.
-   ========================================================================== */
-:root[data-mode="light"] .cm-s-material-darker.CodeMirror {
-  background: var(--editor-background);
-  color: var(--editor-text);
-}
-
-:root[data-mode="light"] .cm-s-material-darker .CodeMirror-gutters {
-  border-right: 1px solid var(--border);
-  background: var(--editor-gutter-background);
-}
-
-:root[data-mode="light"] .cm-s-material-darker .CodeMirror-linenumber {
-  color: var(--muted);
-}
-
-:root[data-mode="light"] .cm-s-material-darker .CodeMirror-cursor {
-  border-left-color: var(--text);
-}
-
-:root[data-mode="light"] .cm-s-material-darker .CodeMirror-selected,
-:root[data-mode="light"] .cm-s-material-darker .CodeMirror-focused .CodeMirror-selected {
-  background: color-mix(in srgb, var(--accent) 22%, transparent) !important;
-}
-
-:root[data-mode="light"] .cm-s-material-darker .CodeMirror-activeline-background {
-  background: color-mix(in srgb, var(--accent) 7%, transparent);
-}
-
-:root[data-mode="light"] .cm-s-material-darker .cm-keyword { color: #7b3fc4; }
-:root[data-mode="light"] .cm-s-material-darker .cm-operator { color: #5b6b61; }
-:root[data-mode="light"] .cm-s-material-darker .cm-variable-2,
-:root[data-mode="light"] .cm-s-material-darker .cm-def { color: #1f5fb5; }
-:root[data-mode="light"] .cm-s-material-darker .cm-variable { color: var(--editor-text); }
-:root[data-mode="light"] .cm-s-material-darker .cm-variable-3,
-:root[data-mode="light"] .cm-s-material-darker .cm-type,
-:root[data-mode="light"] .cm-s-material-darker .cm-builtin { color: #0b7285; }
-:root[data-mode="light"] .cm-s-material-darker .cm-property { color: #1f5fb5; }
-:root[data-mode="light"] .cm-s-material-darker .cm-string,
-:root[data-mode="light"] .cm-s-material-darker .cm-string-2 { color: #1a7f37; }
-:root[data-mode="light"] .cm-s-material-darker .cm-number,
-:root[data-mode="light"] .cm-s-material-darker .cm-atom { color: #b35900; }
-:root[data-mode="light"] .cm-s-material-darker .cm-comment { color: #6b7a70; font-style: italic; }
-:root[data-mode="light"] .cm-s-material-darker .cm-meta { color: #6b7a70; }
-:root[data-mode="light"] .cm-s-material-darker .cm-tag { color: #c2185b; }
-:root[data-mode="light"] .cm-s-material-darker .cm-attribute,
-:root[data-mode="light"] .cm-s-material-darker .cm-qualifier { color: #8a5a00; }
-:root[data-mode="light"] .cm-s-material-darker .cm-bracket { color: #5b6b61; }
-:root[data-mode="light"] .cm-s-material-darker .cm-error { color: #c0392b; }
 
 
 /* Halaman dokumentasi (sementara berisi pengantar singkat) */
