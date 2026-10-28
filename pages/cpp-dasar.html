@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>C++ Dasar | CodingSkanetra</title>
+  <link rel="icon" href="../favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" href="../favicon-96.png" sizes="96x96">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="canonical" href="https://codingskanetra.vercel.app/pages/cpp-dasar.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Coding Skanetra">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:title" content="C++ Dasar | CodingSkanetra">
+  <meta property="og:description" content="Belajar dasar C++ bersama CodingSkanetra: struktur program, variabel, input-output, kondisi, perulangan, fungsi, array, dan vector.">
+  <meta property="og:url" content="https://codingskanetra.vercel.app/pages/cpp-dasar.html">
+  <meta property="og:image" content="https://codingskanetra.vercel.app/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta
+    name="description"
+    content="Belajar dasar C++ bersama CodingSkanetra: struktur program, variabel, input-output, kondisi, perulangan, fungsi, array, dan vector."
+  >
+
+  <script src="../js/theme.js?v=5"></script>
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <link rel="stylesheet" href="../css/gerak.css?v=1">
+  <link rel="stylesheet" href="../css/nav-mobile.css?v=1">
+  <link rel="stylesheet" href="../css/maskot.css?v=2">
+  <script src="../js/main.js?v=5" defer></script>
+  <script src="../js/ikon.js?v=1" defer></script>
+  <script src="../js/nav-mobile.js?v=2" defer></script>
+  <script src="../js/gerak.js?v=1" defer></script>
+  <script src="../js/maskot.js?v=4" defer></script>
+</head>
+
+<body>
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="CodingSkanetra, beranda">
+      <img class="brand-logo" src="../assets/images/logo-eskul.png" alt="" width="38" height="44">
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link active" href="materi.html" data-nav="materi" aria-current="page">Materi</a>
+      <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link" href="peringkat.html" data-nav="peringkat">Peringkat</a>
+      <a class="nav-link" href="games.html" data-nav="games">Games</a>
+      <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
+      <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
+      <a class="nav-link" href="setting.html" data-nav="setting">Pengaturan</a>
+    </nav>
+  </header>
+
+  <main class="lesson-page">
+    <div class="container lesson-layout">
+
+      <aside class="lesson-sidebar">
+        <a href="materi.html" class="back-link">
+          ← Kembali ke Materi
+        </a>
+
+        <p class="eyebrow">Jalur belajar</p>
+        <h2>C++ Dasar</h2>
+
+        <nav class="lesson-nav" aria-label="Daftar materi">
+          <a href="#pengenalan">1. Pengenalan C++</a>
+          <a href="#variabel">2. Variabel dan Tipe Data</a>
+          <a href="#input-output">3. Input dan Output</a>
+          <a href="#kondisi">4. Kondisi</a>
+          <a href="#perulangan">5. Perulangan</a>
+          <a href="#fungsi">6. Fungsi</a>
+          <a href="#array">7. Array dan Vector</a>
+          <a href="#latihan">8. Latihan</a>
+        </nav>
+      </aside>
+
+      <article class="lesson-content">
+        <div class="lesson-header">
+          <p class="eyebrow">Materi menengah</p>
+          <h1>Kenalan dengan C++</h1>
+          <p>
+            Bahasa yang cepat dan kuat, dasar dari banyak game dan lomba pemrograman. Sedikit lebih ketat dari Python, tapi melatih ketelitian.
+          </p>
+          <span class="lesson-badge">Menengah · 30 menit</span>
+        </div>
+
+        <section id="pengenalan" class="lesson-section">
+          <h2>1. Apa itu C++?</h2>
+
+          <p>
+            <strong>C++</strong> adalah bahasa pemrograman yang cepat dan kuat. Ia dipakai untuk game, aplikasi desktop, sistem tertanam, dan lomba pemrograman seperti OSN Informatika. Beda dengan Python, kode C++ harus <strong>dikompilasi</strong> dulu menjadi program sebelum bisa dijalankan.
+          </p>
+
+          <p>
+            Program C++ paling sederhana:
+          </p>
+
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    cout &lt;&lt; "Halo, CodingSkanetra!" &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+          <ul>
+            <li><code>#include &lt;iostream&gt;</code> memanggil pustaka untuk input dan output.</li>
+            <li><code>main()</code> adalah tempat program mulai berjalan.</li>
+            <li><code>cout</code> menampilkan teks ke layar, dan <code>endl</code> pindah ke baris baru.</li>
+            <li>Setiap perintah diakhiri tanda titik koma <code>;</code>. Isi blok ditulis di dalam kurung kurawal <code>{ }</code>.</li>
+          </ul>
+
+        </section>
+
+        <section id="variabel" class="lesson-section">
+          <h2>2. Variabel dan tipe data</h2>
+
+          <p>
+            Di C++, tipe variabel harus ditulis saat membuatnya, lalu tipe itu tidak bisa berubah.
+          </p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main() {
+    string nama = "Kaito";   // teks
+    int umur = 17;           // bilangan bulat
+    double tinggi = 1.65;    // bilangan desimal
+    char kelas = 'A';        // satu huruf
+    bool aktif = true;       // benar/salah
+
+    cout &lt;&lt; nama &lt;&lt; " " &lt;&lt; umur &lt;&lt; " " &lt;&lt; tinggi &lt;&lt; " " &lt;&lt; kelas &lt;&lt; " " &lt;&lt; aktif &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+          <div class="lesson-table-wrap">
+            <table class="lesson-table">
+              <thead>
+                <tr><th>Tipe</th><th>Contoh</th><th>Keterangan</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>int</code></td><td><code>42</code></td><td>Bilangan bulat</td></tr>
+                <tr><td><code>double</code></td><td><code>3.14</code></td><td>Bilangan desimal</td></tr>
+                <tr><td><code>char</code></td><td><code>'A'</code></td><td>Satu karakter, pakai tanda kutip tunggal</td></tr>
+                <tr><td><code>string</code></td><td><code>"Halo"</code></td><td>Teks, pakai tanda kutip ganda dan <code>#include &lt;string&gt;</code></td></tr>
+                <tr><td><code>bool</code></td><td><code>true</code>, <code>false</code></td><td>Benar atau salah (ditampilkan sebagai 1 atau 0)</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </section>
+
+        <section id="input-output" class="lesson-section">
+          <h2>3. Input dan output</h2>
+
+          <p>
+            <code>cin</code> membaca masukan dari pengguna. Pakai <code>&gt;&gt;</code> untuk membaca satu kata atau angka, dan <code>getline(cin, variabel)</code> untuk membaca satu baris penuh (misalnya nama dengan spasi).
+          </p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main() {
+    string nama;
+    int angka;
+
+    cout &lt;&lt; "Siapa namamu? ";
+    getline(cin, nama);
+    cout &lt;&lt; "Halo, " &lt;&lt; nama &lt;&lt; "!" &lt;&lt; endl;
+
+    cout &lt;&lt; "Masukkan angka: ";
+    cin &gt;&gt; angka;
+    cout &lt;&lt; "Dua kali lipatnya: " &lt;&lt; angka * 2 &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+          <p>
+            Catatan: di Editor C++ pada web ini, isi semua masukan di kotak <strong>Input</strong> sebelum menekan Kompilasi &amp; Jalankan, satu jawaban per baris.
+          </p>
+
+        </section>
+
+        <section id="kondisi" class="lesson-section">
+          <h2>4. Kondisi</h2>
+
+          <p>
+            Syarat ditulis di dalam tanda kurung <code>( )</code>, dan isi blok di dalam <code>{ }</code>. Untuk memilih dari banyak nilai tetap, pakai <code>switch</code>. Jangan lupa <code>break</code> di setiap <code>case</code>.
+          </p>
+
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int nilai = 82;
+
+    if (nilai &gt;= 90) {
+        cout &lt;&lt; "Sangat baik" &lt;&lt; endl;
+    } else if (nilai &gt;= 75) {
+        cout &lt;&lt; "Lulus" &lt;&lt; endl;
+    } else {
+        cout &lt;&lt; "Belum lulus" &lt;&lt; endl;
+    }
+
+    int hari = 3;
+    switch (hari) {
+        case 1: cout &lt;&lt; "Senin" &lt;&lt; endl; break;
+        case 2: cout &lt;&lt; "Selasa" &lt;&lt; endl; break;
+        case 3: cout &lt;&lt; "Rabu" &lt;&lt; endl; break;
+        default: cout &lt;&lt; "Hari lain" &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre>
+
+          <p>
+            Operator pembanding yang sering dipakai: <code>==</code> (sama dengan), <code>!=</code> (tidak sama), <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>. Gabungkan syarat dengan <code>&amp;&amp;</code> (dan) serta <code>||</code> (atau). Hati-hati: <code>=</code> untuk mengisi nilai, <code>==</code> untuk membandingkan.
+          </p>
+
+        </section>
+
+        <section id="perulangan" class="lesson-section">
+          <h2>5. Perulangan</h2>
+
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    for (int i = 1; i &lt;= 3; i++) {
+        cout &lt;&lt; "Perulangan ke-" &lt;&lt; i &lt;&lt; endl;
+    }
+
+    int n = 3;
+    while (n &gt; 0) {
+        cout &lt;&lt; n &lt;&lt; "..." &lt;&lt; endl;
+        n--;
+    }
+    cout &lt;&lt; "Mulai!" &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+          <p>
+            <code>for</code> cocok bila jumlah putarannya sudah jelas. Bagian dalam kurungnya ada tiga: nilai awal, syarat lanjut, dan langkah tiap putaran. <code>while</code> cocok bila berhenti berdasarkan suatu syarat. <code>i++</code> artinya tambah satu, <code>n--</code> artinya kurangi satu.
+          </p>
+
+        </section>
+
+        <section id="fungsi" class="lesson-section">
+          <h2>6. Fungsi</h2>
+
+          <p>
+            Fungsi menulis tipe hasil di depan namanya. Gunakan <code>void</code> bila fungsi tidak mengembalikan apa pun. Fungsi harus ditulis <strong>sebelum</strong> <code>main()</code> agar dikenali.
+          </p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+string sapa(string nama) {
+    return "Halo, " + nama + "!";
+}
+
+int kuadrat(int x) {
+    return x * x;
+}
+
+int main() {
+    cout &lt;&lt; sapa("Kaito") &lt;&lt; endl;
+    cout &lt;&lt; sapa("Skanetra") &lt;&lt; endl;
+    cout &lt;&lt; "7 kuadrat = " &lt;&lt; kuadrat(7) &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+        </section>
+
+        <section id="array" class="lesson-section">
+          <h2>7. Array dan vector</h2>
+
+          <p>
+            <strong>Array</strong> menyimpan sejumlah nilai bertipe sama dengan ukuran tetap. Nomor urutnya (indeks) dimulai dari <strong>0</strong>. <strong>Vector</strong> mirip array tetapi ukurannya bisa bertambah.
+          </p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main() {
+    int nilai[3] = {80, 90, 75};
+    int total = 0;
+    for (int i = 0; i &lt; 3; i++) {
+        total += nilai[i];
+    }
+    cout &lt;&lt; "Rata-rata: " &lt;&lt; total / 3.0 &lt;&lt; endl;
+
+    vector&lt;string&gt; buah = {"apel", "jeruk"};
+    buah.push_back("mangga");
+    for (string b : buah) {
+        cout &lt;&lt; b &lt;&lt; endl;
+    }
+    cout &lt;&lt; "Jumlah buah: " &lt;&lt; buah.size() &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+          <p>
+            Pembagian dua <code>int</code> di C++ menghasilkan bilangan bulat (<code>7 / 2</code> hasilnya <code>3</code>). Itu sebabnya contoh di atas membagi dengan <code>3.0</code> supaya hasilnya desimal.
+          </p>
+
+        </section>
+
+        <section id="latihan" class="lesson-section">
+          <h2>8. Latihan Pemahaman</h2>
+
+          <p>
+            Tanda apa yang wajib ada di akhir hampir setiap perintah dalam C++?
+          </p>
+
+          <div
+            class="quiz-options"
+            id="quiz-options"
+            data-correct="a"
+            data-benar="Benar! Perintah C++ diakhiri titik koma (;). Lupa tanda ini adalah error paling umum."
+            data-salah="Belum tepat. Perintah C++ diakhiri dengan titik koma (;)."
+          >
+            <button type="button" data-answer="a">;</button>
+            <button type="button" data-answer="b">:</button>
+            <button type="button" data-answer="c">.</button>
+          </div>
+
+          <p id="quiz-feedback" class="quiz-feedback" aria-live="polite"></p>
+        </section>
+
+        <div class="lesson-footer">
+          <a href="editor-cpp.html" class="button button-primary">
+            Coba di Editor C++ →
+          </a>
+          <a href="materi.html" class="button button-secondary">
+            Kembali ke Semua Materi
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>
+        © <span id="year"></span> CodingSkanetra.
+        Belajar bersama, berkembang bersama.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -10,6 +10,8 @@
 - [CSS Dasar](https://codingskanetra.vercel.app/pages/css-dasar.html): selektor, warna, box model, flexbox
 - [JavaScript Dasar](https://codingskanetra.vercel.app/pages/javascript-dasar.html): variabel, kondisi, perulangan, fungsi, DOM
 - [Python Dasar](https://codingskanetra.vercel.app/pages/python-dasar.html): variabel, input-output, kondisi, perulangan, fungsi
+- [C++ Dasar](https://codingskanetra.vercel.app/pages/cpp-dasar.html): struktur program, tipe data, input-output, kondisi, perulangan, fungsi, array, vector
+- [Proyek Mini](https://codingskanetra.vercel.app/pages/proyek-mini.html): kalkulator, tebak angka, dan buku nilai dengan Python
 - [Playground](https://codingskanetra.vercel.app/pages/playground.html): pilihan editor kode online
 - [Editor Web](https://codingskanetra.vercel.app/pages/editor-html.html): HTML, CSS, dan JavaScript dengan pratinjau langsung
 - [Editor Python](https://codingskanetra.vercel.app/pages/editor-python.html): menjalankan Python di browser

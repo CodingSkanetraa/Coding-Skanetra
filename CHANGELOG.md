@@ -3,6 +3,18 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.4.0] - 2026-10-28
+
+### Ditambahkan
+- **Materi C++ Dasar** (`pages/cpp-dasar.html`): struktur program, tipe data, input-output, kondisi, perulangan, fungsi, array, dan vector, lengkap dengan kuis dan tautan ke Editor C++.
+- **Materi Proyek Mini** (`pages/proyek-mini.html`): tiga proyek Python (Kalkulator Mini, Tebak Angka, Buku Nilai) dengan tantangan lanjutan.
+- Keterangan kepemilikan (Kaito Sora dan organisasi CodingSkanetra) di README.
+
+### Diubah
+- Kartu C++ Dasar dan Proyek Mini di halaman Materi tidak lagi "Segera hadir"; keduanya kini bisa dibuka.
+- README: bagian Lisensi diperbarui sesuai berkas `LICENSE` (MIT).
+- `sitemap.xml` dan `llms.txt` memuat dua halaman baru.
+
 ## [5.3.0] - 2026-10-27
 
 ### Ditambahkan

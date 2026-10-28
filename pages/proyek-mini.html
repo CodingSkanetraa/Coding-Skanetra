@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Proyek Mini | CodingSkanetra</title>
+  <link rel="icon" href="../favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" href="../favicon-96.png" sizes="96x96">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="canonical" href="https://codingskanetra.vercel.app/pages/proyek-mini.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Coding Skanetra">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:title" content="Proyek Mini | CodingSkanetra">
+  <meta property="og:description" content="Latihan membuat proyek kecil bersama CodingSkanetra: kalkulator, tebak angka, dan buku nilai dengan Python.">
+  <meta property="og:url" content="https://codingskanetra.vercel.app/pages/proyek-mini.html">
+  <meta property="og:image" content="https://codingskanetra.vercel.app/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta
+    name="description"
+    content="Latihan membuat proyek kecil bersama CodingSkanetra: kalkulator, tebak angka, dan buku nilai dengan Python."
+  >
+
+  <script src="../js/theme.js?v=5"></script>
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <link rel="stylesheet" href="../css/gerak.css?v=1">
+  <link rel="stylesheet" href="../css/nav-mobile.css?v=1">
+  <link rel="stylesheet" href="../css/maskot.css?v=2">
+  <script src="../js/main.js?v=5" defer></script>
+  <script src="../js/ikon.js?v=1" defer></script>
+  <script src="../js/nav-mobile.js?v=2" defer></script>
+  <script src="../js/gerak.js?v=1" defer></script>
+  <script src="../js/maskot.js?v=4" defer></script>
+</head>
+
+<body>
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="CodingSkanetra, beranda">
+      <img class="brand-logo" src="../assets/images/logo-eskul.png" alt="" width="38" height="44">
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link active" href="materi.html" data-nav="materi" aria-current="page">Materi</a>
+      <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link" href="peringkat.html" data-nav="peringkat">Peringkat</a>
+      <a class="nav-link" href="games.html" data-nav="games">Games</a>
+      <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
+      <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
+      <a class="nav-link" href="setting.html" data-nav="setting">Pengaturan</a>
+    </nav>
+  </header>
+
+  <main class="lesson-page">
+    <div class="container lesson-layout">
+
+      <aside class="lesson-sidebar">
+        <a href="materi.html" class="back-link">
+          ← Kembali ke Materi
+        </a>
+
+        <p class="eyebrow">Jalur belajar</p>
+        <h2>Proyek Mini</h2>
+
+        <nav class="lesson-nav" aria-label="Daftar materi">
+          <a href="#persiapan">1. Sebelum mulai</a>
+          <a href="#kalkulator">2. Proyek 1: Kalkulator Mini</a>
+          <a href="#tebak-angka">3. Proyek 2: Tebak Angka</a>
+          <a href="#buku-nilai">4. Proyek 3: Buku Nilai</a>
+          <a href="#tantangan">5. Tantangan Lanjutan</a>
+          <a href="#latihan">6. Latihan</a>
+        </nav>
+      </aside>
+
+      <article class="lesson-content">
+        <div class="lesson-header">
+          <p class="eyebrow">Materi menengah</p>
+          <h1>Bikin proyek kecil pertamamu</h1>
+          <p>
+            Terapkan yang sudah dipelajari dengan membuat tiga program kecil yang seru dan bisa langsung dijalankan.
+          </p>
+          <span class="lesson-badge">Menengah · 40 menit</span>
+        </div>
+
+        <section id="persiapan" class="lesson-section">
+          <h2>1. Sebelum mulai</h2>
+
+          <p>
+            Proyek mini adalah program kecil yang menggabungkan beberapa hal sekaligus. Tiga proyek di bawah memakai Python dan bisa langsung dijalankan di <strong>Editor Python</strong> (mode Console). Cara mengerjakannya:
+          </p>
+
+          <ol>
+            <li>Baca dulu tujuan proyeknya.</li>
+            <li>Ketik kodenya sendiri di editor, jangan hanya salin. Mengetik membuat kamu lebih cepat paham.</li>
+            <li>Jalankan, lalu ubah-ubah angka atau teksnya dan lihat apa yang terjadi.</li>
+            <li>Kerjakan tantangan di akhir tiap proyek.</li>
+          </ol>
+
+          <p>
+            Prasyarat: sudah membaca materi <a href="python-dasar.html">Python Dasar</a>.
+          </p>
+
+        </section>
+
+        <section id="kalkulator" class="lesson-section">
+          <h2>2. Proyek 1: Kalkulator Mini</h2>
+
+          <p>
+            <strong>Tujuan:</strong> program yang meminta dua angka dan satu operasi, lalu menampilkan hasilnya. Kamu berlatih <code>input()</code>, <code>float()</code>, dan <code>if / elif / else</code>.
+          </p>
+
+<pre><code>print("=== Kalkulator Mini ===")
+a = float(input("Angka pertama: "))
+op = input("Operasi (+, -, *, /): ")
+b = float(input("Angka kedua: "))
+
+if op == "+":
+    hasil = a + b
+elif op == "-":
+    hasil = a - b
+elif op == "*":
+    hasil = a * b
+elif op == "/":
+    if b == 0:
+        hasil = "tidak bisa dibagi nol"
+    else:
+        hasil = a / b
+else:
+    hasil = "operasi tidak dikenal"
+
+print("Hasil:", hasil)</code></pre>
+
+          <p>
+            Perhatikan bagian pembagian: sebelum membagi, program mengecek apakah pembaginya nol. Membagi dengan nol akan menyebabkan error, jadi dicegah lebih dulu.
+          </p>
+
+          <p>
+            <strong>Tantangan:</strong> tambahkan operasi <code>**</code> (pangkat) dan <code>%</code> (sisa bagi).
+          </p>
+
+        </section>
+
+        <section id="tebak-angka" class="lesson-section">
+          <h2>3. Proyek 2: Tebak Angka</h2>
+
+          <p>
+            <strong>Tujuan:</strong> komputer memilih angka rahasia, pemain menebak sampai benar. Kamu berlatih <code>import random</code>, perulangan <code>while</code>, dan variabel penghitung.
+          </p>
+
+<pre><code>import random
+
+rahasia = random.randint(1, 20)
+tebakan = 0
+percobaan = 0
+
+print("Aku memilih angka antara 1 sampai 20. Coba tebak!")
+
+while tebakan != rahasia:
+    tebakan = int(input("Tebakanmu: "))
+    percobaan += 1
+
+    if tebakan &lt; rahasia:
+        print("Terlalu kecil")
+    elif tebakan &gt; rahasia:
+        print("Terlalu besar")
+
+print("Benar! Kamu berhasil dalam", percobaan, "percobaan.")</code></pre>
+
+          <p>
+            <code>random.randint(1, 20)</code> memilih satu angka acak dari 1 sampai 20, dan batasnya ikut terhitung. Perulangan <code>while</code> terus berjalan selama tebakan masih berbeda dari angka rahasia, sedangkan <code>percobaan += 1</code> menghitung jumlah tebakan.
+          </p>
+
+          <p>
+            <strong>Tantangan:</strong> batasi pemain hanya 5 kesempatan. Jika habis, tampilkan angka rahasianya.
+          </p>
+
+        </section>
+
+        <section id="buku-nilai" class="lesson-section">
+          <h2>4. Proyek 3: Buku Nilai</h2>
+
+          <p>
+            <strong>Tujuan:</strong> menyimpan beberapa nilai ke dalam list, lalu menghitung nilai tertinggi, terendah, dan rata-ratanya. Kamu berlatih <code>list</code>, <code>for</code>, dan fungsi bawaan <code>sum()</code>, <code>max()</code>, <code>min()</code>, <code>len()</code>.
+          </p>
+
+<pre><code>nilai = []
+
+jumlah = int(input("Berapa nilai yang mau dimasukkan? "))
+for i in range(jumlah):
+    n = int(input("Nilai ke-" + str(i + 1) + ": "))
+    nilai.append(n)
+
+rata = sum(nilai) / len(nilai)
+print("Tertinggi:", max(nilai))
+print("Terendah:", min(nilai))
+print("Rata-rata:", round(rata, 1))
+
+if rata &gt;= 75:
+    print("Kerja bagus, lulus!")
+else:
+    print("Ayo belajar lagi.")</code></pre>
+
+          <p>
+            <code>nilai.append(n)</code> menambahkan satu nilai ke akhir list. <code>round(rata, 1)</code> membulatkan hasil sampai satu angka di belakang koma.
+          </p>
+
+          <p>
+            <strong>Tantangan:</strong> minta juga nama tiap siswa, lalu tampilkan siapa yang nilainya tertinggi.
+          </p>
+
+        </section>
+
+        <section id="tantangan" class="lesson-section">
+          <h2>5. Tantangan lanjutan</h2>
+
+          <p>
+            Sudah selesai ketiganya? Coba gabungkan dan kembangkan sendiri:
+          </p>
+
+          <ul>
+            <li><strong>Konverter suhu:</strong> ubah Celsius ke Fahrenheit dengan rumus <code>F = C × 9/5 + 32</code>.</li>
+            <li><strong>Menu utama:</strong> buat satu program yang menawarkan pilihan Kalkulator, Tebak Angka, atau Buku Nilai, lalu menjalankan yang dipilih (petunjuk: bungkus tiap proyek dalam fungsi).</li>
+            <li><strong>Halaman profil:</strong> di <a href="editor-html.html">Editor Web</a>, buat kartu perkenalan dirimu dengan HTML dan CSS, lalu beri tombol yang mengubah warna latarnya dengan JavaScript.</li>
+            <li><strong>Bagikan hasilmu:</strong> pakai tombol Bagikan di editor untuk mengirim tautan kodemu ke teman atau pembina.</li>
+          </ul>
+
+        </section>
+
+        <section id="latihan" class="lesson-section">
+          <h2>6. Latihan Pemahaman</h2>
+
+          <p>
+            Pada Tebak Angka, perulangan jenis apa yang cocok bila jumlah tebakan tidak diketahui sejak awal?
+          </p>
+
+          <div
+            class="quiz-options"
+            id="quiz-options"
+            data-correct="b"
+            data-benar="Benar! while terus berjalan selama syaratnya terpenuhi, cocok untuk jumlah putaran yang belum pasti."
+            data-salah="Belum tepat. Untuk putaran yang tidak pasti jumlahnya, pakai while."
+          >
+            <button type="button" data-answer="a">for dengan range(5)</button>
+            <button type="button" data-answer="b">while</button>
+            <button type="button" data-answer="c">if</button>
+          </div>
+
+          <p id="quiz-feedback" class="quiz-feedback" aria-live="polite"></p>
+        </section>
+
+        <div class="lesson-footer">
+          <a href="editor-python.html" class="button button-primary">
+            Coba di Editor Python →
+          </a>
+          <a href="materi.html" class="button button-secondary">
+            Kembali ke Semua Materi
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>
+        © <span id="year"></span> CodingSkanetra.
+        Belajar bersama, berkembang bersama.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
