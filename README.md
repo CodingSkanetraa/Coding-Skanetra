@@ -4,6 +4,17 @@ Website komunitas belajar pemrograman **Coding SMK Negeri Situraja**. Isinya mat
 
 Situs: https://codingskanetra.vercel.app
 
+## Kepemilikan dan Pengelolaan
+
+Website Coding Skanetra dikembangkan sebagai bagian dari komunitas belajar pemrograman **Coding SMK Negeri Situraja** dan dikelola melalui organisasi GitHub **CodingSkanetra**.
+
+- **Pemilik repositori:** Organisasi CodingSkanetra
+- **Pengembang awal:** Kaito Sora Wakil Ketua 2026 (`@SoraKaito`)
+- **Pengelolaan teknis:** Pengembangan, pemeliharaan, perbaikan bug, dan pengembangan fitur dilakukan oleh pengelola teknis sesuai akses dan tanggung jawab yang diberikan.
+- **Hosting:** Proyek Vercel saat ini dikelola melalui akun pengembang.
+
+Repositori ini ditujukan untuk mendukung kegiatan belajar pemrograman komunitas Coding Skanetra. Pengembangan selanjutnya dapat diteruskan bersama oleh pengurus dan kontributor komunitas.
+
 ## Isi website
 
 | Bagian | Keterangan |
@@ -133,4 +144,4 @@ Ada ide fitur atau menemukan bug? Hubungi pengurus Coding Skanetra atau buka *is
 
 ## Lisensi
 
-Belum ditentukan. Tambahkan berkas `LICENSE` bila ingin membuka kode ini untuk umum.
+LICENSE.MD
