@@ -52,12 +52,13 @@
 
     const ucap = (teks, tutupMs) => {
       window.clearTimeout(timerTutup);
+      wadah.classList.add("bicara");
       gelembung.classList.add("ganti");
       window.setTimeout(() => {
         gelembung.textContent = teks;
         gelembung.classList.remove("ganti", "sembunyi");
       }, 160);
-      if (tutupMs) timerTutup = window.setTimeout(() => gelembung.classList.add("sembunyi"), tutupMs);
+      if (tutupMs) timerTutup = window.setTimeout(() => { gelembung.classList.add("sembunyi"); wadah.classList.remove("bicara"); }, tutupMs);
     };
 
     const kedip = () => {

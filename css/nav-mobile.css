@@ -1,0 +1,110 @@
+/* Navbar HP: bar ikon bawah (<= 720px). Di atas itu, navbar lama tetap dipakai. */
+
+.bar-bawah, .bb-sheet, .bb-latar { display: none; }
+
+@media (max-width: 720px) {
+  :root { --bb-tinggi: 58px; }
+
+  /* Navbar atas hanya menampilkan merek */
+  .navbar .menu-toggle,
+  .navbar .nav-links { display: none !important; }
+  .navbar { padding: 7px 14px; gap: 0; }
+  .navbar .brand { font-size: 0.95rem; gap: 9px; }
+  .navbar .brand-logo { width: auto; height: 30px; }
+
+  body.punya-bar-bawah { padding-bottom: calc(var(--bb-tinggi) + env(safe-area-inset-bottom, 0px)); }
+
+  .bar-bawah {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 120;
+    display: flex;
+    height: calc(var(--bb-tinggi) + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    border-top: 1px solid var(--border);
+    background: color-mix(in srgb, var(--background) 94%, transparent);
+    backdrop-filter: blur(14px);
+  }
+
+  .bb-item {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.66rem;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .bb-item:active { color: var(--text); }
+  .bb-item.aktif { color: var(--accent); }
+  .bb-item.aktif::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 26px;
+    height: 3px;
+    border-radius: 0 0 3px 3px;
+    background: var(--accent);
+  }
+  .bb-item:focus-visible, .bb-sheet-item:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+
+  .bb-latar {
+    position: fixed;
+    inset: 0;
+    z-index: 118;
+    display: block;
+    background: rgb(0 0 0 / 40%);
+  }
+  .bb-latar[hidden], .bb-sheet[hidden] { display: none; }
+
+  .bb-sheet {
+    position: fixed;
+    right: 10px;
+    bottom: calc(var(--bb-tinggi) + env(safe-area-inset-bottom, 0px) + 8px);
+    z-index: 119;
+    display: block;
+    min-width: 210px;
+    padding: 6px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    box-shadow: 0 10px 30px rgb(0 0 0 / 40%);
+  }
+  .bb-sheet-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 12px;
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.95rem;
+    text-decoration: none;
+  }
+  .bb-sheet-item:active { background: var(--surface-hover); }
+  .bb-sheet-item.aktif { color: var(--accent); }
+
+  html.keyboard-terbuka .bar-bawah { display: none; }
+  html.keyboard-terbuka body.punya-bar-bawah { padding-bottom: 0; }
+
+  /* Skani kecil naik di atas bar bawah */
+  .maskot-mini { bottom: calc(var(--bb-tinggi) + env(safe-area-inset-bottom, 0px) + 10px); }
+}
+
+@media (min-width: 721px) {
+  .bar-bawah, .bb-sheet, .bb-latar { display: none !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-bawah { backdrop-filter: none; }
+}

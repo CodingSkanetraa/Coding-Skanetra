@@ -71,7 +71,7 @@
   function bindButton(options) {
     const { button, getKey, getData, notify } = options;
     const baseline = {}; // nama -> isi terakhir yang dimuat/disimpan
-    const idleLabel = button.textContent;
+    const idleHtml = button.innerHTML;
     let timer = null;
 
     const snapshot = () => JSON.stringify(getData());
@@ -99,11 +99,13 @@
           ? options.successMessage()
           : "Kode disimpan di browser ini."
       );
-      button.textContent = "✓ Tersimpan";
+      button.innerHTML = window.CodingSkanetraIkon
+        ? window.CodingSkanetraIkon.svg("centang", 18) + '<span class="tb-label">Tersimpan</span>'
+        : "✓ Tersimpan";
       button.classList.add("is-saved");
       clearTimeout(timer);
       timer = setTimeout(() => {
-        button.textContent = idleLabel;
+        button.innerHTML = idleHtml;
         button.classList.remove("is-saved");
       }, 1600);
       return true;

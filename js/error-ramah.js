@@ -422,7 +422,7 @@
       baris.textContent = "Lihat sekitar baris " + info.baris;
       kotak.appendChild(baris);
     }
-    output.insertAdjacentElement("afterend", kotak);
+    output.insertAdjacentElement("beforebegin", kotak); // penjelasan ramah di atas, pesan asli di bawahnya
     EXTRA.set(output, kotak);
 
     // Hilang sendiri saat output tidak lagi berstatus error (program dijalankan ulang).

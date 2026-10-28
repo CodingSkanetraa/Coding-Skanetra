@@ -211,3 +211,10 @@
 @media print {
   .maskot-mini { display: none; }
 }
+
+/* Di HP, Skani kecil hanya muncul saat sedang bicara supaya layar editor tidak sesak */
+@media (max-width: 720px) {
+  .maskot-mini { opacity: 0; transform: translateY(10px); transition: opacity 0.2s ease, transform 0.2s ease; }
+  .maskot-mini.bicara { opacity: 1; transform: none; }
+  .maskot-mini .maskot-badan { width: 42px; }
+}

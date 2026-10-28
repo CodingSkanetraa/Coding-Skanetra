@@ -33,7 +33,7 @@
   .gerak-kartu:hover {
     translate: 0 -4px;
     border-color: var(--accent-dark);
-    box-shadow: 0 10px 26px rgb(0 0 0 / 22%);
+
   }
 }
 

@@ -1,0 +1,422 @@
+/* Tombol kembali hanya untuk desktop; di HP navigasi sudah ada di bilah bawah. */
+.tb-kembali { display: none; }
+/* Editor ringkas. Aturan umum berlaku di semua ukuran; blok @media (max-width: 720px) khusus HP. */
+
+/* ---------- Tombol berikon (semua ukuran) ---------- */
+.tb-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.tb-btn .ik { flex: none; width: 18px; height: 18px; }
+.tb-more-btn, .tb-tabs, .tb-contoh, .tb-simbol { display: none; }
+.tb-more-group { display: contents; }
+.py-laci-kepala, .py-laci-latar { display: none; }
+.py-laci { display: block; }
+.py-actions .tb-label, .editor-actions .tb-label { white-space: nowrap; }
+.py-actions .btn.tb-btn { gap: 8px; }
+
+/* Penanda "belum disimpan" pada tombol Simpan berikon */
+.tb-btn.is-dirty { position: relative; }
+
+/* ---------- Barisan simbol ---------- */
+.tb-simbol {
+  position: fixed;
+  z-index: 140;
+  left: 0;
+  top: auto;
+  height: 46px;
+  gap: 6px;
+  align-items: center;
+  padding: 5px 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 0 -4px 14px rgb(0 0 0 / 30%);
+}
+.tb-simbol::-webkit-scrollbar { display: none; }
+.tb-simbol:not([hidden]) { display: flex; }
+.tb-simbol-tombol {
+  flex: none;
+  min-width: 40px;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--text);
+  font: 600 1rem/1 ui-monospace, Menlo, Consolas, monospace;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.tb-simbol-tombol:active { background: var(--surface-hover); border-color: var(--accent); }
+
+/* ---------- HP ---------- */
+@media (max-width: 720px) {
+  /* Halaman editor: konten penuh lebar, tanpa judul dan catatan panjang */
+  .py-editor-page, .playground-page { padding: 0 0 6px; }
+  .py-editor-page .container, .playground-page .container { width: 100%; }
+  .py-editor-heading, .playground-heading, .playground-tips, .preview-note,
+  .py-code-panel > .py-panel-top { display: none; }
+  body.halaman-editor .footer { display: none; }
+  body.halaman-editor .navbar { position: static; }
+  .alat-banner { margin: 0 0 6px; border-radius: 0; border-left: 0; border-right: 0; }
+
+  /* Susunan python/cpp: panel kode dilebur supaya toolbar bisa menempel di atas di kedua tab */
+  .py-editor-layout { display: block; }
+  .py-code-panel { display: contents; }
+  .py-code-panel, .py-output-panel { border-radius: 0; box-shadow: none; }
+  .py-output-panel { border-width: 1px 0 0; overflow: visible; }
+  .py-editor-layout[data-tab="kode"] .py-output-panel { display: none; }
+  .py-editor-layout[data-tab="output"] .py-code-panel > :not(.py-actions) { display: none !important; }
+  .py-editor-layout { display: flex; flex-direction: column; gap: 0; }
+  .py-output-panel > .py-panel-top { display: none; }
+  .py-actions { order: -3; }
+  .py-mode-switch { order: -2; }
+
+  /* Toolbar menempel di atas */
+  .py-actions, .editor-actions {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 5px;
+    padding: 8px;
+    border: 0;
+    border-bottom: 1px solid var(--border-color, var(--border));
+    background: var(--surface);
+  }
+  .py-actions .btn, .editor-actions .btn { padding: 0 10px; height: 40px; border-radius: 9px; font-size: 0.9rem; gap: 6px; }
+  .py-actions .tb-ikon-saja, .editor-actions .tb-ikon-saja,
+  .py-actions .tb-more-btn, .py-actions .tb-contoh { width: 38px; height: 40px; padding: 0; flex: none; border-radius: 9px; }
+  .tb-ikon-saja .tb-label { display: none; }
+  .tb-more-btn, .tb-contoh { display: inline-flex; }
+
+  /* Tab Kode | Output */
+  .tb-tabs {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 100px;
+    height: 40px;
+    border: 1px solid var(--border-color, var(--border));
+    border-radius: 9px;
+    overflow: hidden;
+  }
+  .tb-tab {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0 4px;
+    border: 0;
+    background: transparent;
+    color: var(--text-muted, var(--muted));
+    font: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+  .tb-tab.is-active { background: color-mix(in srgb, var(--accent) 22%, var(--surface)); color: var(--text); font-weight: 600; }
+  .tb-tab + .tb-tab { border-left: 1px solid var(--border-color, var(--border)); }
+
+  /* Menu ⋯ */
+  .tb-more-group {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 8px;
+    flex-direction: column;
+    min-width: 210px;
+    padding: 6px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    box-shadow: 0 12px 30px rgb(0 0 0 / 40%);
+  }
+  .tb-more-group.is-open { display: flex; }
+  .tb-more-group > button, .tb-more-group .download-toggle {
+    justify-content: flex-start;
+    gap: 12px;
+    width: 100%;
+    padding: 12px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    text-align: left;
+    height: auto;
+  }
+  .tb-more-group > button:active { background: var(--surface-hover); }
+  .tb-more-group .tb-label { display: inline !important; }
+  .tb-more-group .download-menu { width: 100%; }
+  .tb-more-group .download-options { position: static; width: 100%; box-shadow: none; border: 0; padding: 0 0 0 8px; }
+
+  /* Status menjadi toast */
+  .py-status-text, #editor-status {
+    position: fixed;
+    left: 50%;
+    bottom: calc(var(--bb-tinggi, 58px) + env(safe-area-inset-bottom, 0px) + 14px);
+    z-index: 150;
+    width: auto;
+    max-width: calc(100% - 32px);
+    margin: 0;
+    padding: 9px 14px;
+    border: 1px solid var(--accent-dark, var(--border));
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.82rem;
+    text-align: center;
+    box-shadow: 0 8px 22px rgb(0 0 0 / 40%);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 8px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    flex: none !important;
+  }
+  .py-status-text.toast-tampil, #editor-status.toast-tampil { opacity: 1; transform: translate(-50%, 0); }
+
+  /* Mode Console | Visual jadi baris tipis */
+  .py-mode-switch { padding: 6px 10px; gap: 6px; }
+  .py-mode-button { padding: 6px 12px; }
+
+  /* Area kode dan output memenuhi layar */
+  .py-code-panel .CodeMirror {
+    height: calc(100dvh - 205px) !important;
+    min-height: 240px;
+    font-size: 14px;
+  }
+  .py-output { min-height: calc(100dvh - 170px); max-height: none; padding: 14px; }
+  .editor-tab-panel .CodeMirror {
+    height: calc(100dvh - 215px) !important;
+    min-height: 240px;
+    max-height: none !important;
+  }
+
+  /* Editor web: toolbar di atas, lalu tab HTML/CSS/JS */
+  .playground-workspace .editor-panel { display: flex; flex-direction: column; overflow: visible; border-radius: 0; border-left: 0; border-right: 0; }
+  .editor-actions { order: -2; }
+  .editor-tabs { order: -1; }
+  .editor-tabs .editor-tab { min-height: 44px; padding-top: 8px !important; padding-bottom: 8px !important; }
+
+  /* Laci Contoh & referensi */
+  .py-laci {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 160;
+    display: none;
+    flex-direction: column;
+    max-height: 78dvh;
+    border: 1px solid var(--border);
+    border-radius: 16px 16px 0 0;
+    background: var(--background);
+    box-shadow: 0 -12px 34px rgb(0 0 0 / 45%);
+  }
+  body.laci-buka .py-laci { display: flex; }
+  .py-laci-kepala {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px 10px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .py-laci-isi { padding: 8px 14px 24px; overflow-y: auto; overscroll-behavior: contain; }
+  .py-laci-isi .py-basics { margin-top: 12px; }
+  .py-laci-isi .py-basics-heading p:last-child { display: none; }
+  .py-laci-latar { position: fixed; inset: 0; z-index: 155; background: rgb(0 0 0 / 50%); }
+  body.laci-buka .py-laci-latar { display: block; }
+  body.laci-buka { overflow: hidden; }
+
+  /* Skani naik di atas toast */
+  body.halaman-editor .maskot-mini { bottom: calc(var(--bb-tinggi, 58px) + env(safe-area-inset-bottom, 0px) + 66px); }
+
+  /* Mode fokus: tanpa bar bawah */
+  html.mode-fokus .bar-bawah { display: none; }
+  html.mode-fokus body.punya-bar-bawah { padding-bottom: 0; }
+}
+
+/* ---------- Desktop: tombol berikon, tata letak sama ---------- */
+@media (min-width: 721px) {
+  .tb-contoh, .tb-more-btn { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .py-status-text, #editor-status { transition: none; }
+}
+
+/* ---------- Pratinjau layar penuh di HP (Editor Web) ---------- */
+@media (max-width: 720px) {
+  .playground-workspace.preview-fullscreen { padding: 6px; }
+  .playground-workspace.preview-fullscreen .panel-heading {
+    max-height: none;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 6px 8px;
+  }
+  .playground-workspace.preview-fullscreen .panel-heading h2 { display: none; }
+  .playground-workspace.preview-fullscreen .preview-controls { flex: 1; flex-wrap: nowrap; gap: 6px; }
+  .playground-workspace.preview-fullscreen .preview-toggle {
+    flex: 1;
+    min-height: 38px;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+}
+
+/* Titik "belum disimpan" pada tombol Simpan berikon: letakkan di dalam pojok tombol */
+.tb-btn.tb-ikon-saja[data-save].is-dirty::after {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  margin: 0;
+}
+
+/* ================================================================
+   Desktop / laptop (>= 721px): editor seperti VS Code
+   - Tanpa navbar situs: ada tombol kembali ke Playground di toolbar.
+   - Editor memenuhi lebar dan tinggi layar (tanpa jarak kiri-kanan).
+   - Toolbar tipis: Jalankan, Simpan, Mode fokus, dan menu ⋯ untuk sisanya.
+   ================================================================ */
+@media (min-width: 721px) {
+  :root { --tb-h: 40px; }
+
+  body.halaman-editor .navbar,
+  body.halaman-editor .footer,
+  body.halaman-editor .py-editor-heading,
+  body.halaman-editor .playground-heading,
+  body.halaman-editor .playground-tips,
+  body.halaman-editor .preview-note { display: none !important; }
+  body.halaman-editor { overflow-x: hidden; }
+
+  /* Memenuhi lebar layar */
+  .py-editor-page, .playground-page { padding: 0 !important; margin: 0; max-width: none; }
+  .py-editor-page .container, .playground-page .container { width: 100%; max-width: none; margin: 0; padding: 0; }
+
+  .py-editor-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr); gap: 0; height: 100vh; height: 100dvh; align-items: stretch; }
+  .py-code-panel, .py-output-panel { border: 0; border-radius: 0; box-shadow: none; height: 100%; min-height: 0; }
+  .py-output-panel { border-left: 1px solid var(--border-color, var(--border)); display: flex; flex-direction: column; overflow: hidden; }
+
+  /* ---- Toolbar tipis (Python & C++): toolbar + mode dalam satu baris ---- */
+  .py-code-panel { display: flex; flex-wrap: wrap; align-content: flex-start; overflow: visible; position: relative; }
+  .py-code-panel > .py-panel-top { display: none; }
+  .py-code-panel > .py-actions { order: 0; flex: 1 1 0; min-width: 0; }
+  .py-code-panel > .py-mode-switch { order: 1; flex: none; height: var(--tb-h); box-sizing: border-box; align-items: center; padding: 0 8px; border-bottom: 1px solid var(--border-color, var(--border)); border-top: 0; }
+  .py-code-panel > .CodeMirror, .py-code-panel > textarea { order: 2; flex: 0 0 100%; box-sizing: border-box; }
+  .py-code-panel .CodeMirror { height: calc(100dvh - var(--tb-h)) !important; font-size: 14px; }
+  .py-code-panel > textarea { height: calc(100dvh - var(--tb-h)); }
+  .py-mode-button { padding: 4px 12px; font-size: 0.82rem; }
+
+  .py-actions, .editor-actions {
+    position: relative;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 4px;
+    height: var(--tb-h);
+    box-sizing: border-box;
+    padding: 0 8px;
+    border: 0;
+    border-bottom: 1px solid var(--border-color, var(--border));
+    background: var(--surface);
+  }
+  .py-actions .btn, .py-actions .py-btn-secondary, .py-actions .tb-kembali,
+  .editor-actions .btn, .editor-actions .playground-reset, .editor-actions .tb-kembali {
+    height: 30px; padding: 0 10px; border-radius: 7px; font-size: 0.85rem; gap: 6px; line-height: 1;
+  }
+  .py-actions .tb-ikon-saja, .editor-actions .tb-ikon-saja,
+  .py-actions .tb-more-btn, .editor-actions .tb-more-btn, .tb-fokus-btn { width: 32px; padding: 0; flex: none; }
+  .tb-ikon-saja .tb-label { display: none; }
+  .py-actions .tb-btn .ik, .editor-actions .tb-btn .ik { width: 16px; height: 16px; }
+  .tb-more-btn { display: inline-flex; }
+
+  .tb-kembali { display: inline-flex; align-items: center; flex: none; margin-right: 4px; color: var(--text); text-decoration: none; border: 1px solid transparent; }
+  .tb-kembali:hover { background: var(--surface-hover); border-color: var(--border); }
+  .tb-kembali .ik { width: 16px; height: 16px; }
+  @media (max-width: 1100px) { .tb-kembali .tb-label { display: none; } .tb-kembali { padding: 0; width: 32px; justify-content: center; } }
+
+  .py-status-text, #editor-status { flex: 1 1 0; min-width: 0; margin-left: auto; padding: 0 6px; font-size: 0.78rem; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-muted, var(--muted)); }
+
+  /* Menu ⋯ berbentuk dropdown */
+  .tb-more-group {
+    display: none;
+    position: absolute;
+    top: calc(100% + 2px);
+    right: 8px;
+    flex-direction: column;
+    min-width: 210px;
+    padding: 5px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow: 0 12px 30px rgb(0 0 0 / 40%);
+  }
+  .tb-more-group.is-open { display: flex; }
+  .tb-more-group > button, .tb-more-group .download-toggle {
+    justify-content: flex-start; gap: 10px; width: 100%; height: auto; padding: 8px 10px;
+    border: 0; border-radius: 6px; background: transparent; text-align: left; font-size: 0.88rem;
+  }
+  .tb-more-group > button:hover, .tb-more-group .download-toggle:hover { background: var(--surface-hover); }
+  .tb-more-group .tb-label { display: inline !important; }
+  .tb-more-group .download-menu { width: 100%; }
+  .tb-more-group .download-options { position: static; width: 100%; box-shadow: none; border: 0; padding: 0 0 0 8px; }
+
+  /* ---- Panel output ---- */
+  .py-output-panel > .py-panel-top { height: var(--tb-h); box-sizing: border-box; padding: 0 12px; flex: none; }
+  .py-output { flex: 1 1 0; min-height: 0; max-height: none; overflow: auto; }
+  .py-visual-wrap { flex: 1 1 0; min-height: 0; overflow: auto; }
+
+  /* ---- Editor Web ---- */
+  .playground-workspace { display: block; height: 100vh; height: 100dvh; margin: 0; padding: 0; max-width: none; gap: 0; }
+  .playground-workspace:not(.preview-fullscreen) .editor-panel {
+    display: flex; flex-wrap: wrap; align-content: flex-start; height: 100%; border: 0; border-radius: 0; overflow: visible;
+  }
+  .editor-panel > .tb-kembali { order: -1; height: var(--tb-h); border-radius: 0; margin: 0; padding: 0 12px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+  .editor-panel > .editor-tabs { order: 0; flex: none; height: var(--tb-h); box-sizing: border-box; }
+  .editor-panel > .editor-actions { order: 1; flex: 1 1 0; min-width: 0; }
+  .editor-panel > .editor-tab-panel { order: 2; flex: 0 0 100%; }
+  .editor-tabs .editor-tab { min-height: 0; height: var(--tb-h); padding-top: 0 !important; padding-bottom: 0 !important; }
+  .editor-tab-panel .CodeMirror { height: calc(100dvh - var(--tb-h)) !important; max-height: none !important; }
+  .editor-tab-panel, .editor-canvas { height: calc(100dvh - var(--tb-h)); max-height: none; }
+  .playground-workspace .preview-panel { height: 100%; }
+}
+
+/* ---------- Desktop: laci Contoh & referensi (geser dari kanan) dan Mode fokus ---------- */
+@media (min-width: 721px) {
+  .py-laci {
+    display: none;
+    position: fixed;
+    top: var(--tb-h);
+    right: 0;
+    bottom: 0;
+    z-index: 160;
+    flex-direction: column;
+    width: min(460px, 92vw);
+    border-left: 1px solid var(--border);
+    background: var(--background);
+    box-shadow: -14px 0 34px rgb(0 0 0 / 40%);
+  }
+  body.laci-buka .py-laci { display: flex; }
+  .py-laci-kepala { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px 8px 16px; border-bottom: 1px solid var(--border); }
+  .py-laci-isi { padding: 8px 16px 28px; overflow-y: auto; overscroll-behavior: contain; }
+  .py-laci-isi .py-basics { margin-top: 12px; }
+  .py-laci-latar { position: fixed; inset: var(--tb-h) 0 0 0; z-index: 155; background: rgb(0 0 0 / 28%); }
+  body.laci-buka .py-laci-latar { display: block; }
+
+  /* Mode fokus: hanya kode. Output muncul sebagai panel geser saat program dijalankan. */
+  html.mode-fokus .py-editor-layout { grid-template-columns: minmax(0, 1fr); }
+  html.mode-fokus .py-output-panel {
+    position: fixed;
+    top: var(--tb-h);
+    right: 0;
+    bottom: 0;
+    z-index: 70;
+    width: min(540px, 46vw);
+    border-left: 1px solid var(--border);
+    box-shadow: -14px 0 34px rgb(0 0 0 / 40%);
+    transform: translateX(104%);
+    transition: transform 0.2s ease;
+  }
+  html.mode-fokus.output-buka .py-output-panel { transform: none; }
+  .alat-keluar-fokus { display: none; }
+}
+@media (min-width: 721px) and (prefers-reduced-motion: reduce) {
+  html.mode-fokus .py-output-panel { transition: none; }
+}
+@media (max-width: 720px) { .tb-kembali { display: none !important; } }

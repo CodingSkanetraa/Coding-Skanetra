@@ -86,13 +86,15 @@ html.mode-fokus { overflow-x: hidden; }
 html.mode-fokus .navbar,
 html.mode-fokus .footer,
 html.mode-fokus .py-editor-heading,
-html.mode-fokus .py-basics,
 html.mode-fokus .playground-heading { display: none !important; }
 html.mode-fokus main { padding-top: 14px; padding-bottom: 14px; }
-html.mode-fokus .py-editor-layout .CodeMirror,
-html.mode-fokus .py-code-panel .CodeMirror { height: calc(100dvh - 190px) !important; min-height: 240px; }
-html.mode-fokus .py-output { max-height: calc(100dvh - 130px); min-height: 200px; }
-html.mode-fokus .playground-workspace { min-height: calc(100dvh - 40px); height: calc(100dvh - 40px); }
+/* Tinggi editor saat fokus di HP; di desktop tata letak IDE (editor-mobile.css) sudah memenuhi layar. */
+@media (max-width: 720px) {
+  html.mode-fokus .py-editor-layout .CodeMirror,
+  html.mode-fokus .py-code-panel .CodeMirror { height: calc(100dvh - 190px) !important; min-height: 240px; }
+  html.mode-fokus .py-output { max-height: calc(100dvh - 130px); min-height: 200px; }
+  html.mode-fokus .playground-workspace { min-height: calc(100dvh - 40px); height: calc(100dvh - 40px); }
+}
 
 .alat-keluar-fokus {
   position: fixed;
@@ -111,3 +113,8 @@ html.mode-fokus .playground-workspace { min-height: calc(100dvh - 40px); height:
 .alat-keluar-fokus:hover { border-color: var(--accent); }
 
 @media print { .alat-keluar-fokus, .alat-banner { display: none; } }
+
+@media (max-width: 720px) {
+  .error-ramah { margin: 10px 10px 0; }
+  .alat-keluar-fokus { top: auto; bottom: 14px; left: 12px; right: auto; }
+}

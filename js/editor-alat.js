@@ -158,7 +158,8 @@
     root.classList.toggle("mode-fokus", aktif);
     if (tombol) {
       tombol.setAttribute("aria-pressed", String(aktif));
-      tombol.textContent = aktif ? "✕ Keluar fokus" : "🎯 Mode fokus";
+      if (window.CodingSkanetraIkon) window.CodingSkanetraIkon.isiTombol(tombol, aktif ? "tutup" : "fokus", aktif ? "Keluar fokus" : "Mode fokus");
+      else tombol.textContent = aktif ? "✕ Keluar fokus" : "🎯 Mode fokus";
     }
     if (aktif && !keluarFokus) {
       keluarFokus = el("button", "alat-keluar-fokus", "✕ Keluar mode fokus");
@@ -181,19 +182,26 @@
     const simpan = adapter.tombolSimpan;
     if (!simpan) return;
 
-    const bagikan = el("button", simpan.className.replace(/\bis-dirty\b|\bis-saved\b/g, "").trim(), "🔗 Bagikan");
+    const I = window.CodingSkanetraIkon;
+    const dasar = simpan.className.replace(/\b(is-dirty|is-saved|tb-ikon-saja|tb-btn)\b/g, "").replace(/\s+/g, " ").trim();
+    const bagikan = el("button", dasar);
     bagikan.type = "button";
     bagikan.title = "Buat tautan berisi kodemu untuk dikirim ke admin atau teman";
+    if (I) I.isiTombol(bagikan, "bagikan", "Bagikan"); else bagikan.textContent = "🔗 Bagikan";
     bagikan.addEventListener("click", () => bagikanDialog(adapter, bagikan));
 
-    const fokus = el("button", bagikan.className, "🎯 Mode fokus");
+    const fokus = el("button", dasar);
     fokus.type = "button";
     fokus.setAttribute("aria-pressed", "false");
     fokus.title = "Sembunyikan semua selain editor dan output (Esc untuk keluar)";
+    if (I) I.isiTombol(fokus, "fokus", "Mode fokus"); else fokus.textContent = "🎯 Mode fokus";
     fokus.addEventListener("click", () => setFokus(!document.documentElement.classList.contains("mode-fokus"), fokus));
 
-    simpan.insertAdjacentElement("afterend", bagikan);
-    bagikan.insertAdjacentElement("afterend", fokus);
+    fokus.dataset.alat = "fokus";
+    const grup = document.querySelector("#tb-more-group");
+    if (grup) grup.prepend(bagikan, fokus);
+    else { simpan.insertAdjacentElement("afterend", bagikan); bagikan.insertAdjacentElement("afterend", fokus); }
+    window.dispatchEvent(new Event("alat:siap"));
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && document.documentElement.classList.contains("mode-fokus") && !document.querySelector("dialog[open]")) {
