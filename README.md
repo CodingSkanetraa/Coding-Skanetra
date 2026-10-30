@@ -28,6 +28,7 @@ Nama, logo, dan identitas resmi CodingSkanetra dikelola oleh organisasi.
 | **Editor Python** | Python berjalan di browser (Pyodide), mendukung `input()`. Ada mode **Console** dan mode **Visual** (kanvas gambar, kura-kura, animasi, mouse, dan keyboard) |
 | **Editor C++** | Kompilasi dan jalankan C++ lewat layanan compiler online, mendukung `cin` |
 | **Akun** | Opsional. Daftar dengan username dan password; kode editor, skor game, dan pengaturan editor tersimpan di akun dan ikut ke perangkat lain |
+| **Proyek** | Khusus akun yang login. Di editor Web, Python, dan C++ ada daftar "Proyek saya": buat, buka, ganti nama, hapus. Perubahan disimpan otomatis, dan ada peringatan bila halaman ditutup sebelum tersimpan |
 | **Peringkat** | Poin anggota dari **Google Sheets** (hanya dilihat), khusus akun yang sudah disetujui pengelola. Login tetap lewat akun Supabase; sesama anggota bisa melihat riwayat poin satu sama lain |
 | **Games** | Code Rush: Robot Escape |
 | **Struktur Organisasi / Tentang** | Pengurus, anggota, dan profil komunitas |

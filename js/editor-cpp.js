@@ -283,6 +283,11 @@ document.addEventListener("DOMContentLoaded", () => {
       jenis: "cpp",
       tombolSimpan: saveButton,
       ambil: () => ({ k: getCode() }),
+      awal: () => ({ k: initialCode }),
+      imporLama: () => {
+        const lama = window.CodeStorage && window.CodeStorage.read("cpp");
+        return lama && typeof lama.data === "string" ? { k: lama.data } : null;
+      },
       terapkan: (d) => setCode(String((d && d.k) || ""), { quiet: true }),
       beritahu: (pesan) => { status.textContent = pesan; }
     });

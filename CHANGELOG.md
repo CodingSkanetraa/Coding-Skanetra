@@ -3,6 +3,25 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.7.0] - 2026-10-30
+
+### Ditambahkan
+- **Proyek di editor Web, Python, dan C++** (`js/proyek.js`, `css/proyek.css`). Akun yang login melihat daftar **Proyek saya** saat editor dibuka: buat proyek baru, buka, ganti nama (dari bar atau daftar), dan hapus (dengan konfirmasi). Tiap editor punya daftarnya sendiri.
+- **Simpan otomatis** sekitar 2 detik setelah berhenti mengetik, ditambah tombol Simpan dan Ctrl + S untuk menyimpan seketika. Status di bar: "Belum tersimpan", "Menyimpan…", "Tersimpan 14.02", atau pesan gagal yang mencoba lagi sendiri.
+- **Peringatan sebelum keluar**: bila masih ada perubahan yang belum tersimpan, browser meminta konfirmasi saat halaman akan ditutup atau ditinggalkan. Perubahan juga dikirim saat tab disembunyikan.
+- Editor Python menyimpan kode mode Console dan Visual dalam satu proyek.
+- Kode yang dulu disimpan di browser dapat dijadikan proyek "Kode lama" dengan satu klik (sekali).
+- Tabel `proyek` di `supabase/skema.sql` dengan RLS: tiap akun hanya mengakses proyeknya sendiri; maksimal 40 proyek per akun dan sekitar 100 KB per proyek.
+
+### Diubah
+- Pengunjung yang belum login tidak mendapat proyek (supaya database tidak penuh); editor bekerja seperti sebelumnya dengan penyimpanan di browser. Bar kecil mengajak masuk dan bisa disembunyikan.
+- Selama sebuah proyek terbuka, tombol Simpan dan Ctrl + S menyimpan ke proyek, bukan ke salinan di browser. Dari dialog, "Lanjut tanpa proyek" mengembalikan perilaku lama.
+- Halaman yang dibuka dari tautan **Bagikan** tidak menampilkan daftar proyek otomatis, agar kode kiriman tidak tertimpa.
+- `js/akun.js` mengekspor `minta()`.
+
+### Perlu dilakukan pengelola
+- Jalankan ulang `supabase/skema.sql` di SQL Editor (aman diulang) untuk membuat tabel `proyek`.
+
 ## [5.6.1] - 2026-10-30
 
 ### Diperbaiki

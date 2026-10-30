@@ -174,13 +174,66 @@ create trigger batasi_progres_sebelum_tambah
   for each row execute function public.batasi_progres();
 
 
+-- ---------- 4b. Proyek (daftar file di editor) -------------------------------------------
+-- Satu baris per proyek buatan pengguna di editor Web, Python, atau C++. Hanya untuk akun yang login.
+-- "isi" adalah JSON kode (Web: h/c/s, Python: m/c/v, C++: k); bentuknya diatur oleh editor.
+create table if not exists public.proyek (
+  id      uuid primary key default gen_random_uuid(),
+  user_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  jenis   text not null check (jenis in ('web', 'py', 'cpp')),
+  nama    text not null check (char_length(btrim(nama)) between 1 and 60),
+  isi     jsonb not null check (octet_length(isi::text) <= 102400),   -- maksimal sekitar 100 KB
+  dibuat  timestamptz not null default now(),
+  diubah  timestamptz not null default now()
+);
+
+create index if not exists proyek_per_akun on public.proyek (user_id, jenis, diubah desc);
+
+alter table public.proyek enable row level security;
+
+drop policy if exists "proyek: kelola milik sendiri" on public.proyek;
+create policy "proyek: kelola milik sendiri"
+  on public.proyek for all to authenticated
+  using      (user_id = (select auth.uid()))
+  with check (user_id = (select auth.uid()));
+
+-- Batas 40 proyek per akun; pemilik dan jenis tidak bisa diganti; waktu "diubah" diisi otomatis.
+create or replace function public.jaga_proyek()
+returns trigger
+language plpgsql
+set search_path = ''
+as $$
+begin
+  if tg_op = 'INSERT' then
+    if (select count(*) from public.proyek where user_id = new.user_id) >= 40 then
+      raise exception 'Batas jumlah proyek per akun tercapai';
+    end if;
+    new.nama := btrim(new.nama);
+    return new;
+  end if;
+  new.user_id := old.user_id;
+  new.jenis := old.jenis;
+  new.dibuat := old.dibuat;
+  new.nama := btrim(new.nama);
+  new.diubah := now();
+  return new;
+end;
+$$;
+
+drop trigger if exists jaga_proyek_sebelum_tulis on public.proyek;
+create trigger jaga_proyek_sebelum_tulis
+  before insert or update on public.proyek
+  for each row execute function public.jaga_proyek();
+
+
 -- ---------- 5. Hak akses tabel -------------------------------------------------------
 -- Pengunjung yang belum login (anon) tidak boleh menyentuh tabel apa pun.
 -- Akun yang sudah login (authenticated) diberi hak minimum; RLS di atas yang membatasi barisnya.
-revoke all on public.profil, public.poin, public.progres from anon;
+revoke all on public.profil, public.poin, public.progres, public.proyek from anon;
 grant usage on schema public to anon, authenticated;
 grant select on public.profil, public.poin to authenticated;
 grant select, insert, update, delete on public.progres to authenticated;
+grant select, insert, update, delete on public.proyek to authenticated;
 
 
 -- ============================================================================

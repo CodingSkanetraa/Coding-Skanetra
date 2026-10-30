@@ -45,6 +45,15 @@ Sesama anggota yang sudah disetujui boleh melihat peringkat semua orang dan riwa
 
 **Menghapus akun**: hapus di **Authentication > Users**. Profil, poin, dan progres akun itu ikut terhapus.
 
+## Proyek di editor
+
+Akun yang login melihat daftar **Proyek saya** di editor Web, Python, dan C++. Datanya ada di tabel `proyek`.
+
+- **Pemasangan:** tempel ulang seluruh `supabase/skema.sql` di SQL Editor lalu **Run** (aman diulang, data lama tidak berubah). Tanpa langkah ini, daftar proyek menampilkan pesan gagal memuat.
+- **Batas:** 40 proyek per akun, sekitar 100 KB per proyek. Teks kode sangat kecil, jadi jatah gratis 500 MB sangat aman. Anak yang belum login tidak memakai tabel ini.
+- **Melihat atau membersihkan:** Table Editor > `proyek` (kolom `user_id` cocok dengan **Authentication > Users**). Menghapus akun di Authentication ikut menghapus proyeknya.
+- **Keamanan:** RLS membuat tiap akun hanya bisa membaca, mengubah, dan menghapus proyeknya sendiri.
+
 ## C. Menghubungkan Peringkat ke Google Sheets
 
 Peringkat dan riwayat poin dibaca dari spreadsheet lewat Google Apps Script, melalui fungsi di folder `api/` (`api/points/ranking.js`, `api/points/riwayat.js`, `api/auth/me.js`). Alurnya:

@@ -646,6 +646,29 @@ animasi(jalan)`
       jenis: "py",
       tombolSimpan: saveButton,
       ambil: () => ({ m: outputMode, k: getCode() }),
+      // Proyek menyimpan kode kedua mode sekaligus (Console dan Visual punya kode sendiri-sendiri).
+      ambilProyek: () => {
+        modeCodes[outputMode] = getCode();
+        return { m: outputMode, c: modeCodes.console, v: modeCodes.visual };
+      },
+      terapkanProyek: (d) => {
+        const mode = d && d.m === "visual" ? "visual" : "console";
+        if (mode !== outputMode) setOutputMode(mode); // menyimpan kode mode lama ke slotnya; ditimpa di bawah
+        modeCodes.console = String(d && typeof d.c === "string" ? d.c : modeDefaults.console);
+        modeCodes.visual = String(d && typeof d.v === "string" ? d.v : modeDefaults.visual);
+        setCode(modeCodes[mode], { quiet: true });
+      },
+      awal: () => ({ m: "console", c: modeDefaults.console, v: modeDefaults.visual }),
+      imporLama: () => {
+        const c = window.CodeStorage && window.CodeStorage.read(saveKeys.console);
+        const v = window.CodeStorage && window.CodeStorage.read(saveKeys.visual);
+        if (!(c && typeof c.data === "string") && !(v && typeof v.data === "string")) return null;
+        return {
+          m: "console",
+          c: c && typeof c.data === "string" ? c.data : modeDefaults.console,
+          v: v && typeof v.data === "string" ? v.data : modeDefaults.visual
+        };
+      },
       terapkan: (d) => {
         setOutputMode(d && d.m === "visual" ? "visual" : "console");
         setCode(String((d && d.k) || ""), { quiet: true });

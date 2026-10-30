@@ -783,6 +783,13 @@ ${html}
       jenis: "web",
       tombolSimpan: saveButton,
       ambil: () => ({ h: htmlEditor.getValue(), c: cssEditor.getValue(), s: jsEditor.getValue() }),
+      awal: () => ({ h: initialHTML, c: initialCSS, s: initialJS }),
+      imporLama: () => {
+        const lama = window.CodeStorage && window.CodeStorage.read("html-playground");
+        const d = lama && lama.data;
+        if (!d || typeof d !== "object") return null;
+        return { h: String(d.html || ""), c: String(d.css || ""), s: String(d.js || "") };
+      },
       terapkan: (d) => {
         htmlEditor.setValue(String((d && d.h) || ""));
         cssEditor.setValue(String((d && d.c) || ""));

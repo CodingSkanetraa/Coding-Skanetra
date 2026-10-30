@@ -202,6 +202,8 @@
     if (grup) grup.prepend(bagikan, fokus);
     else { simpan.insertAdjacentElement("afterend", bagikan); bagikan.insertAdjacentElement("afterend", fokus); }
     window.dispatchEvent(new Event("alat:siap"));
+    // Daftar proyek di akun (js/proyek.js), bila dimuat oleh halaman ini.
+    if (window.CodingSkanetraProyek) window.CodingSkanetraProyek.pasang(adapter);
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && document.documentElement.classList.contains("mode-fokus") && !document.querySelector("dialog[open]")) {

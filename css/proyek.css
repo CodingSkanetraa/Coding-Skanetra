@@ -1,0 +1,163 @@
+/* Proyek di editor: bar status dan dialog "Proyek saya" (js/proyek.js) */
+
+.proyek-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 0 0 14px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+.proyek-bar.tamu .proyek-info { flex: 1 1 240px; }
+.proyek-label { color: var(--muted); }
+.proyek-info { color: var(--muted); flex: 1 1 200px; }
+.proyek-nama {
+  max-width: 100%;
+  padding: 3px 8px;
+  border: 1px dashed transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  cursor: text;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+.proyek-nama:hover { border-color: var(--border); }
+.proyek-status { margin-right: auto; color: var(--muted); font-size: 0.85rem; }
+.proyek-status[data-jenis="kotor"]::before,
+.proyek-status[data-jenis="menyimpan"]::before,
+.proyek-status[data-jenis="galat"]::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--warning, #f0d77a);
+  vertical-align: middle;
+}
+.proyek-status[data-jenis="galat"] { color: var(--danger, #ff8a80); }
+.proyek-status[data-jenis="galat"]::before { background: var(--danger, #ff8a80); }
+.proyek-status[data-jenis="ok"] { color: var(--accent); }
+
+.proyek-btn,
+.proyek-kecil {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.88rem;
+  line-height: 1.3;
+  text-decoration: none;
+  cursor: pointer;
+}
+.proyek-kecil { padding: 4px 9px; font-size: 0.82rem; color: var(--muted); }
+.proyek-btn:hover,
+.proyek-kecil:hover { border-color: var(--accent-dark); color: var(--text); }
+.proyek-btn-utama { border-color: var(--accent-dark); background: var(--accent); color: var(--button-text, #07120b); font-weight: 700; }
+.proyek-btn-utama:hover { color: var(--button-text, #07120b); filter: brightness(1.06); }
+.proyek-hapus:hover { border-color: var(--danger, #ff8a80); color: var(--danger, #ff8a80); }
+.proyek-btn:focus-visible,
+.proyek-kecil:focus-visible,
+.proyek-nama:focus-visible,
+.proyek-buka:focus-visible,
+.proyek-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.proyek-input {
+  min-width: 0;
+  flex: 1;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--text);
+  font: inherit;
+}
+
+/* Titik kuning di tombol Simpan: ada perubahan yang belum tersimpan ke proyek. */
+html.proyek-aktif button[data-save].is-dirty::after { content: none; }
+html.proyek-aktif button[data-save].proyek-kotor::after {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 8px;
+  border-radius: 50%;
+  background: var(--warning, #f0d77a);
+  vertical-align: middle;
+}
+
+html.mode-fokus .proyek-bar { display: none; }
+
+/* Dialog */
+.proyek-dialog {
+  margin: auto;
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 22px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+}
+.proyek-dialog::backdrop { background: rgb(0 0 0 / 55%); }
+.proyek-dialog h2 { margin: 0 0 4px; font-size: 1.2rem; }
+.proyek-dialog.sibuk { cursor: progress; }
+.proyek-sub { margin: 4px 0 0; color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
+.proyek-pesan { min-height: 1.3em; margin: 10px 0 0; color: var(--muted); font-size: 0.88rem; }
+.proyek-pesan.galat { color: var(--danger, #ff8a80); }
+.proyek-baru { display: flex; gap: 8px; margin-top: 14px; }
+.proyek-daftar { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.proyek-kosong { padding: 14px 4px; color: var(--muted); font-size: 0.92rem; }
+.proyek-baris {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+}
+.proyek-baris.aktif { border-color: var(--accent-dark); }
+.proyek-baris.mengedit .proyek-input { flex: 1 1 160px; }
+.proyek-buka {
+  display: grid;
+  flex: 1 1 160px;
+  gap: 2px;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.proyek-buka:hover { background: var(--surface-hover, var(--surface)); }
+.proyek-baris-nama { font-weight: 700; overflow-wrap: anywhere; }
+.proyek-baris-waktu { color: var(--muted); font-size: 0.8rem; }
+.proyek-tanya { color: var(--muted); font-size: 0.85rem; }
+.proyek-impor { margin-top: 14px; }
+.proyek-impor-aksi { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.proyek-bawah { display: flex; justify-content: flex-end; margin-top: 16px; }
+
+@media (max-width: 520px) {
+  .proyek-baru { flex-direction: column; }
+  .proyek-status { flex-basis: 100%; margin-right: 0; }
+}

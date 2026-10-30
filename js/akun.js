@@ -482,7 +482,7 @@
   });
 
   window.CodingSkanetraAkun = {
-    siap, tersedia: SIAP_DIPAKAI, pengguna, masuk, daftar, keluar, profil, ambil, rpc,
+    siap, tersedia: SIAP_DIPAKAI, pengguna, masuk, daftar, keluar, profil, ambil, rpc, minta,
     token: tokenAktif, // token login terbaru (untuk memanggil fungsi api/ di Vercel)
     sinkron: { catat, catatHapus, sekarang: sinkronAwalDiam, dorong, status: () => Object.assign({ menunggu: menunggu.size }, status) }
   };
