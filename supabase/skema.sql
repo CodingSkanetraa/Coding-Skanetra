@@ -226,14 +226,130 @@ create trigger jaga_proyek_sebelum_tulis
   for each row execute function public.jaga_proyek();
 
 
+-- ---------- 4c. Tautan Bagikan (berlaku 7 hari) --------------------------------------------
+-- Tombol Bagikan di editor menyimpan salinan kode di sini dan memberi kode acak 12 karakter.
+-- Siapa pun yang punya tautannya bisa membuka kodenya sampai kedaluwarsa (7 hari), tetapi tidak bisa
+-- melihat daftar tautan lain: pembukaan hanya lewat fungsi ambil_bagikan() dengan kode yang tepat.
+create table if not exists public.bagikan (
+  kode        text primary key check (kode ~ '^[0-9a-f]{12}$'),
+  user_id     uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  jenis       text not null check (jenis in ('web', 'py', 'cpp')),
+  nama        text check (nama is null or char_length(nama) <= 40),     -- nama/kelas pengirim (opsional)
+  isi         jsonb not null check (octet_length(isi::text) <= 102400),  -- maksimal sekitar 100 KB
+  dibuat      timestamptz not null default now(),
+  kedaluwarsa timestamptz not null default now() + interval '7 days'
+);
+
+create index if not exists bagikan_per_akun on public.bagikan (user_id, kedaluwarsa);
+
+alter table public.bagikan enable row level security;
+
+-- Pemilik boleh melihat dan menghapus tautannya sendiri (yang masih berlaku). Membuat hanya lewat fungsi.
+drop policy if exists "bagikan: baca milik sendiri" on public.bagikan;
+create policy "bagikan: baca milik sendiri"
+  on public.bagikan for select to authenticated
+  using (user_id = (select auth.uid()) and kedaluwarsa > now());
+
+drop policy if exists "bagikan: hapus milik sendiri" on public.bagikan;
+create policy "bagikan: hapus milik sendiri"
+  on public.bagikan for delete to authenticated
+  using (user_id = (select auth.uid()));
+
+-- Membuat tautan: harus login, maksimal 20 tautan aktif per akun, tautan yang sudah kedaluwarsa dibersihkan
+-- sekalian (tanpa pengaturan jadwal tambahan). Mengembalikan kode dan waktu kedaluwarsa.
+create or replace function public.buat_bagikan(p_jenis text, p_isi jsonb, p_nama text default null)
+returns table (kode text, kedaluwarsa timestamptz)
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_uid uuid := auth.uid();
+  v_kode text;
+  v_batas timestamptz;
+begin
+  if v_uid is null then
+    raise exception 'Masuk dulu untuk membuat tautan';
+  end if;
+  delete from public.bagikan b where b.kedaluwarsa <= now();
+  if (select count(*) from public.bagikan b where b.user_id = v_uid) >= 20 then
+    raise exception 'Batas 20 tautan aktif per akun tercapai';
+  end if;
+  for i in 1..6 loop
+    v_kode := substr(replace(gen_random_uuid()::text, '-', ''), 1, 12);
+    begin
+      insert into public.bagikan (kode, user_id, jenis, nama, isi)
+      values (v_kode, v_uid, p_jenis, nullif(btrim(p_nama), ''), p_isi)
+      returning bagikan.kedaluwarsa into v_batas;
+      return query select v_kode, v_batas;
+      return;
+    exception when unique_violation then
+      null; -- kode kebetulan sama: coba lagi
+    end;
+  end loop;
+  raise exception 'Gagal membuat kode, coba lagi';
+end;
+$$;
+
+-- Membuka tautan (boleh tanpa login). Status: ok, kedaluwarsa, atau tidak-ada. Isi tidak dikirim bila kedaluwarsa.
+create or replace function public.ambil_bagikan(p_kode text)
+returns jsonb
+language plpgsql
+security definer
+stable
+set search_path = ''
+as $$
+declare
+  r public.bagikan%rowtype;
+begin
+  if p_kode is null or p_kode !~ '^[0-9a-f]{12}$' then
+    return jsonb_build_object('status', 'tidak-ada');
+  end if;
+  select * into r from public.bagikan b where b.kode = p_kode;
+  if not found then
+    return jsonb_build_object('status', 'tidak-ada');
+  end if;
+  if r.kedaluwarsa <= now() then
+    return jsonb_build_object('status', 'kedaluwarsa');
+  end if;
+  return jsonb_build_object('status', 'ok', 'jenis', r.jenis, 'isi', r.isi, 'nama', r.nama, 'kedaluwarsa', r.kedaluwarsa);
+end;
+$$;
+
+revoke all on function public.buat_bagikan(text, jsonb, text) from public, anon;
+grant execute on function public.buat_bagikan(text, jsonb, text) to authenticated;
+revoke all on function public.ambil_bagikan(text) from public;
+grant execute on function public.ambil_bagikan(text) to anon, authenticated;
+
+
+-- ---------- 4d. Foto profil -------------------------------------------------------------
+-- Satu foto kecil per akun (browser sudah memotong persegi dan mengecilkannya menjadi sekitar 256 px).
+-- Hanya pemilik akun yang bisa membaca dan mengubahnya; tidak tampil untuk anggota lain.
+create table if not exists public.foto_profil (
+  user_id uuid primary key default auth.uid() references auth.users(id) on delete cascade,
+  data    text not null check (data ~ '^data:image/(webp|jpeg);base64,[A-Za-z0-9+/]+=*$' and char_length(data) <= 60000),
+  diubah  timestamptz not null default now()
+);
+
+alter table public.foto_profil enable row level security;
+
+drop policy if exists "foto_profil: kelola milik sendiri" on public.foto_profil;
+create policy "foto_profil: kelola milik sendiri"
+  on public.foto_profil for all to authenticated
+  using      (user_id = (select auth.uid()))
+  with check (user_id = (select auth.uid()));
+
+
 -- ---------- 5. Hak akses tabel -------------------------------------------------------
 -- Pengunjung yang belum login (anon) tidak boleh menyentuh tabel apa pun.
 -- Akun yang sudah login (authenticated) diberi hak minimum; RLS di atas yang membatasi barisnya.
-revoke all on public.profil, public.poin, public.progres, public.proyek from anon;
+revoke all on public.profil, public.poin, public.progres, public.proyek, public.bagikan, public.foto_profil from anon;
 grant usage on schema public to anon, authenticated;
 grant select on public.profil, public.poin to authenticated;
 grant select, insert, update, delete on public.progres to authenticated;
 grant select, insert, update, delete on public.proyek to authenticated;
+grant select, delete on public.bagikan to authenticated;
+grant select, insert, update, delete on public.foto_profil to authenticated;
 
 
 -- ============================================================================

@@ -3,6 +3,21 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.10.0] - 2026-10-31
+
+### Ditambahkan
+- **Tautan Bagikan pendek dari database, berlaku 7 hari.** Untuk akun yang login, tombol Bagikan membuat tautan seperti `editor-html.html#b=5bab41319` (bukan lagi tautan panjang berisi seluruh kode). Setelah 7 hari tautan otomatis kedaluwarsa dan kodenya tidak bisa dibuka lagi; yang membuka melihat pesan jelas. Kode dibuka tanpa login, dan tautan untuk editor lain otomatis memindahkan ke editor yang benar. Maksimal 20 tautan aktif per akun, tiap tautan sampai sekitar 100 KB. Tautan yang kedaluwarsa dihapus otomatis saat ada yang membuat tautan baru, tanpa jadwal tambahan.
+- Tautan panjang lama (`#bagikan=`) tetap berfungsi dan tetap tersedia untuk pengunjung tanpa akun (tidak kedaluwarsa).
+- **Tautan Bagikan aktif di halaman Profil**: lihat sisa waktu, salin, atau hapus tautan lebih awal.
+- **Foto profil.** Di Profil, **Ganti foto** memotong foto menjadi persegi dari tengah dan mengecilkannya menjadi sekitar 256 px (WebP, sekitar 10 sampai 30 KB) di perangkatmu sebelum disimpan, jadi penyimpanan gratis tidak terbebani. Foto tampil di navbar (desktop), menu Lainnya (HP), dan Profil; hanya terlihat oleh pemiliknya. **Hapus foto** mengembalikan avatar huruf.
+- Tabel `bagikan` dan `foto_profil` beserta fungsi `buat_bagikan()` dan `ambil_bagikan()` di `supabase/skema.sql`, dengan RLS (tiap akun hanya melihat miliknya; tabel `bagikan` tidak bisa dibaca langsung tanpa login, hanya lewat kode yang tepat) dan batas ukuran di database.
+
+### Diubah
+- Dialog Bagikan: tombol sekunder kini bergaya sama di semua editor.
+
+### Perlu dilakukan pengelola
+- Jalankan ulang `supabase/skema.sql` di SQL Editor (aman diulang) untuk membuat tabel `bagikan` dan `foto_profil`.
+
 ## [5.9.0] - 2026-10-30
 
 ### Ditambahkan

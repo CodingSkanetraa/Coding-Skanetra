@@ -54,6 +54,13 @@ Akun yang login melihat daftar **Proyek saya** di editor Web, Python, dan C++. D
 - **Melihat atau membersihkan:** Table Editor > `proyek` (kolom `user_id` cocok dengan **Authentication > Users**). Menghapus akun di Authentication ikut menghapus proyeknya.
 - **Keamanan:** RLS membuat tiap akun hanya bisa membaca, mengubah, dan menghapus proyeknya sendiri.
 
+## Tautan Bagikan dan foto profil
+
+- **Pemasangan:** tempel ulang seluruh `supabase/skema.sql` di SQL Editor lalu **Run** (aman diulang). Ini membuat tabel `bagikan` dan `foto_profil`.
+- **Tautan Bagikan (7 hari):** dibuat lewat fungsi `buat_bagikan()` (harus login, maksimal 20 aktif per akun, sekitar 100 KB per tautan). Yang membuka tautan tidak perlu login, tetapi hanya bisa membuka satu kode yang tepat lewat `ambil_bagikan()`; tabel `bagikan` tidak bisa dibaca langsung oleh pengunjung. Baris yang sudah kedaluwarsa tidak bisa dibuka lagi dan dihapus otomatis saat ada yang membuat tautan baru. Untuk melihat atau membersihkan manual: Table Editor > `bagikan` (hapus baris yang `kedaluwarsa`-nya sudah lewat bila perlu).
+- **Foto profil:** satu baris per akun di tabel `foto_profil`. Browser memotong dan mengecilkan fotonya (sekitar 256 px, 10 sampai 30 KB) sebelum dikirim, dan database menolak data di atas sekitar 45 KB atau yang bukan gambar WebP/JPEG. 100 akun memakai paling banyak beberapa MB dari jatah 500 MB. Foto hanya terbaca oleh pemiliknya. Untuk menghapus foto seseorang: Table Editor > `foto_profil` > hapus barisnya (avatar kembali berupa huruf).
+- **Kapasitas:** semua tabel buatan pengguna (progres, proyek, tautan, foto) bersifat teks kecil, jadi jatah gratis sangat aman untuk satu eskul.
+
 ## C. Menghubungkan Peringkat ke Google Sheets
 
 Peringkat dan riwayat poin dibaca dari spreadsheet lewat Google Apps Script, melalui fungsi di folder `api/` (`api/points/ranking.js`, `api/points/riwayat.js`, `api/auth/me.js`). Alurnya:

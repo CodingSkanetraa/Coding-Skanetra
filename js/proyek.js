@@ -500,8 +500,8 @@
     jadikanBtn.addEventListener("click", () => bukaDialog({ dariKodeSekarang: true }));
 
     gambarBar();
-    // Tampil otomatis sebelum menulis, kecuali halaman dibuka dari tautan "Bagikan" (kode orang lain jangan tertimpa).
-    if (!location.hash.startsWith("#bagikan=")) bukaDialog();
+    // Tampil otomatis sebelum menulis, kecuali halaman dibuka dari tautan "Bagikan" (#bagikan= atau #b=): kode orang lain jangan tertimpa.
+    if (!/^#(bagikan|b)=/.test(location.hash)) bukaDialog();
 
     // Sesi berakhir di tab lain: beri tahu, tetapi jangan membuang kode yang belum tersimpan.
     window.addEventListener("cs:akun", (e) => {

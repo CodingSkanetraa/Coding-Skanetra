@@ -28,6 +28,9 @@
   const AWALAN_KODE = "codingskanetra-code:";
   const KUNCI_SKOR = "codingskanetra-code-rush-high-score";
   const KUNCI_PREF = "codingskanetra-editor-preferences";
+  const KUNCI_FOTO = "codingskanetra-foto";                  // foto profil akun yang sedang masuk: { uid, data }
+  const POLA_FOTO = /^data:image\/(webp|jpeg);base64,[A-Za-z0-9+/]+=*$/;
+  const BATAS_FOTO = 60000;                                 // karakter data URL; batas yang sama di database
 
   // ---------- Penyimpanan lokal yang aman ----------
 
@@ -182,6 +185,8 @@
     if (!res.ok || !res.data || !res.data.access_token) throw galat(pesanGalat(res), "masuk");
     simpanSesi(dariToken(res.data));
     sinkronAwalDiam();
+    // Foto profil ikut diambil (paling lama 1,5 detik) supaya navbar di halaman berikutnya langsung menampilkannya.
+    await Promise.race([muatFoto().catch(() => {}), new Promise((r) => setTimeout(r, 1500))]);
     return pengguna();
   }
 
@@ -207,7 +212,7 @@
       if (!opsi.paksa && menunggu.size) throw galat("Perubahan terakhir belum terkirim ke akunmu.", "belum-terkirim");
       try { await minta("/auth/v1/logout?scope=local", { metode: "POST" }); } catch (e) { /* tetap keluar di sisi ini */ }
     }
-    if (opsi.bersihkan !== false) bersihkanLokal();
+    if (opsi.bersihkan !== false) { bersihkanLokal(); hapusLokal(KUNCI_FOTO); }
     menunggu.clear();
     clearTimeout(pewaktu);
     simpanSesi(null);
@@ -441,6 +446,56 @@
     status.terakhir = null;
   }
 
+  // ---------- Foto profil ----------
+  // Foto kecil (sekitar 256 px) disimpan di tabel foto_profil dan hanya terlihat oleh pemiliknya.
+  // Salinannya disimpan di browser ini supaya navbar bisa menampilkannya tanpa memanggil server.
+
+  const fotoValid = (d) => typeof d === "string" && d.length <= BATAS_FOTO && POLA_FOTO.test(d);
+
+  function foto() {
+    if (!sesi) return null;
+    try {
+      const o = JSON.parse(baca(KUNCI_FOTO));
+      if (o && o.uid === sesi.user.id && fotoValid(o.data)) return o.data;
+    } catch (e) { /* tidak ada atau rusak */ }
+    return null;
+  }
+
+  function simpanFotoLokal(data) {
+    if (sesi && fotoValid(data)) tulis(KUNCI_FOTO, JSON.stringify({ uid: sesi.user.id, data }));
+    else hapusLokal(KUNCI_FOTO);
+    window.dispatchEvent(new CustomEvent("cs:foto"));
+  }
+
+  async function muatFoto() {
+    if (!sesi) return null;
+    const res = await minta("/rest/v1/foto_profil?select=data");
+    if (!res.ok || !Array.isArray(res.data)) throw galat("Foto profil belum bisa dimuat.", "foto");
+    const d = res.data[0] && res.data[0].data;
+    simpanFotoLokal(fotoValid(d) ? d : null);
+    return foto();
+  }
+
+  async function ubahFoto(data) {
+    if (!sesi) throw galat("Masuk dulu untuk mengganti foto.", "sesi");
+    if (!fotoValid(data)) throw galat("Foto tidak valid atau terlalu besar.", "foto");
+    const res = await minta("/rest/v1/foto_profil?on_conflict=user_id", {
+      metode: "POST", body: { data, diubah: new Date().toISOString() },
+      header: { Prefer: "resolution=merge-duplicates,return=minimal" }
+    });
+    if (res.status === 401 || res.status === 403) throw galat("Sesi berakhir. Masuk lagi, lalu ulangi.", "sesi");
+    if (!res.ok) throw galat("Foto belum tersimpan. Coba lagi.", "foto");
+    simpanFotoLokal(data);
+  }
+
+  async function hapusFoto() {
+    if (!sesi) return;
+    const res = await minta("/rest/v1/foto_profil?user_id=eq." + encodeURIComponent(sesi.user.id), { metode: "DELETE" });
+    if (res.status === 401 || res.status === 403) throw galat("Sesi berakhir. Masuk lagi, lalu ulangi.", "sesi");
+    if (!res.ok) throw galat("Foto belum terhapus. Coba lagi.", "foto");
+    simpanFotoLokal(null);
+  }
+
   // ---------- Pemberitahuan kecil ----------
 
   function tampilkanPemberitahuan(teks, tombol, aksi) {
@@ -490,7 +545,7 @@
     if (sesi && kedaluwarsa(60000)) await segarkan();
   })();
 
-  siap.then(() => { if (sesi) sinkronAwalDiam(); });
+  siap.then(() => { if (sesi) { sinkronAwalDiam(); muatFoto().catch(() => {}); } });
 
   window.addEventListener("online", () => { if (sesi && menunggu.size) dorong().catch(() => {}); });
   window.addEventListener("pagehide", () => {
@@ -499,6 +554,7 @@
 
   window.CodingSkanetraAkun = {
     siap, tersedia: SIAP_DIPAKAI, pengguna, masuk, daftar, keluar, ubahPassword, profil, ambil, rpc, minta,
+    foto, muatFoto, ubahFoto, hapusFoto,
     token: tokenAktif, // token login terbaru (untuk memanggil fungsi api/ di Vercel)
     sinkron: { catat, catatHapus, sekarang: sinkronAwalDiam, dorong, status: () => Object.assign({ menunggu: menunggu.size }, status) }
   };

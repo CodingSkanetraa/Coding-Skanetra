@@ -6,7 +6,9 @@
 (() => {
   "use strict";
   const KUNCI_SESI = "codingskanetra-sesi";
+  const KUNCI_FOTO = "codingskanetra-foto";
   const POLA_USERNAME = /^[a-z0-9_.]{3,20}$/;
+  const POLA_FOTO = /^data:image\/(webp|jpeg);base64,[A-Za-z0-9+/]+=*$/;
   const KELOMPOK_LAINNYA = ["struktur", "dokumentasi", "about", "setting"];
 
   // Username akun yang sedang masuk, atau null.
@@ -18,15 +20,35 @@
     return null;
   }
 
-  // Avatar bulat berisi huruf pertama username; warnanya selalu sama untuk username yang sama.
+  // Foto profil akun yang sedang masuk (disimpan js/akun.js di browser ini), atau null.
+  function fotoAktif() {
+    try {
+      const s = JSON.parse(localStorage.getItem(KUNCI_SESI));
+      const o = JSON.parse(localStorage.getItem(KUNCI_FOTO));
+      if (s && s.user && o && o.uid === s.user.id && typeof o.data === "string" && o.data.length <= 60000 && POLA_FOTO.test(o.data)) return o.data;
+    } catch (e) { /* tidak ada foto */ }
+    return null;
+  }
+
+  // Avatar bulat: foto profil bila ada, selain itu huruf pertama username (warna tetap untuk username yang sama).
   function avatar(username, kelas) {
     let h = 0;
     for (const c of username) h = (h * 31 + c.charCodeAt(0)) >>> 0;
     const a = document.createElement("span");
     a.className = "cs-avatar" + (kelas ? " " + kelas : "");
-    a.textContent = username.charAt(0).toUpperCase();
     a.style.setProperty("--avatar-hue", String(h % 360));
     a.setAttribute("aria-hidden", "true");
+    const foto = fotoAktif();
+    if (foto) {
+      const img = document.createElement("img");
+      img.alt = "";
+      img.decoding = "async";
+      img.src = foto;
+      a.classList.add("berfoto");
+      a.appendChild(img);
+    } else {
+      a.textContent = username.charAt(0).toUpperCase();
+    }
     return a;
   }
 
@@ -102,6 +124,7 @@
     }
   }
   gambar();
-  window.addEventListener("storage", (e) => { if (e.key === KUNCI_SESI) gambar(); });
+  window.addEventListener("storage", (e) => { if (e.key === KUNCI_SESI || e.key === KUNCI_FOTO) gambar(); });
+  window.addEventListener("cs:foto", gambar);
   window.addEventListener("cs:akun", gambar);
 })();

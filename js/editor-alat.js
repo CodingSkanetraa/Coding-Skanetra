@@ -87,14 +87,45 @@
   function bacaNama() { try { return localStorage.getItem(NAMA_KUNCI) || ""; } catch (e) { return ""; } }
   function simpanNama(n) { try { localStorage.setItem(NAMA_KUNCI, n); } catch (e) { /* abaikan */ } }
 
+  // Tautan pendek (database, berlaku 7 hari): kode 12 karakter hex di bagian setelah "#b=".
+  const AWAL_DB = "#b=";
+  const POLA_KODE_DB = /^[0-9a-f]{12}$/;
+  const HALAMAN_EDITOR = { web: "editor-html.html", py: "editor-python.html", cpp: "editor-cpp.html" };
+
+  const waktuSingkat = (iso) => {
+    try {
+      return new Date(iso).toLocaleString("id-ID", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+    } catch (e) { return ""; }
+  };
+
+  function pesanBuat(res) {
+    const d = res && res.data && typeof res.data === "object" ? res.data : {};
+    const teks = String(d.message || "");
+    if (res.status === 401 || res.status === 403) return "Sesi berakhir. Masuk lagi, lalu coba lagi.";
+    if (teks.includes("Batas 20")) return "Batas 20 tautan aktif tercapai. Hapus tautan lama di halaman Profil.";
+    if (d.code === "23514") return "Kodemu terlalu besar untuk tautan pendek (maksimal sekitar 100 KB). Pakai tautan panjang atau tombol Unduh.";
+    return "Tautan belum bisa dibuat. Periksa internet lalu coba lagi.";
+  }
+
   async function bagikanDialog(adapter, tombolAsal) {
     let dialog = document.querySelector("#alat-dialog");
     if (dialog) dialog.remove();
     dialog = el("dialog", "alat-dialog");
     dialog.id = "alat-dialog";
+    const akun = window.CodingSkanetraAkun;
+    const login = Boolean(akun && akun.tersedia && akun.pengguna());
 
     dialog.appendChild(el("h2", "", "Bagikan kode"));
-    dialog.appendChild(el("p", "alat-info", "Tautan ini berisi kodemu. Kirim ke guru, admin, atau teman. Saat tautannya dibuka, kodemu langsung muncul di editor."));
+    const info = el("p", "alat-info");
+    dialog.appendChild(info);
+    if (!login && akun && akun.tersedia) {
+      const halaman = (location.pathname.split("/").pop() || "").replace(/\.html$/, "");
+      const ajak = el("p", "alat-info");
+      const a = el("a", "", "Masuk");
+      a.href = "login.html" + (/^[a-z0-9-]{1,40}$/.test(halaman) ? "?next=" + halaman : "");
+      ajak.append(a, document.createTextNode(" untuk membuat tautan pendek yang berlaku 7 hari."));
+      dialog.appendChild(ajak);
+    }
 
     const labelNama = el("label", "", "Nama / kelas (boleh dikosongkan)");
     labelNama.htmlFor = "alat-nama";
@@ -104,16 +135,22 @@
     labelLink.htmlFor = "alat-link";
     const link = el("textarea"); link.id = "alat-link"; link.readOnly = true; link.rows = 3;
     const catatan = el("p", "alat-catatan");
+    catatan.setAttribute("role", "status");
     const aksi = el("div", "alat-aksi");
+    const buat = el("button", "btn btn-primary", "Buat tautan pendek"); buat.type = "button";
     const salin = el("button", "btn btn-primary", "📋 Salin tautan"); salin.type = "button";
+    const beralih = el("button", "py-btn-secondary", ""); beralih.type = "button";
     const tutup = el("button", "py-btn-secondary", "Tutup"); tutup.type = "button";
-    aksi.append(salin, tutup);
+    aksi.append(buat, salin, beralih, tutup);
     dialog.append(labelNama, nama, labelLink, link, catatan, aksi);
     document.body.appendChild(dialog);
 
+    let mode = login ? "pendek" : "panjang";
+    let pendek = null; // { tautan, sampai } setelah tautan pendek dibuat
+    let membuat = false;
     let versi = 0;
-    const susun = async () => {
-      const ini = ++versi;
+
+    const susunPanjang = async (ini) => {
       const data = adapter.ambil();
       const objek = { j: adapter.jenis, d: data };
       const n = nama.value.trim();
@@ -130,8 +167,63 @@
           ? "Tautannya cukup panjang. Kalau terpotong di aplikasi chat, kirim lewat file (tombol Unduh)."
           : "Tautan siap dikirim. Kodemu belum berubah, ini hanya salinan.";
     };
-    nama.addEventListener("input", () => { simpanNama(nama.value.trim()); susun(); });
-    await susun();
+
+    const tampil = async () => {
+      const ini = ++versi;
+      const pendekAktif = mode === "pendek";
+      buat.hidden = !pendekAktif;
+      beralih.hidden = !login;
+      beralih.textContent = pendekAktif ? "Pakai tautan panjang" : "Pakai tautan pendek (7 hari)";
+      if (pendekAktif) {
+        info.textContent = "Tautan pendek berlaku 7 hari, lalu kedaluwarsa otomatis. Salinan kodemu disimpan di server selama itu dan bisa dibuka siapa pun yang punya tautannya.";
+        nama.disabled = Boolean(pendek);
+        link.value = pendek ? pendek.tautan : "";
+        link.placeholder = "Tekan “Buat tautan pendek”.";
+        salin.disabled = !pendek;
+        buat.textContent = pendek ? "Buat tautan lain" : "Buat tautan pendek";
+        catatan.className = "alat-catatan";
+        catatan.textContent = pendek
+          ? "Berlaku sampai " + waktuSingkat(pendek.sampai) + ". Kodemu belum berubah, ini salinan. Tautan bisa dihapus lebih awal di halaman Profil."
+          : "";
+      } else {
+        info.textContent = "Tautan ini berisi kodemu langsung (tidak lewat server), jadi tidak kedaluwarsa tetapi panjang. Kirim ke guru, admin, atau teman. Saat dibuka, kodemu langsung muncul di editor.";
+        nama.disabled = false;
+        link.placeholder = "";
+        await susunPanjang(ini);
+      }
+    };
+
+    nama.addEventListener("input", () => { simpanNama(nama.value.trim()); if (mode === "panjang") tampil(); });
+    beralih.addEventListener("click", () => { mode = mode === "pendek" ? "panjang" : "pendek"; tampil(); });
+
+    buat.addEventListener("click", async () => {
+      if (pendek) { pendek = null; tampil(); nama.focus(); return; }
+      if (membuat) return;
+      membuat = true; buat.disabled = true;
+      catatan.className = "alat-catatan";
+      catatan.textContent = "Membuat tautan…";
+      try {
+        const res = await akun.minta("/rest/v1/rpc/buat_bagikan", {
+          metode: "POST",
+          body: { p_jenis: adapter.jenis, p_isi: adapter.ambil(), p_nama: nama.value.trim() || null }
+        });
+        if (!res.ok) throw new Error(pesanBuat(res));
+        const baris = Array.isArray(res.data) ? res.data[0] : res.data;
+        if (!baris || !POLA_KODE_DB.test(String(baris.kode))) throw new Error("Tautan belum bisa dibuat. Coba lagi.");
+        pendek = { tautan: location.origin + location.pathname + AWAL_DB + baris.kode, sampai: baris.kedaluwarsa };
+        adapter.beritahu("Tautan pendek dibuat. Berlaku 7 hari.");
+      } catch (e) {
+        pendek = null;
+        await tampil();
+        catatan.className = "alat-catatan peringatan";
+        catatan.textContent = (e && e.message) || "Tautan belum bisa dibuat. Coba lagi.";
+        membuat = false; buat.disabled = false;
+        return;
+      }
+      membuat = false; buat.disabled = false;
+      await tampil();
+      salin.focus();
+    });
 
     salin.addEventListener("click", async () => {
       let berhasil = false;
@@ -147,8 +239,9 @@
     tutup.addEventListener("click", () => dialog.close());
     dialog.addEventListener("close", () => { dialog.remove(); if (tombolAsal) tombolAsal.focus(); });
     dialog.addEventListener("click", (e) => { if (e.target === dialog) dialog.close(); });
+    await tampil();
     if (typeof dialog.showModal === "function") dialog.showModal(); else dialog.setAttribute("open", "");
-    nama.focus();
+    (login && !pendek ? buat : nama).focus();
   }
 
   /* ---------- Mode fokus ---------- */
@@ -210,6 +303,36 @@
         setFokus(false, fokus);
       }
     });
+
+    // Tautan pendek dari database: #b=kode
+    const cocokDb = /^#b=([0-9a-f]{12})$/.exec(location.hash || "");
+    const kodeDb = cocokDb ? cocokDb[1] : null;
+    if (kodeDb) {
+      const akun = window.CodingSkanetraAkun;
+      try {
+        if (!akun || !akun.tersedia) throw new Error("tanpa-akun");
+        const hasil = await akun.rpc("ambil_bagikan", { p_kode: kodeDb });
+        if (!hasil || hasil.status === "tidak-ada") throw new Error("tidak-ada");
+        if (hasil.status === "kedaluwarsa") throw new Error("kedaluwarsa");
+        if (hasil.status !== "ok" || !HALAMAN_EDITOR[hasil.jenis]) throw new Error("gagal");
+        if (hasil.jenis !== adapter.jenis) {
+          // Tautan untuk editor lain: pindah otomatis ke editor yang benar.
+          location.replace(new URL(HALAMAN_EDITOR[hasil.jenis], location.href).href + location.hash);
+          return;
+        }
+        adapter.terapkan(hasil.isi);
+        const dari = typeof hasil.nama === "string" && hasil.nama.trim() ? " dari " + hasil.nama.trim().slice(0, 40) : "";
+        tampilBanner(adapter, "📎 Kode ini dibuka dari tautan" + dari + ". Belum dijalankan dan belum disimpan di akunmu. Tautan berlaku sampai " + waktuSingkat(hasil.kedaluwarsa) + ".");
+        adapter.beritahu("Kode dari tautan dimuat.");
+      } catch (e) {
+        const k = e && e.message;
+        tampilBanner(adapter, k === "kedaluwarsa"
+          ? "Tautan ini sudah kedaluwarsa (tautan pendek berlaku 7 hari). Minta pengirimnya membagikan lagi."
+          : k === "tidak-ada"
+            ? "Tautan ini tidak ditemukan atau sudah dihapus pengirimnya. Periksa apakah tautannya lengkap."
+            : "Tautan belum bisa dibuka. Periksa internet lalu muat ulang halaman ini.", "galat");
+      }
+    }
 
     if (masuk) {
       try {
