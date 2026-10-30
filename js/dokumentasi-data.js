@@ -23,13 +23,20 @@
 // CONTOH (hapus tanda // di depan tiap baris untuk memakainya):
 //
 //   {
-//     foto: "latihan-html.jpg",
-//     judul: "Latihan HTML dasar",
-//     tanggal: "2026-10-12",
-//     lokasi: "Lab Komputer 2",
-//     deskripsi: "Anggota membuat halaman pertama dengan HTML dan CSS, lalu menjalankannya di Editor Web."
+//     foto: ".webp",
+//     judul: "",
+//     tanggal: "2026-08-12",
+//     lokasi: "",
+//     deskripsi: "."
 //   },
 
 window.DOKUMENTASI = [
   // Tulis blok dokumentasi di sini, dipisahkan koma.
+  {
+    foto: "img1.webp",
+    judul: "Foto bersama",
+    tanggal: "2026-08-12",
+    lokasi: "Lapangan SMKN Situraja",
+    deskripsi: "Foto pertama kita, diikuti hampir seluruh anggota coding skanetra."
+  }
 ];
