@@ -3,6 +3,27 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.9.0] - 2026-10-30
+
+### Ditambahkan
+- **Halaman Dokumentasi** (`pages/dokumentasi.html`). Kartu dibuat otomatis untuk setiap foto dari daftar array di `js/dokumentasi-data.js`; foto lokal di `assets/dokumentasi/`. Menambah foto cukup menaruh berkasnya lalu menulis satu blok `{ foto, judul, tanggal, deskripsi, lokasi }`, tanpa mengubah HTML.
+- Daftar diurutkan otomatis dari tanggal terbaru (yang tanpa tanggal di akhir). Data yang salah (nama foto tidak valid, tanggal tidak ada) dilewati dengan peringatan di konsol; foto yang berkasnya belum ada tampil sebagai "Foto belum tersedia".
+- **Detail**: klik kartu membuka jendela berisi foto, judul, tanggal, lokasi, dan deskripsi (baris baru dipertahankan), dengan tombol sebelumnya/berikutnya dan panah keyboard.
+- **Tampilan penuh**: klik foto di detail untuk memperbesar sampai memenuhi layar. Zoom 100 sampai 600% lewat tombol, roda mouse, klik dua kali, atau tombol +/-/0; geser dengan mouse atau sentuhan; tombol layar penuh (bila didukung browser); panah untuk pindah foto; Esc menutup.
+- Menu **Dokumentasi** di dropdown Lainnya (desktop) dan menu Lainnya (HP), sitemap, dan `llms.txt`.
+
+## [5.8.0] - 2026-10-30
+
+### Ditambahkan
+- **Halaman Profil** (`pages/profil.html`): avatar, `@username`, nama dan kelas (bila diisi pengelola), status akun, status sinkron, dan tombol **Keluar**. Password selalu tampil tersembunyi (`••••••••`): situs memang tidak pernah menyimpan atau mengetahui password aslinya. Tombol **Ubah password** membuka form (ketik dua kali, ada opsi tampilkan); sesi tetap berlaku setelah diganti.
+- **Navbar desktop dirampingkan**: menu utama Beranda, Materi, Playground, Peringkat, Games, lalu dropdown **Lainnya** (Struktur Organisasi, Tentang, Pengaturan) dan tombol **Masuk** atau avatar + `@username` yang membuka Profil. Dropdown bisa ditutup dengan Esc atau klik di luar.
+- **Avatar** bulat berisi huruf pertama username, warnanya tetap untuk username yang sama (tanpa unggah foto, jadi tidak memakai penyimpanan).
+- **HP**: bar bawah tidak berubah. Di menu **Lainnya** ada baris pertama berisi avatar dan `@username` (atau **Masuk**) yang membuka Profil.
+
+### Diubah
+- Kartu Akun di Pengaturan dipindah ke halaman Profil; Pengaturan hanya menyisakan tautan ke Profil.
+- Di layar 721 sampai 1024 px (menu hamburger) semua tautan tetap tampil berurutan tanpa dropdown.
+
 ## [5.7.0] - 2026-10-30
 
 ### Ditambahkan

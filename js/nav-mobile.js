@@ -11,7 +11,7 @@
     { kunci: "playground", ikon: "editor", label: "Editor" },
     { kunci: "peringkat", ikon: "peringkat", label: "Peringkat" }
   ];
-  const LAIN = { games: "games", struktur: "struktur", about: "tentang", setting: "pengaturan" };
+  const LAIN = { games: "games", struktur: "struktur", dokumentasi: "galeri", about: "tentang", setting: "pengaturan" };
 
   const tautan = {};
   nav.querySelectorAll("a.nav-link").forEach((a) => {
@@ -37,7 +37,7 @@
     bar.appendChild(a);
   });
 
-  const lainAktif = Object.keys(LAIN).some((k) => tautan[k] && tautan[k].aktif);
+  const lainAktif = Object.keys(LAIN).some((k) => tautan[k] && tautan[k].aktif) || Boolean(tautan.profil && tautan.profil.aktif);
   const tombolLain = el("button", "bb-item bb-lainnya" + (lainAktif ? " aktif" : ""));
   tombolLain.type = "button";
   tombolLain.setAttribute("aria-haspopup", "true");
@@ -51,6 +51,26 @@
   const sheet = el("div", "bb-sheet");
   sheet.id = "bb-sheet";
   sheet.hidden = true;
+  // Baris pertama: Profil (bila sudah masuk, tampil avatar dan @username) atau Masuk.
+  if (tautan.profil) {
+    const t = tautan.profil;
+    const nama = window.CodingSkanetraAvatar ? window.CodingSkanetraAvatar.username() : null;
+    const a = el("a", "bb-sheet-item bb-profil" + (t.aktif ? " aktif" : ""));
+    a.href = t.href;
+    if (t.aktif) a.setAttribute("aria-current", "page");
+    if (nama) {
+      a.setAttribute("aria-label", "Profil, masuk sebagai @" + nama);
+      a.appendChild(window.CodingSkanetraAvatar.buat(nama));
+      const teks = el("span", "bb-profil-teks");
+      const atas = el("strong"); atas.textContent = "@" + nama;
+      const bawah = el("small"); bawah.textContent = "Lihat profil";
+      teks.append(atas, bawah);
+      a.appendChild(teks);
+    } else {
+      a.innerHTML = ikon.svg("akun", 20) + "<span>Masuk</span>";
+    }
+    sheet.appendChild(a);
+  }
   Object.keys(LAIN).forEach((k) => {
     const t = tautan[k];
     if (!t) return;

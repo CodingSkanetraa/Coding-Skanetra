@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b100e">
+  <title>Profil | CodingSkanetra</title>
+
+  <link rel="icon" href="../favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" href="../favicon-96.png" sizes="96x96">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <meta name="robots" content="noindex, follow">
+  <script src="../js/theme.js?v=5"></script>
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <link rel="stylesheet" href="../css/profil.css?v=1">
+  <link rel="stylesheet" href="../css/gerak.css?v=1">
+  <link rel="stylesheet" href="../css/nav-mobile.css?v=2">
+  <link rel="stylesheet" href="../css/navbar-akun.css?v=1">
+  <link rel="stylesheet" href="../css/maskot.css?v=2">
+
+  <script>
+    // Terapkan tema tersimpan sebelum halaman tampil.
+    if (window.CodingSkanetraTheme) {
+      CodingSkanetraTheme.applyTheme(
+        CodingSkanetraTheme.getSavedTheme(),
+        CodingSkanetraTheme.getSavedMode()
+      );
+    }
+  </script>
+  <script src="../js/akun-config.js?v=1" defer></script>
+  <script src="../js/akun.js?v=3" defer></script>
+  <script src="../js/main.js?v=5" defer></script>
+  <script src="../js/ikon.js?v=3" defer></script>
+  <script src="../js/navbar-akun.js?v=2" defer></script>
+  <script src="../js/nav-mobile.js?v=4" defer></script>
+  <script src="../js/gerak.js?v=1" defer></script>
+  <script src="../js/maskot.js?v=4" defer></script>
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="CodingSkanetra, beranda">
+      <img class="brand-logo" src="../assets/images/logo-eskul.png" alt="" width="38" height="44">
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+      <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link" href="peringkat.html" data-nav="peringkat">Peringkat</a>
+      <a class="nav-link" href="games.html" data-nav="games">Games</a>
+      <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
+      <a class="nav-link" href="dokumentasi.html" data-nav="dokumentasi">Dokumentasi</a>
+      <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
+      <a class="nav-link" href="setting.html" data-nav="setting">Pengaturan</a>
+    </nav>
+  </header>
+
+  <main class="profil-page container">
+    <section class="profil-intro">
+      <span class="profil-eyebrow">Profil</span>
+      <h1>Profil <span>Saya</span></h1>
+    </section>
+
+    <section class="profil-kartu" id="profil-tamu" hidden>
+      <h2>Belum masuk</h2>
+      <p>Masuk atau daftar supaya proyek dan kodemu tersimpan di akun dan ikut ada di perangkat lain. Tanpa akun pun semua materi dan editor tetap bisa dipakai.</p>
+      <div class="profil-aksi">
+        <a class="profil-tombol utama" href="login.html?next=profil">Masuk atau daftar</a>
+      </div>
+    </section>
+
+    <section class="profil-kartu" id="profil-isi" hidden>
+      <div class="profil-kepala">
+        <span id="profil-avatar" class="profil-avatar-wadah"></span>
+        <div>
+          <h2 id="profil-username">@</h2>
+          <p class="profil-status" id="profil-status">Memuat…</p>
+        </div>
+      </div>
+
+      <dl class="profil-daftar">
+        <div class="profil-baris" id="baris-nama" hidden>
+          <dt>Nama</dt>
+          <dd id="profil-nama"></dd>
+        </div>
+        <div class="profil-baris" id="baris-kelas" hidden>
+          <dt>Kelas</dt>
+          <dd id="profil-kelas"></dd>
+        </div>
+        <div class="profil-baris">
+          <dt>Username</dt>
+          <dd id="profil-username-baris"></dd>
+        </div>
+        <div class="profil-baris">
+          <dt>Password</dt>
+          <dd class="profil-sandi">
+            <span id="profil-sandi" aria-label="Password disembunyikan">••••••••</span>
+            <button class="profil-tombol" id="ubah-sandi-buka" type="button" aria-expanded="false" aria-controls="form-sandi">Ubah password</button>
+          </dd>
+        </div>
+      </dl>
+
+      <p class="profil-sukses" id="sandi-sukses" role="status" aria-live="polite" hidden>Password berhasil diubah.</p>
+
+      <form class="profil-form" id="form-sandi" autocomplete="off" novalidate hidden>
+        <label for="sandi-baru">Password baru</label>
+        <input id="sandi-baru" type="password" autocomplete="new-password" minlength="6" maxlength="72">
+        <label for="sandi-ulang">Ulangi password baru</label>
+        <input id="sandi-ulang" type="password" autocomplete="new-password" minlength="6" maxlength="72">
+        <label class="profil-lihat"><input id="sandi-lihat" type="checkbox"> Tampilkan password yang kuketik</label>
+        <p class="profil-pesan" id="sandi-pesan" role="status" aria-live="polite"></p>
+        <div class="profil-aksi">
+          <button class="profil-tombol utama" id="sandi-simpan" type="submit">Simpan password</button>
+          <button class="profil-tombol" id="sandi-batal" type="button">Batal</button>
+        </div>
+      </form>
+
+      <p class="profil-sinkron" id="profil-sinkron" role="status" aria-live="polite" hidden></p>
+
+      <div class="profil-aksi profil-bawah">
+        <a class="profil-tombol" href="setting.html">Pengaturan tampilan dan editor</a>
+        <button class="profil-tombol bahaya" id="profil-keluar" type="button">Keluar</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© CodingSkanetra — Belajar, membangun, dan berkembang.</p>
+    </div>
+  </footer>
+
+  <script src="../js/profil.js?v=1" defer></script>
+</body>
+</html>

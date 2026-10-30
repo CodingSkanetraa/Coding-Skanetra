@@ -20,6 +20,7 @@
 ## Komunitas
 - [Struktur Organisasi](https://codingskanetra.vercel.app/pages/struktur-organisasi.html): pengurus dan anggota
 - [Tentang](https://codingskanetra.vercel.app/pages/about.html): tentang proyek, pembuat, dan kontak
+- [Dokumentasi](https://codingskanetra.vercel.app/pages/dokumentasi.html): foto dan cerita singkat kegiatan eskul
 - [Games](https://codingskanetra.vercel.app/pages/games.html): Code Rush: Robot Escape
 
 ## Catatan

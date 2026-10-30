@@ -219,6 +219,22 @@
     umumkan();
   });
 
+  // Mengganti password akun yang sedang masuk. Sesi tetap berlaku (tidak perlu masuk lagi).
+  async function ubahPassword(baru) {
+    if (!sesi) throw galat("Masuk dulu untuk mengubah password.", "sesi");
+    if (String(baru || "").length < 6) throw galat("Password minimal 6 karakter.", "password");
+    const res = await minta("/auth/v1/user", { metode: "PUT", body: { password: String(baru) } });
+    if (res.ok) return true;
+    const d = (res.data && typeof res.data === "object") ? res.data : {};
+    const kode = String(d.error_code || d.code || "");
+    const teks = String(d.msg || d.message || "").toLowerCase();
+    if (res.status === 401 || (res.status === 403 && kode !== "reauthentication_needed")) throw galat("Sesi berakhir. Masuk lagi, lalu ulangi.", "sesi");
+    if (kode === "same_password" || teks.includes("different from the old")) throw galat("Password baru harus berbeda dari yang lama.", "sama");
+    if (kode === "weak_password" || teks.includes("password should")) throw galat("Password terlalu lemah. Gunakan minimal 6 karakter.", "password");
+    if (kode === "reauthentication_needed" || teks.includes("reauthentication")) throw galat("Demi keamanan, keluar lalu masuk lagi, kemudian ulangi mengubah password.", "ulang-masuk");
+    throw galat(pesanGalat(res), "password");
+  }
+
   // ---------- Profil dan data ----------
 
   async function ambil(path) {
@@ -482,7 +498,7 @@
   });
 
   window.CodingSkanetraAkun = {
-    siap, tersedia: SIAP_DIPAKAI, pengguna, masuk, daftar, keluar, profil, ambil, rpc, minta,
+    siap, tersedia: SIAP_DIPAKAI, pengguna, masuk, daftar, keluar, ubahPassword, profil, ambil, rpc, minta,
     token: tokenAktif, // token login terbaru (untuk memanggil fungsi api/ di Vercel)
     sinkron: { catat, catatHapus, sekarang: sinkronAwalDiam, dorong, status: () => Object.assign({ menunggu: menunggu.size }, status) }
   };

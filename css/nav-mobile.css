@@ -92,6 +92,11 @@
     text-decoration: none;
   }
   .bb-sheet-item:active { background: var(--surface-hover); }
+  .bb-profil { padding-bottom: 12px; margin-bottom: 4px; border-bottom: 1px solid var(--border); border-radius: 8px 8px 0 0; }
+  .bb-profil .cs-avatar { --avatar-ukuran: 34px; }
+  .bb-profil-teks { display: grid; gap: 2px; min-width: 0; }
+  .bb-profil-teks strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.95rem; }
+  .bb-profil-teks small { color: var(--muted); font-size: 0.78rem; }
   .bb-sheet-item.aktif { color: var(--accent); }
 
   html.keyboard-terbuka .bar-bawah { display: none; }

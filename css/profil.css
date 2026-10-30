@@ -1,0 +1,84 @@
+/* Halaman Profil */
+.profil-page { max-width: 640px; padding-top: 56px; padding-bottom: 96px; }
+.profil-intro { margin-bottom: 22px; }
+.profil-eyebrow { color: var(--accent); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.profil-intro h1 { margin: 6px 0 0; font-size: clamp(1.8rem, 5vw, 2.4rem); line-height: 1.15; }
+.profil-intro h1 span { color: var(--accent); }
+
+.profil-kartu {
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card-background, var(--surface));
+}
+.profil-kartu[hidden] { display: none; }
+.profil-kartu h2 { margin: 0 0 8px; font-size: 1.2rem; }
+.profil-kartu p { margin: 0; color: var(--muted); line-height: 1.6; }
+
+.profil-kepala { display: flex; align-items: center; gap: 18px; margin-bottom: 20px; }
+.profil-kepala h2 { margin: 0 0 4px; font-size: 1.4rem; overflow-wrap: anywhere; }
+.profil-kepala p { font-size: 0.92rem; }
+.profil-avatar-wadah { display: inline-flex; flex: none; }
+
+.profil-daftar { margin: 0; border-top: 1px solid var(--border); }
+.profil-baris { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.profil-baris[hidden] { display: none; }
+.profil-baris dt { color: var(--muted); font-size: 0.9rem; }
+.profil-baris dd { margin: 0; font-weight: 650; text-align: right; overflow-wrap: anywhere; }
+.profil-sandi { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 12px; }
+.profil-sandi span { letter-spacing: 0.12em; color: var(--muted); }
+
+.profil-sukses { margin: 14px 0 0 !important; padding: 10px 12px; border: 1px solid var(--accent-dark); border-radius: 8px; color: var(--accent) !important; font-size: 0.92rem; }
+.profil-sukses[hidden] { display: none; }
+
+.profil-form { display: grid; gap: 8px; margin-top: 16px; padding: 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--background); }
+.profil-form[hidden] { display: none; }
+.profil-form label { color: var(--muted); font-size: 0.88rem; }
+.profil-form input[type="password"],
+.profil-form input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+.profil-form input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.profil-form .profil-lihat { display: flex; align-items: center; gap: 8px; margin-top: 2px; cursor: pointer; }
+.profil-pesan { min-height: 1.3em; font-size: 0.88rem; }
+.profil-pesan.galat { color: var(--danger, #ff8a80) !important; }
+
+.profil-sinkron { margin-top: 16px !important; font-size: 0.86rem; }
+.profil-sinkron[hidden] { display: none; }
+
+.profil-aksi { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.profil-bawah { justify-content: space-between; margin-top: 22px; }
+.profil-tombol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 16px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+.profil-tombol:hover { border-color: var(--accent-dark); }
+.profil-tombol.utama { border-color: var(--accent-dark); background: var(--accent); color: var(--button-text, #07120b); font-weight: 700; }
+.profil-tombol.utama:hover { filter: brightness(1.06); }
+.profil-tombol.bahaya:hover { border-color: var(--danger, #ff8a80); color: var(--danger, #ff8a80); }
+.profil-tombol:disabled { opacity: 0.6; cursor: progress; }
+.profil-tombol:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+@media (max-width: 520px) {
+  .profil-page { padding-top: 32px; }
+  .profil-kartu { padding: 18px; }
+  .profil-kepala { gap: 14px; }
+  .profil-bawah .profil-tombol { flex: 1 1 100%; }
+}

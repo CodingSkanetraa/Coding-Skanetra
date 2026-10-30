@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dokumentasi kegiatan eskul CodingSkanetra SMK Negeri Situraja: foto dan cerita singkat dari setiap pertemuan.">
+  <meta name="theme-color" content="#0b100e">
+  <title>Dokumentasi | CodingSkanetra</title>
+  <link rel="icon" href="../favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" href="../favicon-96.png" sizes="96x96">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="canonical" href="https://codingskanetra.vercel.app/pages/dokumentasi.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Coding Skanetra">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:title" content="Dokumentasi | CodingSkanetra">
+  <meta property="og:description" content="Dokumentasi kegiatan eskul CodingSkanetra SMK Negeri Situraja: foto dan cerita singkat dari setiap pertemuan.">
+  <meta property="og:url" content="https://codingskanetra.vercel.app/pages/dokumentasi.html">
+  <meta property="og:image" content="https://codingskanetra.vercel.app/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <script src="../js/theme.js?v=5"></script>
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <link rel="stylesheet" href="../css/dokumentasi.css?v=1">
+  <link rel="stylesheet" href="../css/gerak.css?v=1">
+  <link rel="stylesheet" href="../css/nav-mobile.css?v=2">
+  <link rel="stylesheet" href="../css/navbar-akun.css?v=1">
+  <link rel="stylesheet" href="../css/maskot.css?v=2">
+  <script>
+    // Terapkan tema tersimpan sebelum halaman tampil.
+    if (window.CodingSkanetraTheme) {
+      CodingSkanetraTheme.applyTheme(
+        CodingSkanetraTheme.getSavedTheme(),
+        CodingSkanetraTheme.getSavedMode()
+      );
+    }
+  </script>
+  <script src="../js/main.js?v=5" defer></script>
+  <script src="../js/ikon.js?v=3" defer></script>
+  <script src="../js/navbar-akun.js?v=2" defer></script>
+  <script src="../js/nav-mobile.js?v=4" defer></script>
+  <script src="../js/gerak.js?v=1" defer></script>
+  <script src="../js/maskot.js?v=4" defer></script>
+  <script src="../js/dokumentasi-data.js?v=1" defer></script>
+  <script src="../js/dokumentasi.js?v=1" defer></script>
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="CodingSkanetra, beranda">
+      <img class="brand-logo" src="../assets/images/logo-eskul.png" alt="" width="38" height="44">
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+      <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link" href="peringkat.html" data-nav="peringkat">Peringkat</a>
+      <a class="nav-link" href="games.html" data-nav="games">Games</a>
+      <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
+      <a class="nav-link active" href="dokumentasi.html" data-nav="dokumentasi" aria-current="page">Dokumentasi</a>
+      <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
+      <a class="nav-link" href="setting.html" data-nav="setting">Pengaturan</a>
+    </nav>
+  </header>
+
+  <main class="dok-page container">
+    <section class="dok-intro">
+      <span class="dok-eyebrow">Dokumentasi</span>
+      <h1>Jejak <span>kegiatan</span> kita</h1>
+      <p>Foto dan cerita singkat dari setiap pertemuan CodingSkanetra. Klik kartu untuk melihat detailnya, lalu klik fotonya untuk memperbesar.</p>
+      <p class="dok-jumlah" id="dok-jumlah" aria-live="polite"></p>
+    </section>
+
+    <noscript><p class="dok-kosong">Halaman ini memerlukan JavaScript untuk menampilkan dokumentasi.</p></noscript>
+    <div class="dok-grid" id="dok-grid"></div>
+    <p class="dok-kosong" id="dok-kosong" hidden>Belum ada dokumentasi yang ditampilkan. Nantikan foto kegiatan berikutnya.</p>
+    <p class="dok-catatan" id="dok-catatan" hidden></p>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© CodingSkanetra — Belajar, membangun, dan berkembang.</p>
+    </div>
+  </footer>
+</body>
+</html>
