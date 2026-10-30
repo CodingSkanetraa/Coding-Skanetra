@@ -3,6 +3,51 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.6.1] - 2026-10-30
+
+### Diperbaiki
+- **Peringkat kembali memakai data dari Google Sheets.** Sejak 5.6.0 peringkat dibaca dari tabel poin di Supabase, sehingga hanya akun yang terdaftar (satu orang) yang tampil. Sekarang seluruh anggota di spreadsheet muncul lagi.
+
+### Diubah
+- Login tetap memakai akun Supabase (username + password) dan tetap menyimpan kode, skor, dan pengaturan editor ke akun. Yang berubah hanya sumber poin.
+- Fungsi `api/` diaktifkan kembali dan diubah: `api/auth/me`, `api/points/ranking`, dan `api/points/riwayat` kini memeriksa **token login Supabase** dan status anggota (`profil.anggota`) sebelum memanggil Apps Script. Rahasia Apps Script tetap hanya ada di server Vercel.
+- **Riwayat poin terbuka untuk sesama anggota**: akun yang sudah login dan disetujui boleh membuka riwayat (tanggal dan jumlah poin) anggota mana pun lewat kartunya di Peringkat. Tidak perlu menghubungkan akun ke ID spreadsheet.
+- Hasil peringkat disimpan singkat (30 detik) di server agar Apps Script tidak dipanggil di setiap kunjungan.
+- Halaman Peringkat kini menjelaskan bila dibuka lewat Live Server / server statis (fungsi `api/` tidak ada, balasan 404) dan menyarankan `npx vercel dev` atau situs yang sudah di-deploy, bukan lagi pesan "periksa koneksi".
+- `js/akun.js` mengekspor `token()` untuk dipakai halaman Peringkat. Tabel `poin` dan fungsi `peringkat()` di Supabase menjadi cadangan (tidak dibaca situs).
+
+### Dihapus
+- `api/auth/login.js` dan `api/auth/logout.js` (login ID/PIN lama). Variabel `SESSION_SECRET` tidak diperlukan lagi.
+
+### Perlu dilakukan pengelola
+- Isi `APPS_SCRIPT_URL` dan `APPS_SCRIPT_SECRET` di Vercel lalu redeploy (lihat `supabase/PANDUAN.md` bagian C).
+
+## [5.6.0] - 2026-10-29
+
+### Ditambahkan
+- **Akun opsional (Supabase)**: daftar dan masuk dengan username + password (`pages/login.html`, `js/akun.js`). Situs tetap bisa dipakai penuh tanpa login.
+- **Progres tersimpan di akun**: kode Editor Web/Python/C++, skor Code Rush, dan pengaturan editor ikut tersimpan ke akun dan dipulihkan di perangkat lain (kode: yang terbaru menang; skor: yang tertinggi menang). Saat keluar, data akun dihapus dari browser supaya aman di komputer bersama.
+- Kartu **Akun** di halaman Pengaturan: status masuk, status sinkron, dan tombol keluar.
+- **Peringkat dengan gerbang login**: belum login diarahkan ke halaman Masuk; akun yang belum disetujui melihat "menunggu persetujuan"; anggota melihat peringkat dan riwayat poinnya sendiri (hanya baca).
+- `supabase/skema.sql` (tabel `profil`, `poin`, `progres` + aturan RLS) dan `supabase/PANDUAN.md` (cara memasang, menyetujui anggota, dan menambah poin lewat dashboard).
+- Berkas baru: `js/akun.js`, `js/akun-config.js`, `js/akun-setting.js`.
+
+### Diubah
+- Halaman Peringkat memakai Supabase, bukan lagi fungsi `api/` + Google Apps Script. Folder `api/` lama masih ada tetapi tidak dipakai situs lagi.
+- Login lama (ID + PIN) diganti login username + password.
+
+## [5.5.0] - 2026-10-29
+
+### Ditambahkan
+- **Petunjuk kode (autocomplete) di Editor Web** untuk HTML, CSS, dan JavaScript. Daftar saran muncul otomatis saat mengetik, lengkap dengan jenisnya (tag, atribut, properti, nilai, metode, dan nama yang sudah kamu tulis sendiri / local).
+  - Navigasi: ↑ ↓ memilih, **Enter** atau **Tab** menerima, **Esc** menutup; di HP cukup ketuk saran.
+  - HTML: nama tag, atribut sesuai tag (mis. `href` untuk `<a>`), dan nilai atribut (mis. `type`, `target`). Memilih atribut langsung menaruh kursor di dalam tanda kutip.
+  - CSS: properti, nilai, pseudo-class (`:hover`), dan at-rule. Memilih properti otomatis menulis `: ` lalu menampilkan nilainya.
+  - JavaScript: keyword, objek bawaan (`document`, `console`, `Math`, ...), anggota objek setelah titik, dan nama variabel/fungsi buatanmu sendiri.
+  - Tidak muncul di dalam string atau komentar, di dalam `<script>`/`<style>` pada editor HTML, saat memberi nama baru (`const`, `let`, `function`), dan pada angka desimal.
+  - Dapat dimatikan di Pengaturan > Pengaturan editor > Petunjuk kode.
+- Berkas baru: `js/editor-hint.js`, `css/editor-hint.css`.
+
 ## [5.4.0] - 2026-10-28
 
 ### Ditambahkan

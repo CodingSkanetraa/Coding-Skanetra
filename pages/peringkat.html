@@ -18,6 +18,8 @@
   <link rel="stylesheet" href="../css/gerak.css?v=1">
   <link rel="stylesheet" href="../css/nav-mobile.css?v=1">
   <link rel="stylesheet" href="../css/maskot.css?v=2">
+  <script src="../js/akun-config.js?v=1" defer></script>
+  <script src="../js/akun.js?v=2" defer></script>
   <script src="../js/main.js?v=5" defer></script>
   <script src="../js/ikon.js?v=1" defer></script>
   <script src="../js/nav-mobile.js?v=2" defer></script>
@@ -78,7 +80,17 @@
     </header>
 
     <!-- Ringkasan data -->
-    <section class="summary-grid" aria-label="Ringkasan peringkat">
+    <!-- Sudah login tetapi belum disetujui sebagai anggota -->
+    <section id="menungguAnggota" class="empty-state" hidden>
+      <h2>Akunmu menunggu persetujuan</h2>
+      <p>
+        Kamu masuk sebagai <strong data-username></strong>. Peringkat poin hanya untuk anggota
+        Coding Skanetra. Minta pengelola (pembina atau admin) menyetujui akunmu, lalu muat ulang halaman ini.
+        Kode dan progres belajarmu tetap tersimpan di akun ini.
+      </p>
+    </section>
+
+    <section class="summary-grid" data-butuh-anggota hidden aria-label="Ringkasan peringkat">
       <article class="summary-card">
         <span class="summary-label">Total anggota</span>
         <strong id="totalAnggota">—</strong>
@@ -93,7 +105,7 @@
     </section>
 
     <!-- Lima besar -->
-    <section class="ranking-section">
+    <section class="ranking-section" data-butuh-anggota hidden>
       <div class="section-heading">
         <div>
           <span class="eyebrow">Papan peringkat</span>
@@ -249,6 +261,6 @@
   </section>
 </dialog>
 
-  <script src="../js/peringkat.js?v=5" defer></script>
+  <script src="../js/peringkat.js?v=9" defer></script>
 </body>
 </html>

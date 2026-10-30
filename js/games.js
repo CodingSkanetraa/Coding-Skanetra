@@ -898,6 +898,7 @@ const QUESTION_BANK = {
     try {
       if (score > getHighScore()) {
         localStorage.setItem(HIGH_SCORE_KEY, String(score));
+        if (window.CodingSkanetraAkun) window.CodingSkanetraAkun.sinkron.catat(HIGH_SCORE_KEY);
       }
     } catch {
       // Game tetap bisa dimainkan jika penyimpanan tidak tersedia.

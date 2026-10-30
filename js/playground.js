@@ -143,6 +143,13 @@ document.addEventListener("DOMContentLoaded", () => {
     [htmlEditor, cssEditor, jsEditor].forEach((cm) => window.CodingSkanetraEditorPrefs.pasang(cm));
   }
 
+  // Petunjuk kode (autocomplete) HTML, CSS, dan JavaScript
+  if (window.CodingSkanetraHint) {
+    window.CodingSkanetraHint.pasang(htmlEditor, "html");
+    window.CodingSkanetraHint.pasang(cssEditor, "css");
+    window.CodingSkanetraHint.pasang(jsEditor, "js");
+  }
+
   // Pembuka kotak pencarian untuk setiap editor (diisi di bawah)
   const pembukaPencarian = new Map();
   function bukaPencarian(editor) {

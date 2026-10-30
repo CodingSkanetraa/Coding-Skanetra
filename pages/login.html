@@ -11,7 +11,7 @@
   <meta name="robots" content="noindex, follow">
   <script src="../js/theme.js?v=5"></script>
   <link rel="stylesheet" href="../css/style.css?v=5">
-  <link rel="stylesheet" href="../css/login.css?v=5">
+  <link rel="stylesheet" href="../css/login.css?v=6">
   <link rel="stylesheet" href="../css/gerak.css?v=1">
   <link rel="stylesheet" href="../css/maskot.css?v=2">
 </head>
@@ -19,20 +19,44 @@
   <main class="login-shell">
     <a class="login-brand" href="../index.html" aria-label="CodingSkanetra, beranda"><img class="brand-logo" src="../assets/images/logo-eskul.png" alt="" width="38" height="44"><span>Coding<span class="brand-accent">Skanetra</span></span></a>
     <section class="login-card" aria-labelledby="loginTitle">
-      <span class="login-eyebrow">Area anggota</span>
-      <h1 id="loginTitle">Masuk ke Peringkat</h1>
-      <p class="login-subtitle">Gunakan ID siswa dan PIN pribadi untuk melihat peringkat serta riwayat poin.</p>
-      <form id="loginForm" autocomplete="on">
-        <label for="studentId">ID siswa</label>
-        <input id="studentId" name="id" type="text" inputmode="text" autocomplete="username" maxlength="40" required>
-        <label for="studentPin">PIN pribadi</label>
-        <input id="studentPin" name="pin" type="password" inputmode="numeric" autocomplete="current-password" minlength="6" maxlength="12" pattern="[0-9]{6,12}" required>
+      <span class="login-eyebrow">Akun CodingSkanetra</span>
+      <h1 id="loginTitle">Masuk</h1>
+      <p class="login-subtitle" id="loginSubtitle">Masuk untuk menyimpan kodemu di akun dan membuka halaman Peringkat.</p>
+
+      <div class="login-tabs" role="tablist" aria-label="Masuk atau daftar">
+        <button type="button" role="tab" id="tabMasuk" aria-selected="true" aria-controls="loginForm">Masuk</button>
+        <button type="button" role="tab" id="tabDaftar" aria-selected="false" aria-controls="loginForm" tabindex="-1">Daftar</button>
+      </div>
+
+      <form id="loginForm" autocomplete="on" novalidate>
+        <label for="loginUsername">Username</label>
+        <input id="loginUsername" name="username" type="text" inputmode="text" autocomplete="username"
+               autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="20" required>
+        <p class="login-hint" id="usernameHint" hidden>3 sampai 20 karakter: huruf kecil, angka, titik, atau _.</p>
+
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" name="password" type="password" autocomplete="current-password" minlength="6" maxlength="72" required>
+
+        <div id="confirmGroup" hidden>
+          <label for="loginPasswordUlang">Ulangi password</label>
+          <input id="loginPasswordUlang" name="password2" type="password" autocomplete="new-password" minlength="6" maxlength="72">
+        </div>
+
+        <label class="login-check"><input id="showPassword" type="checkbox"> Tampilkan password</label>
+
         <button id="loginButton" type="submit">Masuk</button>
         <p id="loginMessage" class="login-message" role="status" aria-live="polite"></p>
       </form>
-      <p class="login-note">Jangan bagikan PIN kepada orang lain. Jika belum memiliki PIN, hubungi pengelola CodingSkanetra.</p>
+
+      <p class="login-note">
+        Tanpa akun pun semua materi dan editor tetap bisa dipakai. Akun hanya menyimpan progresmu.
+        Peringkat khusus anggota yang sudah disetujui pengelola. Belum ada reset password otomatis,
+        jadi catat passwordmu. Jangan bagikan password kepada siapa pun.
+      </p>
     </section>
   </main>
-  <script src="../js/login.js?v=5" defer></script>
+  <script src="../js/akun-config.js?v=1" defer></script>
+  <script src="../js/akun.js?v=2" defer></script>
+  <script src="../js/login.js?v=6" defer></script>
 </body>
 </html>

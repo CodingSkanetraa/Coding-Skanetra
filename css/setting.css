@@ -325,3 +325,8 @@
     gap: 12px;
   }
 }
+
+/* Kartu Akun */
+.akun-aksi { display: flex; gap: 8px; flex-wrap: wrap; }
+.akun-aksi a.settings-reset-button { text-decoration: none; display: inline-block; }
+.akun-aksi [hidden] { display: none; }

@@ -1,11 +1,21 @@
 // Penyimpanan kode editor di browser ini (localStorage), dipakai Editor HTML, Python, dan C++.
 //
 // Kode hanya disimpan saat tombol "Simpan" (atau Ctrl + S) ditekan, lalu dimuat otomatis
-// saat editor dibuka lagi. Datanya tersimpan per browser dan per alamat situs: tidak ikut
-// berpindah ke browser/perangkat lain, dan hilang bila data situs dihapus dari browser.
+// saat editor dibuka lagi. Tanpa login, datanya hanya ada di browser ini dan hilang bila data situs
+// dihapus. Setelah login (js/akun.js), kode yang disimpan juga masuk ke akun dan ikut ke perangkat lain.
 (function () {
   const PREFIX = "codingskanetra-code:";
   const VERSION = 1;
+
+  // Bila sudah login (js/akun.js), perubahan ikut dikirim ke akun. Tanpa login: tidak melakukan apa-apa.
+  function sinkron(aksi, name) {
+    try {
+      const akun = window.CodingSkanetraAkun;
+      if (akun && akun.sinkron) akun.sinkron[aksi](PREFIX + name);
+    } catch (error) {
+      // sinkronisasi tidak boleh mengganggu penyimpanan lokal
+    }
+  }
 
   // Hasil: { v, savedAt, data } atau null bila belum ada / tidak bisa dibaca.
   function read(name) {
@@ -27,6 +37,7 @@
         PREFIX + name,
         JSON.stringify({ v: VERSION, savedAt: Date.now(), data })
       );
+      sinkron("catat", name);
       return { ok: true };
     } catch (error) {
       const penuh = error && (error.name === "QuotaExceededError" || error.code === 22);
@@ -42,6 +53,7 @@
   function remove(name) {
     try {
       window.localStorage.removeItem(PREFIX + name);
+      sinkron("catatHapus", name);
     } catch (error) {
       // diabaikan: tidak ada yang perlu dihapus bila penyimpanan tidak tersedia
     }

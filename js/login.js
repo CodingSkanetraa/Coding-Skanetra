@@ -1,34 +1,85 @@
 "use strict";
-const form = document.getElementById('loginForm');
-const button = document.getElementById('loginButton');
-const message = document.getElementById('loginMessage');
+// Halaman masuk / daftar. Logika akun ada di js/akun.js.
+(() => {
+  const akun = window.CodingSkanetraAkun;
+  const el = {
+    judul: document.getElementById("loginTitle"),
+    sub: document.getElementById("loginSubtitle"),
+    form: document.getElementById("loginForm"),
+    tabMasuk: document.getElementById("tabMasuk"),
+    tabDaftar: document.getElementById("tabDaftar"),
+    user: document.getElementById("loginUsername"),
+    pass: document.getElementById("loginPassword"),
+    pass2: document.getElementById("loginPasswordUlang"),
+    grup2: document.getElementById("confirmGroup"),
+    hint: document.getElementById("usernameHint"),
+    lihat: document.getElementById("showPassword"),
+    tombol: document.getElementById("loginButton"),
+    pesan: document.getElementById("loginMessage")
+  };
 
-(async () => {
-  try {
-    const response = await fetch('/api/auth/me', { credentials: 'same-origin', cache: 'no-store' });
-    if (response.ok) window.location.replace('/pages/peringkat.html');
-  } catch (_) { /* login tetap bisa dicoba saat pemeriksaan awal gagal */ }
-})();
+  // Tujuan setelah berhasil: ?next=peringkat membuka pages/peringkat.html. Hanya nama halaman biasa yang diterima.
+  const next = new URLSearchParams(location.search).get("next") || "";
+  const tujuan = /^[a-z0-9-]{1,40}$/.test(next) ? next + ".html" : "../index.html";
 
-form.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  message.textContent = '';
-  button.disabled = true;
-  button.textContent = 'Memeriksa…';
-  const id = document.getElementById('studentId').value.trim();
-  const pin = document.getElementById('studentPin').value;
-  try {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST', credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, pin })
-    });
-    const result = await response.json();
-    if (!response.ok || result.sukses !== true) throw new Error(result.pesan || 'ID atau PIN tidak sesuai.');
-    window.location.replace('/pages/peringkat.html');
-  } catch (error) {
-    message.textContent = error.message || 'Gagal masuk. Periksa koneksi lalu coba lagi.';
-    button.disabled = false;
-    button.textContent = 'Masuk';
+  let daftar = new URLSearchParams(location.search).get("mode") === "daftar";
+
+  function atur() {
+    el.judul.textContent = daftar ? "Buat akun" : "Masuk";
+    el.sub.textContent = daftar
+      ? "Pilih username dan password. Kodemu nanti tersimpan di akun ini."
+      : "Masuk untuk menyimpan kodemu di akun dan membuka halaman Peringkat.";
+    el.tombol.textContent = daftar ? "Daftar" : "Masuk";
+    el.grup2.hidden = !daftar;
+    el.hint.hidden = !daftar;
+    el.pass2.required = daftar;
+    el.pass.autocomplete = daftar ? "new-password" : "current-password";
+    el.tabMasuk.setAttribute("aria-selected", String(!daftar));
+    el.tabDaftar.setAttribute("aria-selected", String(daftar));
+    el.tabMasuk.tabIndex = daftar ? -1 : 0;
+    el.tabDaftar.tabIndex = daftar ? 0 : -1;
+    el.pesan.textContent = "";
   }
-});
+
+  el.tabMasuk.addEventListener("click", () => { daftar = false; atur(); });
+  el.tabDaftar.addEventListener("click", () => { daftar = true; atur(); });
+  el.lihat.addEventListener("change", () => {
+    const tipe = el.lihat.checked ? "text" : "password";
+    el.pass.type = tipe;
+    el.pass2.type = tipe;
+  });
+
+  function selesai() { window.location.replace(tujuan); }
+
+  async function kirim(event) {
+    event.preventDefault();
+    el.pesan.textContent = "";
+    if (!akun || !akun.tersedia) {
+      el.pesan.textContent = "Fitur akun belum siap. Hubungi pengelola.";
+      return;
+    }
+    const username = el.user.value.trim().toLowerCase();
+    const password = el.pass.value;
+    if (daftar && password !== el.pass2.value) {
+      el.pesan.textContent = "Kedua password tidak sama.";
+      return;
+    }
+    el.tombol.disabled = true;
+    el.tombol.textContent = daftar ? "Membuat akun…" : "Memeriksa…";
+    try {
+      if (daftar) await akun.daftar(username, password);
+      else await akun.masuk(username, password);
+      selesai();
+    } catch (error) {
+      el.pesan.textContent = error.message || "Gagal. Periksa koneksi lalu coba lagi.";
+      el.tombol.disabled = false;
+      el.tombol.textContent = daftar ? "Daftar" : "Masuk";
+    }
+  }
+
+  el.form.addEventListener("submit", kirim);
+  atur();
+
+  // Sudah masuk: langsung ke tujuan.
+  if (akun) akun.siap.then(() => { if (akun.pengguna()) selesai(); });
+})();

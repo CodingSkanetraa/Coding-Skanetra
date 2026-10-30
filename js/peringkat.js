@@ -5,15 +5,72 @@
 // 1. KONFIGURASI
 // ========================================
 
+// Login memakai akun Supabase (window.CodingSkanetraAkun, js/akun.js).
+// Data poin diambil dari Google Sheets lewat fungsi di folder api/ (Vercel). Fungsi itu
+// memeriksa token login dan status anggota dulu, baru membaca spreadsheet lewat Apps Script.
+const akun = window.CodingSkanetraAkun;
+const HALAMAN_LOGIN = "login.html?next=peringkat";
+
 const API_URL = "/api/points/ranking";
-const RIWAYAT_API_URL = "/api/points/riwayat?id=";
+const RIWAYAT_API_URL = "/api/points/riwayat";
+const ME_API_URL = "/api/auth/me";
 
 const BATAS_PERINGKAT = 5;
 
 // Data yang sudah berhasil diambil dari server.
 let semuaData = [];
 let sedangMemuat = false;
-let idAnggotaLogin = null;
+let sesiTerverifikasi = false; // true setelah server memeriksa login + status anggota
+
+
+const PESAN_API_TIDAK_ADA =
+  "Halaman Peringkat butuh server Vercel karena datanya dibaca lewat folder api/. " +
+  "Di Live Server atau server statis lain fitur ini tidak bisa jalan. " +
+  "Jalankan \"npx vercel dev\" atau buka situs yang sudah di-deploy.";
+
+// Memanggil fungsi api/ dengan token login. Bila gagal, error membawa .kode:
+// "sesi" (harus masuk lagi), "belum_anggota", "api_tidak_ada", atau "galat".
+async function apiGet(url) {
+  const token = akun && akun.token ? await akun.token() : null;
+
+  if (!token) {
+    const e = new Error("Sesi berakhir. Masuk lagi.");
+    e.kode = "sesi";
+    throw e;
+  }
+
+  const respons = await fetch(url, {
+    method: "GET",
+    cache: "no-store",
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  let hasil = null;
+
+  try {
+    hasil = await respons.json();
+  } catch (e) {
+    hasil = null;
+  }
+
+  if (!respons.ok || !hasil || hasil.sukses !== true) {
+    const e = new Error(
+      (hasil && hasil.pesan) || `Server mengembalikan status HTTP ${respons.status}.`
+    );
+    // 404/405 tanpa JSON dari kita = fungsi api/ tidak ada di server ini (mis. Live Server).
+    e.kode = hasil && hasil.kode
+      ? hasil.kode
+      : respons.status === 401
+        ? "sesi"
+        : respons.status === 404 || respons.status === 405
+          ? "api_tidak_ada"
+          : "galat";
+    e.status = respons.status;
+    throw e;
+  }
+
+  return hasil;
+}
 
 
 // ========================================
@@ -217,8 +274,8 @@ function tampilkanError(pesan) {
 // ========================================
 
 async function muatPeringkat() {
-    // Jangan memuat ranking sebelum sesi terverifikasi.
-  if (idAnggotaLogin === null) return;
+  // Jangan memuat peringkat sebelum sesi terverifikasi.
+  if (!sesiTerverifikasi) return;
   // Hindari beberapa permintaan bersamaan.
   if (sedangMemuat) return;
 
@@ -226,21 +283,9 @@ async function muatPeringkat() {
   tampilkanLoading();
 
   try {
-    const respons = await fetch(API_URL, {
-      method: "GET",
-      credentials: "same-origin",
-      cache: "no-store"
-    });
+    const hasil = await apiGet(API_URL);
 
-    if (!respons.ok) {
-      throw new Error(
-        `Server mengembalikan status HTTP ${respons.status}.`
-      );
-    }
-
-    const hasil = await respons.json();
-
-    if (hasil.sukses !== true || !Array.isArray(hasil.data)) {
+    if (!Array.isArray(hasil.data)) {
       throw new Error(
         "Format JSON tidak sesuai. Periksa respons Apps Script."
       );
@@ -288,7 +333,11 @@ async function muatPeringkat() {
       el.topEmpty.hidden = true;
 
       tampilkanError(
-        "Peringkat gagal dimuat. Periksa koneksi atau akses API."
+        error && error.kode === "sesi"
+          ? "Sesimu berakhir. Masuk lagi untuk melihat peringkat."
+          : error && error.kode === "api_tidak_ada"
+            ? PESAN_API_TIDAK_ADA
+            : "Peringkat gagal dimuat. Periksa koneksi lalu coba lagi."
       );
     } else {
       tampilkanError(
@@ -490,13 +539,13 @@ function tampilkanRiwayat(riwayat) {
     const tanggal = buatElemen(
       "span",
       "member-history__date",
-      item.tanggal || "Tanggal tidak tersedia"
+      [item.tanggal || "Tanggal tidak tersedia", item.alasan].filter(Boolean).join(" · ")
     );
 
-    const poin = Number(item.poin);
+    const poin = Number(item.poin ?? item.jumlah);
     const teksPoin = Number.isFinite(poin)
-      ? `${formatAngka(poin)} poin`
-      : `${item.poin ?? 0} poin`;
+      ? `${poin > 0 ? "+" : ""}${formatAngka(poin)} poin`
+      : `${item.poin ?? item.jumlah ?? 0} poin`;
 
     const nilai = buatElemen(
       "span",
@@ -532,41 +581,23 @@ async function bukaDetailAnggota(id) {
     el.memberModal.showModal();
   }
 
-  // Riwayat hanya boleh diminta untuk akun yang sedang login.
-  if (idAnggotaLogin === null) {
+  // Riwayat bisa dibuka untuk anggota mana pun, tetapi hanya oleh akun yang sudah login dan
+  // disetujui (server memeriksanya lagi).
+  if (!sesiTerverifikasi) {
     el.historyStatus.textContent =
       "Sesi belum terverifikasi. Muat ulang halaman.";
-    return;
-  }
-
-  if (String(id) !== idAnggotaLogin) {
-    el.historyStatus.textContent =
-      "Riwayat poin hanya tersedia untuk akunmu sendiri.";
     return;
   }
 
   el.historyStatus.textContent = "Memuat riwayat poin...";
 
   try {
-    const respons = await fetch(
-      RIWAYAT_API_URL + encodeURIComponent(idAnggotaLogin),
-      {
-        method: "GET",
-        credentials: "same-origin",
-        cache: "no-store"
-      }
+    const hasil = await apiGet(
+      RIWAYAT_API_URL + "?id=" + encodeURIComponent(id)
     );
 
-    if (!respons.ok) {
-      throw new Error(`HTTP ${respons.status}`);
-    }
-
-    const hasil = await respons.json();
-
-    if (hasil.sukses !== true || !hasil.data) {
-      throw new Error(
-        hasil.pesan || "Respons riwayat tidak valid."
-      );
+    if (!hasil.data) {
+      throw new Error("Respons riwayat tidak valid.");
     }
 
     const detail = hasil.data;
@@ -581,7 +612,9 @@ async function bukaDetailAnggota(id) {
     console.error("Gagal memuat riwayat anggota:", error);
 
     el.historyStatus.textContent =
-      "Riwayat gagal dimuat. Periksa koneksi lalu coba lagi.";
+      error && error.kode === "sesi"
+        ? "Sesimu berakhir. Masuk lagi untuk melihat riwayat."
+        : "Riwayat gagal dimuat. Periksa koneksi lalu coba lagi.";
   }
 }
 
@@ -690,38 +723,70 @@ el.retryButton.addEventListener("click", muatPeringkat);
 // 10. JALANKAN SAAT HALAMAN DIBUKA
 // ========================================
 
-// Pastikan sesi valid sebelum meminta data ranking.
+// Gerbang: harus login, dan harus berstatus anggota. Pemeriksaan sebenarnya dilakukan server
+// (api/auth/me memeriksa token ke Supabase); kode ini hanya mengatur apa yang ditampilkan.
+const elMenunggu = document.getElementById("menungguAnggota");
+const elIsi = document.querySelectorAll("[data-butuh-anggota]");
+
+function tampilkanIsi(boleh) {
+  elIsi.forEach(bagian => { bagian.hidden = !boleh; });
+  if (elMenunggu) elMenunggu.hidden = boleh;
+}
+
+function tampilkanMenunggu(pengguna) {
+  // Sudah login tetapi belum disetujui pengelola.
+  if (!elMenunggu) return;
+
+  const nama = elMenunggu.querySelector("[data-username]");
+  if (nama) nama.textContent = "@" + pengguna.username;
+
+  elMenunggu.hidden = false;
+}
+
 (async function pastikanSesi() {
+  tampilkanIsi(false);
+  if (elMenunggu) elMenunggu.hidden = true;
+
+  if (!akun || !akun.tersedia) {
+    tampilkanError("Fitur akun belum siap. Hubungi pengelola.");
+    return;
+  }
+
   try {
-    const response = await fetch("/api/auth/me", {
-      cache: "no-store",
-      credentials: "same-origin"
-    });
+    await akun.siap;
+    const pengguna = akun.pengguna();
 
-    if (!response.ok) {
-      window.location.replace("/pages/login.html?next=peringkat");
+    if (!pengguna) {
+      window.location.replace(HALAMAN_LOGIN);
       return;
     }
 
-    const hasil = await response.json();
+    try {
+      await apiGet(ME_API_URL);
+    } catch (error) {
+      if (error && error.kode === "belum_anggota") {
+        tampilkanMenunggu(pengguna);
+        return;
+      }
 
-    if (
-      hasil.sukses !== true ||
-      !hasil.data ||
-      !hasil.data.id
-    ) {
-      window.location.replace("/pages/login.html?next=peringkat");
-      return;
+      throw error;
     }
 
-    // Simpan ID akun yang sedang login.
-    idAnggotaLogin = String(hasil.data.id);
+    sesiTerverifikasi = true;
+    tampilkanIsi(true);
 
-    // Ranking baru dimuat setelah sesi terverifikasi.
+    // Peringkat baru dimuat setelah status anggota terverifikasi.
     muatPeringkat();
   } catch (error) {
+    if (error && error.kode === "sesi") {
+      window.location.replace(HALAMAN_LOGIN);
+      return;
+    }
+
     tampilkanError(
-      "Tidak dapat memeriksa sesi. Periksa koneksi lalu muat ulang."
+      error && error.kode === "api_tidak_ada"
+        ? PESAN_API_TIDAK_ADA
+        : "Tidak dapat memeriksa akun. Periksa koneksi lalu muat ulang."
     );
   }
 })();
@@ -737,21 +802,22 @@ if (logoutButton) {
     logoutButton.textContent = "Keluar...";
 
     try {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
-        credentials: "same-origin",
-        cache: "no-store"
-      });
+      await akun.keluar();
+    } catch (error) {
+      const paksa = window.confirm(
+        (error && error.message ? error.message + "\n" : "") +
+        "Tetap keluar? Perubahan terakhir yang belum terkirim akan hilang dari perangkat ini."
+      );
 
-      if (!response.ok) {
-        throw new Error("Gagal keluar.");
+      if (!paksa) {
+        logoutButton.disabled = false;
+        logoutButton.textContent = "Keluar";
+        return;
       }
 
-      window.location.replace("/pages/login.html");
-    } catch (error) {
-      window.alert("Gagal keluar. Periksa koneksi lalu coba lagi.");
-      logoutButton.disabled = false;
-      logoutButton.textContent = "Keluar";
+      await akun.keluar({ paksa: true });
     }
+
+    window.location.replace("login.html");
   });
 }

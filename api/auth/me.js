@@ -1,7 +1,9 @@
-const { json, readSession } = require('../_security');
-module.exports = function handler(req, res) {
+// Memeriksa login (token Supabase) + status anggota.
+const { json, periksaAnggota } = require('../_security');
+
+module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return json(res, 405, { sukses: false, pesan: 'Metode tidak diizinkan.' });
-  const session = readSession(req);
-  if (!session) return json(res, 401, { sukses: false, pesan: 'Silakan login terlebih dahulu.' });
-  return json(res, 200, { sukses: true, data: { id: session.id } });
+  const anggota = await periksaAnggota(req);
+  if (!anggota.ok) return json(res, anggota.status, { sukses: false, kode: anggota.kode, pesan: anggota.pesan });
+  return json(res, 200, { sukses: true, data: { username: anggota.username } });
 };

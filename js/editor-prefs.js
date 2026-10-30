@@ -17,6 +17,7 @@
       if ([2, 4].includes(Number(saved.tabSize))) prefs.tabSize = Number(saved.tabSize);
       if (typeof saved.lineWrapping === "boolean") prefs.lineWrapping = saved.lineWrapping;
       if (typeof saved.lineNumbers === "boolean") prefs.lineNumbers = saved.lineNumbers;
+      if (typeof saved.hint === "boolean") prefs.hint = saved.hint; // petunjuk kode; bawaan: menyala
       return Object.keys(prefs).length ? prefs : null;
     } catch (error) {
       return null;

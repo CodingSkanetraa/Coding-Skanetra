@@ -13,7 +13,7 @@
   <meta name="robots" content="noindex, follow">
   <script src="../js/theme.js?v=5"></script>
   <link rel="stylesheet" href="../css/style.css?v=5">
-  <link rel="stylesheet" href="../css/setting.css?v=5">
+  <link rel="stylesheet" href="../css/setting.css?v=6">
   <link rel="stylesheet" href="../css/gerak.css?v=1">
   <link rel="stylesheet" href="../css/nav-mobile.css?v=1">
   <link rel="stylesheet" href="../css/maskot.css?v=2">
@@ -27,6 +27,8 @@
       );
     }
   </script>
+  <script src="../js/akun-config.js?v=1" defer></script>
+  <script src="../js/akun.js?v=2" defer></script>
   <script src="../js/main.js?v=5" defer></script>
   <script src="../js/ikon.js?v=1" defer></script>
   <script src="../js/nav-mobile.js?v=2" defer></script>
@@ -64,6 +66,7 @@
     <div class="settings-layout">
       <aside class="settings-sidebar">
         <a href="#appearance" class="settings-nav active">🎨 Appearance</a>
+        <a href="#akun" class="settings-nav">👤 Akun</a>
         <a href="#editor" class="settings-nav">⌨️ Editor</a>
         <a href="#about" class="settings-nav">ℹ️ Tentang</a>
       </aside>
@@ -130,6 +133,29 @@
           </p>
         </section>
 
+        <section class="settings-card" id="akun">
+          <div class="settings-card-heading">
+            <div>
+              <h2>Akun</h2>
+              <p>Masuk supaya kodemu tersimpan di akun dan ikut ada di perangkat lain.</p>
+            </div>
+            <span class="settings-symbol">👤</span>
+          </div>
+
+          <div class="setting-row">
+            <div>
+              <strong id="akun-status">Memeriksa akun…</strong>
+              <p id="akun-detail">Tanpa akun pun semua materi dan editor tetap bisa dipakai.</p>
+            </div>
+            <div class="akun-aksi">
+              <a class="settings-reset-button" id="akun-masuk" href="login.html?next=setting" hidden>Masuk atau daftar</a>
+              <button class="settings-reset-button" id="akun-keluar" type="button" hidden>Keluar</button>
+            </div>
+          </div>
+
+          <p class="settings-hint" id="akun-sinkron" role="status" aria-live="polite" hidden></p>
+        </section>
+
         <section class="settings-card" id="editor">
           <div class="settings-card-heading">
             <div>
@@ -182,6 +208,14 @@
             <input id="editor-line-numbers" type="checkbox">
           </div>
 
+          <div class="setting-row">
+            <div>
+              <label for="editor-hint">Petunjuk kode</label>
+              <p>Saran otomatis saat mengetik di Editor Web. Tekan Enter atau Tab untuk menerima.</p>
+            </div>
+            <input id="editor-hint" type="checkbox">
+          </div>
+
           <p class="settings-hint" id="editor-status"
              role="status" aria-live="polite">
             Pengaturan editor tersimpan secara lokal.
@@ -225,6 +259,7 @@
     </div>
   </footer>
 
-  <script src="../js/setting.js?v=5"></script>
+  <script src="../js/akun-setting.js?v=1" defer></script>
+  <script src="../js/setting.js?v=7"></script>
 </body>
 </html>

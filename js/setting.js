@@ -10,7 +10,8 @@
     fontSize: 14,
     tabSize: 4,
     lineWrapping: false,
-    lineNumbers: true
+    lineNumbers: true,
+    hint: true
   };
 
   const $ = (selector) => document.querySelector(selector);
@@ -33,6 +34,7 @@
       result.tabSize = Number(result.tabSize);
       result.lineWrapping = Boolean(result.lineWrapping);
       result.lineNumbers = Boolean(result.lineNumbers);
+      result.hint = result.hint !== false;
 
       return result;
     } catch {
@@ -43,6 +45,7 @@
   function saveEditorPreferences(preferences) {
     try {
       localStorage.setItem(EDITOR_KEY, JSON.stringify(preferences));
+      if (window.CodingSkanetraAkun) window.CodingSkanetraAkun.sinkron.catat(EDITOR_KEY);
       $("#editor-status").textContent =
         "Preferensi editor berhasil disimpan di browser ini.";
     } catch {
@@ -77,6 +80,7 @@
     $("#editor-tab-size").value = String(preferences.tabSize);
     $("#editor-wrap").checked = preferences.lineWrapping;
     $("#editor-line-numbers").checked = preferences.lineNumbers;
+    $("#editor-hint").checked = preferences.hint;
   }
 
   function updateEditorPreference(key, value) {
@@ -133,6 +137,10 @@
     updateEditorPreference("lineNumbers", event.target.checked);
   });
 
+  $("#editor-hint").addEventListener("change", (event) => {
+    updateEditorPreference("hint", event.target.checked);
+  });
+
   $("#reset-settings").addEventListener("click", () => {
     const confirmed = window.confirm(
       "Kembalikan tema dan preferensi editor ke pengaturan awal?"
@@ -142,6 +150,7 @@
 
     try {
       localStorage.removeItem(EDITOR_KEY);
+      if (window.CodingSkanetraAkun) window.CodingSkanetraAkun.sinkron.catatHapus(EDITOR_KEY);
 
       if (themeAPI) {
         themeAPI.setTheme("emerald");

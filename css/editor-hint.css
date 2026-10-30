@@ -1,0 +1,49 @@
+/* Daftar petunjuk kode di editor. Editor selalu gelap, jadi daftar ini juga selalu gelap. */
+.cs-hint {
+  position: fixed;
+  z-index: 3000;
+  min-width: 190px;
+  max-width: min(360px, calc(100vw - 16px));
+  overflow-y: auto;
+  padding: 3px;
+  background: #1b221e;
+  border: 1px solid #34453a;
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 45%);
+  font-family: Consolas, "Courier New", ui-monospace, monospace;
+  color: #dce7df;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cs-hint[hidden] { display: none; }
+
+.cs-hint-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 3px 8px;
+  border-radius: 5px;
+  line-height: 1.55;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cs-hint-item:hover { background: rgb(112 217 154 / 8%); }
+
+.cs-hint-item.aktif {
+  background: rgb(112 217 154 / 20%);
+  color: #fff;
+}
+
+.cs-hint-jenis {
+  font-family: "Plus Jakarta Sans", "Segoe UI", Arial, sans-serif;
+  font-size: 0.78em;
+  color: #8fa399;
+}
+
+.cs-hint-item.aktif .cs-hint-jenis { color: #70d99a; }
+
+@media (max-width: 720px) {
+  .cs-hint-item { padding: 6px 10px; } /* sasaran ketuk lebih besar di HP */
+}
