@@ -32,4 +32,11 @@
 
 window.DOKUMENTASI = [
   // Tulis blok dokumentasi di sini, dipisahkan koma.
+  {
+    foto: "img1.webp",
+    judul: "Foto bersama",
+    tanggal: "2026-08-12",
+    lokasi: "Lapangan SMKN Situraja",
+    deskripsi: "Foto pertama kita, diikuti hampir seluruh anggota coding skanetra."
+  }
 ];

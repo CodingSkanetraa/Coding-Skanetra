@@ -53,6 +53,8 @@
     const p = akun.pengguna();
     el.tamu.hidden = Boolean(p);
     el.isi.hidden = !p;
+    document.body.classList.toggle("pf-masuk", Boolean(p));
+    window.dispatchEvent(new Event("pf:render"));
     if (!p) { tutupForm(); el.tautan.hidden = true; return; }
     el.username.textContent = "@" + p.username;
     el.baris.textContent = "@" + p.username;

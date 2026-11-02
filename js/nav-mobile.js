@@ -93,6 +93,23 @@
   document.body.append(latar, sheet, bar);
   document.body.classList.add("punya-bar-bawah");
 
+  // Header atas hilang saat menggulir ke bawah dan muncul lagi saat menggulir ke atas.
+  const hp = window.matchMedia("(max-width: 720px)");
+  let terakhir = window.scrollY;
+  let menunggu = false;
+  const periksaGulir = () => {
+    menunggu = false;
+    const y = Math.max(0, window.scrollY);
+    const selisih = y - terakhir;
+    if (!hp.matches || y < 80) document.documentElement.classList.remove("header-sembunyi");
+    else if (selisih > 6) document.documentElement.classList.add("header-sembunyi");
+    else if (selisih < -6) document.documentElement.classList.remove("header-sembunyi");
+    if (Math.abs(selisih) > 6 || y < 80) terakhir = y;
+  };
+  window.addEventListener("scroll", () => {
+    if (!menunggu) { menunggu = true; window.requestAnimationFrame(periksaGulir); }
+  }, { passive: true });
+
   // Saat keyboard layar terbuka (ada kolom ketik yang fokus dan area tampil menyusut), bar disembunyikan
   // supaya tidak menutupi kolom ketik. Tidak dicek saat halaman baru dimuat agar tidak salah deteksi.
   const vv = window.visualViewport;

@@ -1,0 +1,118 @@
+/* Tampilan ala aplikasi di HP (<= 720px): header hilang saat scroll, ikon lokal, kartu ringkas. */
+.ik-lokal { display: block; width: 100%; height: 100%; object-fit: contain; }
+
+@media (max-width: 720px) {
+  .navbar { transition: transform 0.22s ease; }
+  html.header-sembunyi .navbar { transform: translateY(-100%); }
+}
+@media (max-width: 720px) and (prefers-reduced-motion: reduce) {
+  .navbar { transition: none; }
+}
+
+/* ---------- Playground: pilih editor ---------- */
+.editor-sub { display: none; }
+@media (max-width: 720px) {
+  body .playground-catalog { padding: 14px 16px 24px; }
+  body .playground-hero { padding: 6px 2px 14px; margin: 0; border: 0; }
+  body .playground-hero .playground-eyebrow,
+  body .playground-hero .playground-intro,
+  body .playground-hero .playground-meta { display: none; }
+  body .playground-hero h1 { margin: 0; font-size: 1.45rem; line-height: 1.2; }
+  body .playground-hero h1 br { display: none; }
+  body .playground-hero h1 span { color: var(--accent); margin-left: 0.25em; }
+
+  body .editor-catalog { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 0; border-top: 0; }
+  body .editor-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) auto;
+    grid-template-areas: "ikon judul status" "ikon sub status";
+    column-gap: 14px;
+    row-gap: 2px;
+    align-items: center;
+    padding: 14px;
+    min-height: 0;
+    border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--accent-soft), var(--card-background) 70%);
+  }
+  body .editor-card:active { transform: scale(0.985); }
+  body .editor-card-top { display: contents; }
+  body .editor-symbol {
+    grid-area: ikon;
+    width: 64px;
+    height: 64px;
+    margin: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    font-size: 1.25rem;
+    overflow: hidden;
+  }
+  body .editor-symbol.punya-gambar { padding: 8px; background: var(--card-background); border: 1px solid var(--border); }
+  body .editor-status { grid-area: status; margin: 0; padding: 0; border: 0; background: none; font-size: 0; gap: 0; }
+  body .editor-status > span { width: 9px; height: 9px; }
+  body .editor-card h2 { grid-area: judul; margin: 0; font-size: 1.1rem; }
+  body .editor-card .editor-sub { grid-area: sub; display: block; margin: 0; color: var(--muted); font-size: 0.82rem; }
+  body .editor-language,
+  body .editor-description,
+  body .editor-features { display: none; }
+  body .editor-action { position: static; display: block; margin: 0; padding: 0; width: 0; height: 0; overflow: hidden; border: 0; font-size: 0; }
+  body .editor-action::after { content: ""; position: absolute; inset: 0; border-radius: 18px; }
+  body .editor-action:focus-visible::after { outline: 2px solid var(--accent); outline-offset: 2px; }
+  body .playground-note,
+  body .playground-footer { display: none; }
+}
+
+/* ---------- Materi: kisi ikon ---------- */
+@media (max-width: 720px) {
+  body:has(.materi-grid) .section { padding: 10px 0 24px; }
+  body:has(.materi-grid) .container { padding-inline: 16px; }
+  body:has(.materi-grid) .section-heading { margin: 0 0 12px; padding: 0; }
+  body:has(.materi-grid) .section-heading .eyebrow,
+  body:has(.materi-grid) .section-heading > p:last-child { display: none; }
+  body:has(.materi-grid) .section-heading h1 { margin: 0; font-size: 1.45rem; line-height: 1.2; max-width: none; }
+
+  .materi-tools { display: grid; gap: 10px; margin: 0 0 14px; }
+  .materi-tools input { width: 100%; box-sizing: border-box; border-radius: 12px; }
+  .materi-filters { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+  .materi-filters::-webkit-scrollbar { display: none; }
+  .filter-btn { flex: none; border-radius: 999px; padding: 7px 16px; }
+
+  body:has(.materi-grid) .materi-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; border: 0; align-items: start; }
+  body:has(.materi-grid) .materi-card {
+    position: relative;
+    min-height: 0;
+    height: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: "ikon" "judul" "level";
+    justify-items: start;
+    row-gap: 8px;
+    padding: 16px 14px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--card-background);
+  }
+  body .materi-card:active { transform: scale(0.98); }
+  body .materi-card[hidden] { display: none; }
+  body .materi-card > p:not(.materi-level) { display: none; }
+  body .materi-card .materi-icon {
+    grid-area: ikon;
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 1rem;
+  }
+  body .materi-card .materi-icon.punya-gambar { padding: 6px; background: none; }
+  body .materi-card h2 { grid-area: judul; font-size: 1.02rem; line-height: 1.25; }
+  body .materi-card .materi-level { grid-area: level; margin: 0; padding: 2px 9px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 0.72rem; }
+  body .materi-card .materi-link { position: static; width: 0; height: 0; overflow: hidden; font-size: 0; padding: 0; border: 0; }
+  body .materi-card .materi-link::after { content: ""; position: absolute; inset: 0; border-radius: 18px; }
+  .hasil-materi { margin: 12px 2px 0; font-size: 0.85rem; }
+  body:has(.materi-grid) > footer.footer { display: none; }
+}

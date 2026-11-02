@@ -23,6 +23,9 @@
     contoh: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.4 1.1 2.2h5c0-.8.4-1.6 1.1-2.2A6 6 0 0 0 12 3z"/>',
     kembali: '<path d="M19 12H5"/><path d="m11 6-6 6 6 6"/>',
     centang: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+    kamera: '<path d="M4 8h3l1.6-2.5h6.8L17 8h3v11H4z"/><circle cx="12" cy="13.2" r="3.4"/>',
+    panah: '<path d="m9.5 5.5 6.5 6.5-6.5 6.5"/>',
+    tampilan: '<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17" /><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/>',
     tutup: '<path d="M6 6l12 12M18 6 6 18"/>'
   };
 

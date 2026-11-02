@@ -26,13 +26,15 @@
   <link rel="stylesheet" href="../css/playground.css?v=5">
   <link rel="stylesheet" href="../css/gerak.css?v=1">
   <link rel="stylesheet" href="../css/nav-mobile.css?v=2">
+  <link rel="stylesheet" href="../css/app-mobile.css?v=1">
   <link rel="stylesheet" href="../css/navbar-akun.css?v=2">
   <link rel="stylesheet" href="../css/maskot.css?v=2">
   <script src="../js/main.js?v=5" defer></script>
-  <script src="../js/ikon.js?v=3" defer></script>
+  <script src="../js/ikon.js?v=4" defer></script>
   <script src="../js/navbar-akun.js?v=3" defer></script>
   <script src="../js/nav-mobile.js?v=4" defer></script>
   <script src="../js/gerak.js?v=1" defer></script>
+  <script src="../js/ikon-lokal.js?v=1" defer></script>
   <script src="../js/maskot.js?v=4" defer></script>
 </head>
 <body>
@@ -53,7 +55,7 @@
       <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
       <a class="nav-link" href="dokumentasi.html" data-nav="dokumentasi">Dokumentasi</a>
       <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
-      <a class="nav-link" href="setting.html" data-nav="setting">Pengaturan</a>
+      <a class="nav-link" href="profil.html#tampilan" data-nav="setting">Pengaturan</a>
     </nav>
   </header>
 
@@ -74,11 +76,12 @@
     <section class="editor-catalog" aria-label="Daftar editor">
       <article class="editor-card editor-card-featured">
         <div class="editor-card-top">
-          <div class="editor-symbol html-symbol" aria-hidden="true">&lt;/&gt;</div>
+          <div class="editor-symbol html-symbol" data-ikon-lokal="html" aria-hidden="true">&lt;/&gt;</div>
           <span class="editor-status status-available"><span></span> Tersedia</span>
         </div>
         <p class="editor-language">HTML <span>+</span> CSS <span>+</span> JS</p>
         <h2>Editor Web</h2>
+        <p class="editor-sub">HTML · CSS · JS</p>
         <p class="editor-description">
           Tulis struktur halaman, atur tampilannya, lalu hidupkan dengan JavaScript.
           Jalankan kode, lihat pratinjau dan console, lalu unduh hasilnya.
@@ -95,11 +98,12 @@
 
       <article class="editor-card">
         <div class="editor-card-top">
-          <div class="editor-symbol python-symbol" aria-hidden="true">Py</div>
+          <div class="editor-symbol python-symbol" data-ikon-lokal="python" aria-hidden="true">Py</div>
           <span class="editor-status status-available"><span></span> Tersedia</span>
         </div>
         <p class="editor-language">PYTHON</p>
         <h2>Editor Python</h2>
+        <p class="editor-sub">Console dan visual</p>
         <p class="editor-description">
           Ruang latihan untuk sintaks Python, variabel, percabangan, perulangan,
           fungsi, dan pemrograman berorientasi objek.
@@ -116,11 +120,12 @@
 
       <article class="editor-card">
         <div class="editor-card-top">
-          <div class="editor-symbol cpp-symbol" aria-hidden="true">C++</div>
+          <div class="editor-symbol cpp-symbol" data-ikon-lokal="cpp" aria-hidden="true">C++</div>
           <span class="editor-status status-available"><span></span> Tersedia</span>
         </div>
         <p class="editor-language">C++</p>
         <h2>Editor C++</h2>
+        <p class="editor-sub">Dikompilasi dengan g++</p>
         <p class="editor-description">
           Belajar dasar C++, menyusun program, dan memahami logika pemrograman.
           Kode dikompilasi dengan g++ sungguhan.

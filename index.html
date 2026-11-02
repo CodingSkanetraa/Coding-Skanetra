@@ -67,11 +67,15 @@
   <link rel="stylesheet" href="css/maskot.css?v=2">
   <link rel="stylesheet" href="css/gerak.css?v=1">
   <link rel="stylesheet" href="css/nav-mobile.css?v=2">
+  <link rel="stylesheet" href="css/app-mobile.css?v=1">
   <link rel="stylesheet" href="css/navbar-akun.css?v=2">
+  <link rel="stylesheet" href="css/beranda-app.css?v=1">
   <script src="js/main.js?v=5" defer></script>
-  <script src="js/ikon.js?v=3" defer></script>
+  <script src="js/ikon.js?v=4" defer></script>
   <script src="js/navbar-akun.js?v=3" defer></script>
   <script src="js/nav-mobile.js?v=4" defer></script>
+  <script src="js/ikon-lokal.js?v=1" defer></script>
+  <script src="js/beranda-app.js?v=2" defer></script>
   <script src="js/gerak.js?v=1" defer></script>
   <script src="js/maskot.js?v=4" defer></script>
 </head>
@@ -94,11 +98,39 @@
       <a class="nav-link" href="pages/struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
       <a class="nav-link" href="pages/dokumentasi.html" data-nav="dokumentasi">Dokumentasi</a>
       <a class="nav-link" href="pages/about.html" data-nav="about">Tentang</a>
-      <a class="nav-link" href="pages/setting.html" data-nav="setting">Pengaturan</a>
+      <a class="nav-link" href="pages/profil.html#tampilan" data-nav="setting">Pengaturan</a>
     </nav>
   </header>
 
   <main>
+    <section class="app-beranda" id="app-beranda" aria-label="Beranda">
+      <div class="ab-sapa">
+        <a class="ab-akun" id="ab-akun" href="pages/login.html">
+          <span class="ab-avatar" id="ab-avatar" aria-hidden="true"></span>
+          <span class="ab-nama"><strong id="ab-halo">Halo!</strong><small id="ab-sub">Masuk untuk simpan proyek</small></span>
+        </a>
+      </div>
+
+      <h2 class="ab-judul">Mulai coding</h2>
+      <div class="ab-editor">
+        <a href="pages/editor-html.html"><i data-ikon-lokal="html"><b>HTML</b></i><span>Web</span></a>
+        <a href="pages/editor-python.html"><i data-ikon-lokal="python"><b>Py</b></i><span>Python</span></a>
+        <a href="pages/editor-cpp.html"><i data-ikon-lokal="cpp"><b>C++</b></i><span>C++</span></a>
+      </div>
+
+      <h2 class="ab-judul">Menu</h2>
+      <div class="ab-grid">
+        <a href="pages/materi.html"><i data-ikon-lokal="materi" data-ikon-cadangan="materi"></i><span>Materi</span></a>
+        <a href="pages/playground.html"><i data-ikon-lokal="playground" data-ikon-cadangan="editor"></i><span>Playground</span></a>
+        <a href="pages/peringkat.html"><i data-ikon-lokal="peringkat" data-ikon-cadangan="peringkat"></i><span>Peringkat</span></a>
+        <a href="pages/games.html"><i data-ikon-lokal="games" data-ikon-cadangan="games"></i><span>Games</span></a>
+        <a href="pages/dokumentasi.html"><i data-ikon-lokal="dokumentasi" data-ikon-cadangan="galeri"></i><span>Dokumentasi</span></a>
+        <a href="pages/struktur-organisasi.html"><i data-ikon-lokal="struktur" data-ikon-cadangan="struktur"></i><span>Struktur</span></a>
+        <a href="pages/profil.html"><i data-ikon-lokal="profil" data-ikon-cadangan="akun"></i><span>Profil</span></a>
+        <a href="pages/profil.html#tampilan"><i data-ikon-cadangan="pengaturan" class="ab-statis"></i><span>Pengaturan</span></a>
+      </div>
+    </section>
+
     <section class="beranda section-container" id="beranda">
       <div class="beranda-teks">
         <p class="kicker">Komunitas belajar pemrograman</p>

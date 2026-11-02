@@ -3,6 +3,21 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.12.0] - 2026-11-02
+
+### Diubah
+- **Header atas di HP menghilang saat menggulir ke bawah** dan muncul lagi saat menggulir ke atas (semua halaman; bar bawah tetap).
+- **Ikon dari folder `assets/icon/`**: beranda HP, Playground, dan Materi memakai gambar lokal bila filenya ada (`html.png`, `python.png`, `cpp.png`, `css.png`, `javascript.png`, `proyek-mini.png`, `materi.png`, `playground.png`, `peringkat.png`, `games.png`, `dokumentasi.png`, `struktur.png`, `profil.png`; daftar lengkap di `assets/icon/README.txt`). Bila belum ada, tampil ikon garis bawaan.
+- **Pilih editor (Playground) di HP** diringkas menjadi tiga kartu besar berisi ikon, nama, satu baris keterangan; seluruh kartu bisa disentuh.
+- **Materi di HP** menjadi kisi dua kolom berisi ikon, judul, dan tingkat. Deskripsi panjang disembunyikan di HP; pencarian dan filter tetap ada.
+- **Profil dan Pengaturan digabung** menjadi satu halaman bergaya daftar menu (HP: daftar lalu panel penuh dengan tombol kembali; desktop: daftar di kiri, panel di kanan). Menu: Akun, Tautan Bagikan, Tampilan, Editor dan progres, Tentang. Tamu (belum masuk) tetap bisa memakai Tampilan, Editor, dan Tentang. Foto diganti lewat tombol kamera di foto profil.
+- `pages/setting.html` kini hanya mengalihkan ke `profil.html#tampilan`; menu "Pengaturan" mengarah ke sana.
+
+## [5.11.0] - 2026-11-02
+
+### Diubah
+- **Beranda di HP kini seperti beranda aplikasi**: sapaan akun (foto dan @username, atau ajakan masuk), tiga pintasan editor (HTML, Python, C++), dan kisi menu ikon ke Materi, Playground, Peringkat, Games, Dokumentasi, Struktur, Profil, Pengaturan. Teks panjang disembunyikan di HP. Tampilan desktop tidak berubah, dan bar bawah HP tetap sama.
+
 ## [5.10.0] - 2026-10-31
 
 ### Ditambahkan

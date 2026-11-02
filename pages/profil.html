@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0b100e">
-  <title>Profil | CodingSkanetra</title>
+  <title>Profil dan pengaturan | CodingSkanetra</title>
 
   <link rel="icon" href="../favicon.ico" sizes="48x48">
   <link rel="icon" type="image/png" href="../favicon-96.png" sizes="96x96">
@@ -13,9 +13,11 @@
   <meta name="robots" content="noindex, follow">
   <script src="../js/theme.js?v=5"></script>
   <link rel="stylesheet" href="../css/style.css?v=5">
-  <link rel="stylesheet" href="../css/profil.css?v=2">
+  <link rel="stylesheet" href="../css/setting.css?v=8">
+  <link rel="stylesheet" href="../css/profil.css?v=3">
   <link rel="stylesheet" href="../css/gerak.css?v=1">
   <link rel="stylesheet" href="../css/nav-mobile.css?v=2">
+  <link rel="stylesheet" href="../css/app-mobile.css?v=1">
   <link rel="stylesheet" href="../css/navbar-akun.css?v=2">
   <link rel="stylesheet" href="../css/maskot.css?v=2">
 
@@ -31,7 +33,7 @@
   <script src="../js/akun-config.js?v=1" defer></script>
   <script src="../js/akun.js?v=4" defer></script>
   <script src="../js/main.js?v=5" defer></script>
-  <script src="../js/ikon.js?v=3" defer></script>
+  <script src="../js/ikon.js?v=4" defer></script>
   <script src="../js/navbar-akun.js?v=3" defer></script>
   <script src="../js/nav-mobile.js?v=4" defer></script>
   <script src="../js/gerak.js?v=1" defer></script>
@@ -55,93 +57,194 @@
       <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
       <a class="nav-link" href="dokumentasi.html" data-nav="dokumentasi">Dokumentasi</a>
       <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
-      <a class="nav-link" href="setting.html" data-nav="setting">Pengaturan</a>
+      <a class="nav-link" href="profil.html#tampilan" data-nav="setting">Pengaturan</a>
     </nav>
   </header>
 
-  <main class="profil-page container">
-    <section class="profil-intro">
-      <span class="profil-eyebrow">Profil</span>
-      <h1>Profil <span>Saya</span></h1>
-    </section>
+  <main class="pf container" id="pf" data-lihat="daftar">
+    <div class="pf-daftar" id="pf-daftar">
+      <section class="pf-kepala" id="profil-tamu" hidden>
+        <span class="pf-avatar-tamu" data-ikon="akun" aria-hidden="true"></span>
+        <div class="pf-identitas">
+          <h1>Belum masuk</h1>
+          <p>Masuk supaya proyek dan progresmu tersimpan di akun.</p>
+        </div>
+        <a class="profil-tombol utama" href="login.html?next=profil">Masuk</a>
+      </section>
 
-    <section class="profil-kartu" id="profil-tamu" hidden>
-      <h2>Belum masuk</h2>
-      <p>Masuk atau daftar supaya proyek dan kodemu tersimpan di akun dan ikut ada di perangkat lain. Tanpa akun pun semua materi dan editor tetap bisa dipakai.</p>
-      <div class="profil-aksi">
-        <a class="profil-tombol utama" href="login.html?next=profil">Masuk atau daftar</a>
-      </div>
-    </section>
-
-    <section class="profil-kartu" id="profil-isi" hidden>
-      <div class="profil-kepala">
-        <span id="profil-avatar" class="profil-avatar-wadah"></span>
-        <div>
-          <h2 id="profil-username">@</h2>
+      <section class="pf-kepala" id="profil-isi" hidden>
+        <div class="pf-foto-wadah">
+          <span id="profil-avatar" class="profil-avatar-wadah"></span>
+          <input id="foto-file" type="file" accept="image/*" hidden>
+          <button class="pf-kamera" id="foto-ganti" type="button" aria-label="Ganti foto profil" data-ikon="kamera"></button>
+        </div>
+        <div class="pf-identitas">
+          <h1 id="profil-username">@</h1>
           <p class="profil-status" id="profil-status">Memuat…</p>
+          <button class="pf-hapus-foto" id="foto-hapus" type="button" hidden>Hapus foto</button>
+          <p class="profil-pesan" id="foto-pesan" role="status" aria-live="polite"></p>
         </div>
-      </div>
+      </section>
 
-      <div class="profil-foto">
-        <input id="foto-file" type="file" accept="image/*" hidden>
-        <div class="profil-aksi">
-          <button class="profil-tombol" id="foto-ganti" type="button">Ganti foto</button>
-          <button class="profil-tombol" id="foto-hapus" type="button" hidden>Hapus foto</button>
-        </div>
-        <p class="profil-foto-info">Foto dipotong persegi dan dikecilkan otomatis di perangkatmu. Hanya kamu yang bisa melihatnya.</p>
-        <p class="profil-pesan" id="foto-pesan" role="status" aria-live="polite"></p>
-      </div>
+      <nav class="pf-menu" aria-label="Profil dan pengaturan">
+        <a class="pf-baris pf-butuh-masuk" href="#akun" data-panel="akun">
+          <span class="pf-ik" data-ikon="akun"></span>
+          <span class="pf-teks"><strong>Akun</strong><small>Password, keluar</small></span>
+          <span class="pf-panah" data-ikon="panah"></span>
+        </a>
+        <a class="pf-baris pf-butuh-masuk" href="#tautan" data-panel="tautan">
+          <span class="pf-ik" data-ikon="bagikan"></span>
+          <span class="pf-teks"><strong>Tautan Bagikan</strong><small>Tautan aktif 7 hari</small></span>
+          <span class="pf-panah" data-ikon="panah"></span>
+        </a>
+        <a class="pf-baris" href="#tampilan" data-panel="tampilan">
+          <span class="pf-ik" data-ikon="tampilan"></span>
+          <span class="pf-teks"><strong>Tampilan</strong><small>Mode, warna, maskot</small></span>
+          <span class="pf-panah" data-ikon="panah"></span>
+        </a>
+        <a class="pf-baris" href="#editor" data-panel="editor">
+          <span class="pf-ik" data-ikon="editor"></span>
+          <span class="pf-teks"><strong>Editor dan progres</strong><small>Font, indentasi, sinkron</small></span>
+          <span class="pf-panah" data-ikon="panah"></span>
+        </a>
+        <a class="pf-baris" href="#tentang" data-panel="tentang">
+          <span class="pf-ik" data-ikon="tentang"></span>
+          <span class="pf-teks"><strong>Tentang</strong><small>Info situs, atur ulang</small></span>
+          <span class="pf-panah" data-ikon="panah"></span>
+        </a>
+      </nav>
+    </div>
 
-      <dl class="profil-daftar">
-        <div class="profil-baris" id="baris-nama" hidden>
-          <dt>Nama</dt>
-          <dd id="profil-nama"></dd>
-        </div>
-        <div class="profil-baris" id="baris-kelas" hidden>
-          <dt>Kelas</dt>
-          <dd id="profil-kelas"></dd>
-        </div>
-        <div class="profil-baris">
-          <dt>Username</dt>
-          <dd id="profil-username-baris"></dd>
-        </div>
-        <div class="profil-baris">
-          <dt>Password</dt>
-          <dd class="profil-sandi">
-            <span id="profil-sandi" aria-label="Password disembunyikan">••••••••</span>
-            <button class="profil-tombol" id="ubah-sandi-buka" type="button" aria-expanded="false" aria-controls="form-sandi">Ubah password</button>
-          </dd>
-        </div>
-      </dl>
+    <div class="pf-isi" id="pf-isi">
+      <section class="pf-panel" id="panel-akun" data-panel="akun" hidden>
+        <header class="pf-bar"><button class="pf-kembali" type="button" aria-label="Kembali" data-ikon="kembali"></button><h2>Akun</h2></header>
+        <dl class="profil-daftar">
+          <div class="profil-baris" id="baris-nama" hidden>
+            <dt>Nama</dt>
+            <dd id="profil-nama"></dd>
+          </div>
+          <div class="profil-baris" id="baris-kelas" hidden>
+            <dt>Kelas</dt>
+            <dd id="profil-kelas"></dd>
+          </div>
+          <div class="profil-baris">
+            <dt>Username</dt>
+            <dd id="profil-username-baris"></dd>
+          </div>
+          <div class="profil-baris">
+            <dt>Password</dt>
+            <dd class="profil-sandi">
+              <span id="profil-sandi" aria-label="Password disembunyikan">••••••••</span>
+              <button class="profil-tombol" id="ubah-sandi-buka" type="button" aria-expanded="false" aria-controls="form-sandi">Ubah</button>
+            </dd>
+          </div>
+        </dl>
 
-      <p class="profil-sukses" id="sandi-sukses" role="status" aria-live="polite" hidden>Password berhasil diubah.</p>
+        <p class="profil-sukses" id="sandi-sukses" role="status" aria-live="polite" hidden>Password berhasil diubah.</p>
 
-      <form class="profil-form" id="form-sandi" autocomplete="off" novalidate hidden>
-        <label for="sandi-baru">Password baru</label>
-        <input id="sandi-baru" type="password" autocomplete="new-password" minlength="6" maxlength="72">
-        <label for="sandi-ulang">Ulangi password baru</label>
-        <input id="sandi-ulang" type="password" autocomplete="new-password" minlength="6" maxlength="72">
-        <label class="profil-lihat"><input id="sandi-lihat" type="checkbox"> Tampilkan password yang kuketik</label>
-        <p class="profil-pesan" id="sandi-pesan" role="status" aria-live="polite"></p>
-        <div class="profil-aksi">
-          <button class="profil-tombol utama" id="sandi-simpan" type="submit">Simpan password</button>
-          <button class="profil-tombol" id="sandi-batal" type="button">Batal</button>
+        <form class="profil-form" id="form-sandi" autocomplete="off" novalidate hidden>
+          <label for="sandi-baru">Password baru</label>
+          <input id="sandi-baru" type="password" autocomplete="new-password" minlength="6" maxlength="72">
+          <label for="sandi-ulang">Ulangi password baru</label>
+          <input id="sandi-ulang" type="password" autocomplete="new-password" minlength="6" maxlength="72">
+          <label class="profil-lihat"><input id="sandi-lihat" type="checkbox"> Tampilkan password yang kuketik</label>
+          <p class="profil-pesan" id="sandi-pesan" role="status" aria-live="polite"></p>
+          <div class="profil-aksi">
+            <button class="profil-tombol utama" id="sandi-simpan" type="submit">Simpan</button>
+            <button class="profil-tombol" id="sandi-batal" type="button">Batal</button>
+          </div>
+        </form>
+
+        <button class="pf-keluar" id="profil-keluar" type="button">Keluar dari akun</button>
+      </section>
+
+      <section class="pf-panel" id="panel-tautan" data-panel="tautan" hidden>
+        <header class="pf-bar"><button class="pf-kembali" type="button" aria-label="Kembali" data-ikon="kembali"></button><h2>Tautan Bagikan</h2></header>
+        <div class="profil-tautan" id="profil-tautan" hidden>
+          <p class="pf-ket">Tautan pendek dari tombol Bagikan berlaku 7 hari. Hapus kapan saja bila tidak diperlukan.</p>
+          <p class="profil-pesan" id="tautan-pesan" role="status" aria-live="polite"></p>
+          <ul class="profil-tautan-daftar" id="tautan-daftar"></ul>
         </div>
-      </form>
+      </section>
 
-      <p class="profil-sinkron" id="profil-sinkron" role="status" aria-live="polite" hidden></p>
+      <section class="pf-panel" id="panel-tampilan" data-panel="tampilan" hidden>
+        <header class="pf-bar"><button class="pf-kembali" type="button" aria-label="Kembali" data-ikon="kembali"></button><h2>Tampilan</h2></header>
+        <label class="settings-label">Mode tampilan</label>
+        <div class="mode-options">
+          <button type="button" class="mode-option" data-mode="dark">
+            <span class="mode-preview dark-preview">◐</span>
+            <span>Dark</span>
+            <span class="mode-check"></span>
+          </button>
+          <button type="button" class="mode-option" data-mode="light">
+            <span class="mode-preview light-preview">☀</span>
+            <span>Light</span>
+            <span class="mode-check"></span>
+          </button>
+        </div>
 
-      <div class="profil-aksi profil-bawah">
-        <a class="profil-tombol" href="setting.html">Pengaturan tampilan dan editor</a>
-        <button class="profil-tombol bahaya" id="profil-keluar" type="button">Keluar</button>
-      </div>
-    </section>
-    <section class="profil-kartu profil-tautan" id="profil-tautan" hidden>
-      <h2>Tautan Bagikan aktif</h2>
-      <p>Tautan pendek dari tombol Bagikan di editor berlaku 7 hari. Hapus kapan saja kalau sudah tidak diperlukan.</p>
-      <p class="profil-pesan" id="tautan-pesan" role="status" aria-live="polite"></p>
-      <ul class="profil-tautan-daftar" id="tautan-daftar"></ul>
-    </section>
+        <label class="settings-label">Warna tema</label>
+        <div class="theme-options">
+          <button type="button" class="theme-option" data-theme="emerald"><span class="theme-swatch swatch-emerald"></span><span>Emerald</span></button>
+          <button type="button" class="theme-option" data-theme="ocean"><span class="theme-swatch swatch-ocean"></span><span>Ocean</span></button>
+          <button type="button" class="theme-option" data-theme="amethyst"><span class="theme-swatch swatch-amethyst"></span><span>Amethyst</span></button>
+          <button type="button" class="theme-option" data-theme="rose"><span class="theme-swatch swatch-rose"></span><span>Rose</span></button>
+        </div>
+
+        <div class="setting-row">
+          <div>
+            <label for="maskot-aktif">Maskot Skani</label>
+            <p>Tampil di beranda, editor, dan kuis.</p>
+          </div>
+          <input id="maskot-aktif" type="checkbox" checked>
+        </div>
+        <p class="settings-hint" id="appearance-status" role="status" aria-live="polite">Disimpan di browser ini.</p>
+      </section>
+
+      <section class="pf-panel" id="panel-editor" data-panel="editor" hidden>
+        <header class="pf-bar"><button class="pf-kembali" type="button" aria-label="Kembali" data-ikon="kembali"></button><h2>Editor dan progres</h2></header>
+        <div class="setting-row">
+          <div><label for="editor-font-size">Ukuran font</label></div>
+          <select id="editor-font-size">
+            <option value="12">12 px</option><option value="13">13 px</option><option value="14">14 px</option>
+            <option value="15">15 px</option><option value="16">16 px</option><option value="18">18 px</option><option value="20">20 px</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <div><label for="editor-tab-size">Indentasi</label></div>
+          <select id="editor-tab-size"><option value="2">2 spasi</option><option value="4">4 spasi</option></select>
+        </div>
+        <div class="setting-row">
+          <div><label for="editor-wrap">Line wrapping</label><p>Baris panjang turun otomatis.</p></div>
+          <input id="editor-wrap" type="checkbox">
+        </div>
+        <div class="setting-row">
+          <div><label for="editor-line-numbers">Nomor baris</label></div>
+          <input id="editor-line-numbers" type="checkbox">
+        </div>
+        <div class="setting-row">
+          <div><label for="editor-hint">Petunjuk kode</label><p>Saran saat mengetik di Editor Web.</p></div>
+          <input id="editor-hint" type="checkbox">
+        </div>
+        <p class="settings-hint" id="editor-status" role="status" aria-live="polite">Disimpan di browser ini.</p>
+        <p class="profil-sinkron" id="profil-sinkron" role="status" aria-live="polite" hidden></p>
+      </section>
+
+      <section class="pf-panel" id="panel-tentang" data-panel="tentang" hidden>
+        <header class="pf-bar"><button class="pf-kembali" type="button" aria-label="Kembali" data-ikon="kembali"></button><h2>Tentang</h2></header>
+        <div class="about-row"><span>Platform</span><strong>CodingSkanetra</strong></div>
+        <div class="about-row"><span>Penyimpanan</span><strong>Browser + akun</strong></div>
+        <a class="pf-baris pf-baris-tunggal" href="about.html">
+          <span class="pf-ik" data-ikon="tentang"></span>
+          <span class="pf-teks"><strong>Tentang komunitas</strong><small>Siapa kami dan kenapa dibuat</small></span>
+          <span class="pf-panah" data-ikon="panah"></span>
+        </a>
+        <div class="settings-reset">
+          <div><strong>Atur ulang pengaturan</strong><p>Kembalikan tema dan editor ke bawaan.</p></div>
+          <button type="button" class="settings-reset-button" id="reset-settings">Atur ulang</button>
+        </div>
+      </section>
+    </div>
   </main>
 
   <footer class="footer">
@@ -150,6 +253,8 @@
     </div>
   </footer>
 
-  <script src="../js/profil.js?v=2" defer></script>
+  <script src="../js/profil.js?v=3" defer></script>
+  <script src="../js/setting.js?v=8"></script>
+  <script src="../js/profil-menu.js?v=1" defer></script>
 </body>
 </html>
