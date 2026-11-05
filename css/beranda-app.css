@@ -1,88 +1,178 @@
-/* Beranda ala aplikasi. Hanya tampil di HP (<= 720px); desktop memakai beranda biasa. */
-.app-beranda { display: none; }
+/* Beranda ala aplikasi, dipakai di HP dan desktop: header profil, pintasan editor, menu ikon,
+   daftar materi, editor aktif, dan info singkat web. */
+.hm { padding-block: 18px 12px; display: grid; gap: 26px; }
+.hm-bagian { min-width: 0; }
 
-@media (max-width: 720px) {
-  .app-beranda { display: block; padding: 14px 16px 8px; }
-
-  /* Teks panjang disembunyikan di HP */
-  #beranda.beranda,
-  .catatan,
-  .footer > p,
-  .footer-brand { display: none; }
-  .footer { padding-block: 8px 20px; text-align: center; }
-
-  .ab-akun {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    background: var(--card-background);
-    color: var(--text);
-    text-decoration: none;
-  }
-  .ab-avatar {
-    flex: none;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-weight: 700;
-  }
-  .ab-avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .ab-avatar svg { width: 22px; height: 22px; }
-  .ab-nama { display: grid; min-width: 0; }
-  .ab-nama strong { font-size: 1rem; }
-  .ab-nama small { color: var(--muted); font-size: 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-  .ab-judul { margin: 22px 2px 10px; font-size: 0.95rem; font-weight: 600; color: var(--muted); }
-
-  .ab-editor { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .ab-editor a {
-    display: grid;
-    gap: 4px;
-    justify-items: start;
-    padding: 14px 12px;
-    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
-    border-radius: 14px;
-    background: var(--accent-soft);
-    color: var(--text);
-    text-decoration: none;
-  }
-  .ab-editor i { display: grid; place-items: center; width: 44px; height: 44px; font-style: normal; }
-  .ab-editor i.punya-gambar { width: 52px; height: 52px; }
-  .ab-editor b { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 1.35rem; color: var(--accent); }
-  .ab-editor span { font-size: 0.78rem; color: var(--muted); }
-
-  .ab-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px 6px; }
-  .ab-grid a {
-    display: grid;
-    justify-items: center;
-    gap: 7px;
-    min-width: 0;
-    color: var(--text);
-    text-decoration: none;
-    font-size: 0.72rem;
-    text-align: center;
-  }
-  .ab-grid i {
-    width: 54px;
-    height: 54px;
-    display: grid;
-    place-items: center;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    background: var(--card-background);
-    color: var(--accent);
-  }
-  .ab-grid i.punya-gambar { padding: 9px; }
-  .ab-grid span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .ab-editor a:active, .ab-grid a:active i, .ab-akun:active { transform: scale(0.97); }
-  .ab-editor a:focus-visible, .ab-grid a:focus-visible, .ab-akun:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* ---------- Header: logo, nama, ikon profil ---------- */
+.hm-atas {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "merek sapa akun";
+  align-items: center;
+  gap: 12px;
 }
-@media (prefers-reduced-motion: reduce) { .ab-editor a, .ab-grid i, .ab-akun { transition: none; } }
+.hm-merek { grid-area: merek; display: flex; align-items: center; gap: 11px; min-width: 0; color: var(--text); text-decoration: none; }
+.hm-merek img { display: block; width: auto; height: 40px; flex: none; }
+.hm-merek-teks { display: grid; min-width: 0; line-height: 1.2; }
+.hm-merek-teks strong { font-size: 1.05rem; font-weight: 750; }
+.hm-merek-teks small { color: var(--muted); font-size: 0.78rem; }
+.hm-akun { grid-area: akun; text-decoration: none; color: var(--text); }
+.ab-avatar {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  border: 2px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+}
+.ab-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.ab-avatar svg { width: 22px; height: 22px; }
+.hm-sapa { grid-area: sapa; display: grid; gap: 2px; min-width: 0; }
+.hm-halo { margin: 0; font-size: 1.2rem; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hm-sub { margin: 0; color: var(--muted); font-size: 0.88rem; }
+
+/* ---------- Judul bagian ---------- */
+.hm-judul { min-height: 22px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 2px 10px; }
+.hm-judul h2 { margin: 0; font-size: 0.95rem; font-weight: 650; color: var(--muted); }
+.hm-judul a { color: var(--accent); font-size: 0.84rem; text-decoration: none; }
+.hm-judul a:hover { text-decoration: underline; }
+.hm-judul a[hidden] { display: none; }
+
+/* ---------- Pintasan editor ---------- */
+.ab-editor { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.ab-editor a {
+  display: grid;
+  gap: 2px;
+  justify-items: start;
+  padding: 14px 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+  border-radius: 14px;
+  background: var(--accent-soft);
+  color: var(--text);
+  text-decoration: none;
+}
+.ab-editor i { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 4px; font-style: normal; }
+.ab-editor i.punya-gambar { width: 52px; height: 52px; }
+.ab-editor b { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 1.35rem; color: var(--accent); }
+.ab-editor strong { font-size: 0.98rem; }
+.ab-editor span { font-size: 0.76rem; color: var(--muted); }
+
+/* ---------- Menu ikon ---------- */
+.ab-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px 6px; }
+.ab-grid a { display: grid; justify-items: center; gap: 7px; min-width: 0; color: var(--text); text-decoration: none; font-size: 0.76rem; text-align: center; }
+.ab-grid i {
+  width: 54px; height: 54px;
+  display: grid; place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--card-background);
+  color: var(--accent);
+}
+.ab-grid i.punya-gambar { padding: 9px; }
+.ab-grid span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---------- Materi dan editor aktif ---------- */
+.hm-dua, .hm-kolom { display: grid; gap: 26px; }
+.hm-kolom { align-content: start; }
+.hm-materi { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.hm-materi a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card-background);
+  color: var(--text);
+  text-decoration: none;
+}
+.hm-mi {
+  flex: none;
+  display: grid; place-items: center;
+  width: 40px; height: 40px;
+  border-radius: 11px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 0.8rem; font-weight: 700;
+}
+.hm-mi.punya-gambar { background: none; }
+.hm-mt { display: grid; min-width: 0; }
+.hm-mt strong { font-size: 0.86rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hm-mt small { color: var(--muted); font-size: 0.72rem; }
+
+.hm-kartu { padding: 14px; border: 1px solid var(--border); border-radius: 14px; background: var(--card-background); display: grid; gap: 10px; }
+.hm-kosong { margin: 0; color: var(--muted); font-size: 0.88rem; }
+.hm-aktif-daftar { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.hm-aktif-daftar:empty { display: none; }
+.hm-aktif-daftar li { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--background); }
+.hm-aktif-teks { display: grid; flex: 1 1 auto; min-width: 0; }
+.hm-aktif-teks strong { font-size: 0.88rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hm-aktif-teks small { color: var(--muted); font-size: 0.74rem; }
+.hm-aktif-daftar a, .hm-aktif-daftar button, .hm-tombol {
+  flex: none;
+  padding: 7px 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+  border-radius: 9px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font: inherit; font-size: 0.8rem; font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.hm-tombol { justify-self: start; }
+.hm-terakhir { display: flex; align-items: center; gap: 10px; }
+.hm-tombol[hidden], .hm-kosong[hidden] { display: none; }
+
+/* ---------- Tentang ---------- */
+.hm-tentang { display: flex; align-items: center; gap: 16px; padding: 16px; border: 1px solid var(--border); border-radius: 14px; background: var(--card-background); }
+.hm-tentang #maskot { flex: none; }
+.hm-tentang .maskot { margin: 0; }
+.hm-tentang-isi { min-width: 0; }
+.hm-tentang h2 { margin: 0 0 6px; font-size: 1rem; }
+.hm-tentang p { margin: 0 0 6px; color: var(--muted); font-size: 0.88rem; line-height: 1.6; }
+.hm-tentang .hm-pembuat strong { color: var(--text); }
+
+.ab-editor a:active, .ab-grid a:active i, .hm-akun:active, .hm-materi a:active { transform: scale(0.97); }
+.ab-editor a:focus-visible, .ab-grid a:focus-visible, .hm-akun:focus-visible, .hm-materi a:focus-visible,
+.hm-merek:focus-visible, .hm-judul a:focus-visible, .hm-tombol:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- HP ---------- */
+@media (max-width: 720px) {
+  .hm { width: 100%; padding-inline: 16px; }
+  /* Header halaman menggantikan navbar atas di beranda; bar bawah tetap dipakai */
+  body.beranda-hm .navbar { display: none; }
+  .hm-merek-teks { display: none; }
+  .hm-merek img { height: 44px; }
+  .footer > p, .footer-brand { display: none; }
+  .footer { padding-block: 8px 20px; text-align: center; }
+  .hm-tentang #maskot { display: none; }
+  .ab-editor span { display: none; }
+  .ab-editor a { justify-items: center; text-align: center; }
+  .hm-mt strong { white-space: normal; }
+}
+
+/* ---------- Desktop ---------- */
+@media (min-width: 721px) {
+  .hm { gap: 34px; padding-block: 32px 24px; }
+  .hm-atas {
+    gap: 24px;
+    padding: 18px 22px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--card-background);
+  }
+  .hm-merek img { height: 52px; }
+  .hm-sapa { padding-left: 24px; border-left: 1px solid var(--border); }
+  .hm-halo { font-size: 1.5rem; }
+  .hm-kolom { gap: 26px; }
+  .ab-avatar { width: 56px; height: 56px; }
+  .ab-editor { gap: 14px; }
+  .ab-editor a { padding: 18px 16px; }
+  .ab-grid { grid-template-columns: repeat(8, 1fr); }
+  .hm-dua { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 34px; align-items: start; }
+  .hm-materi { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) { .ab-editor a, .ab-grid i, .hm-akun, .hm-materi a { transition: none; } }

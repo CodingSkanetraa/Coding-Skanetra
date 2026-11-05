@@ -69,18 +69,20 @@
   <link rel="stylesheet" href="css/nav-mobile.css?v=2">
   <link rel="stylesheet" href="css/app-mobile.css?v=1">
   <link rel="stylesheet" href="css/navbar-akun.css?v=2">
-  <link rel="stylesheet" href="css/beranda-app.css?v=1">
+  <link rel="stylesheet" href="css/beranda-app.css?v=5">
+  <script src="js/akun-config.js?v=1" defer></script>
+  <script src="js/akun.js?v=4" defer></script>
   <script src="js/main.js?v=5" defer></script>
   <script src="js/ikon.js?v=4" defer></script>
   <script src="js/navbar-akun.js?v=3" defer></script>
   <script src="js/nav-mobile.js?v=4" defer></script>
   <script src="js/ikon-lokal.js?v=1" defer></script>
-  <script src="js/beranda-app.js?v=2" defer></script>
+  <script src="js/beranda-app.js?v=4" defer></script>
   <script src="js/gerak.js?v=1" defer></script>
   <script src="js/maskot.js?v=4" defer></script>
 </head>
 
-<body>
+<body class="beranda-hm">
   <header class="navbar">
     <a class="brand" href="index.html#beranda" aria-label="CodingSkanetra, beranda">
       <img class="brand-logo" src="assets/images/logo-eskul.png" alt="" width="38" height="44">
@@ -102,23 +104,34 @@
     </nav>
   </header>
 
-  <main>
-    <section class="app-beranda" id="app-beranda" aria-label="Beranda">
-      <div class="ab-sapa">
-        <a class="ab-akun" id="ab-akun" href="pages/login.html">
-          <span class="ab-avatar" id="ab-avatar" aria-hidden="true"></span>
-          <span class="ab-nama"><strong id="ab-halo">Halo!</strong><small id="ab-sub">Masuk untuk simpan proyek</small></span>
-        </a>
-      </div>
+  <main class="hm section-container">
+    <h1 class="sr-only">Coding Skanetra, belajar ngoding bareng</h1>
 
-      <h2 class="ab-judul">Mulai coding</h2>
+    <header class="hm-atas" id="app-beranda" aria-label="Beranda">
+      <a class="hm-merek" href="index.html" aria-label="Coding Skanetra, beranda">
+        <img src="assets/images/logo-eskul.png" alt="" width="38" height="44">
+        <span class="hm-merek-teks"><strong>Coding<span class="brand-accent">Skanetra</span></strong><small>SMK Negeri Situraja</small></span>
+      </a>
+      <a class="hm-akun ab-akun" id="ab-akun" href="pages/login.html" aria-label="Akun">
+        <span class="ab-avatar" id="ab-avatar" aria-hidden="true"></span>
+      </a>
+      <div class="hm-sapa">
+        <p class="hm-halo" id="ab-halo">Halo!</p>
+        <p class="hm-sub" id="ab-sub">Masuk untuk simpan proyek</p>
+      </div>
+    </header>
+
+    <section class="hm-bagian" aria-labelledby="h-coding">
+      <div class="hm-judul"><h2 id="h-coding">Mulai coding</h2><a href="pages/playground.html">Semua editor</a></div>
       <div class="ab-editor">
-        <a href="pages/editor-html.html"><i data-ikon-lokal="html"><b>HTML</b></i><span>Web</span></a>
-        <a href="pages/editor-python.html"><i data-ikon-lokal="python"><b>Py</b></i><span>Python</span></a>
-        <a href="pages/editor-cpp.html"><i data-ikon-lokal="cpp"><b>C++</b></i><span>C++</span></a>
+        <a href="pages/editor-html.html"><i data-ikon-lokal="html"><b>HTML</b></i><strong>Web</strong><span>HTML, CSS, JS</span></a>
+        <a href="pages/editor-python.html"><i data-ikon-lokal="python"><b>Py</b></i><strong>Python</strong><span>Console, Visual</span></a>
+        <a href="pages/editor-cpp.html"><i data-ikon-lokal="cpp"><b>C++</b></i><strong>C++</strong><span>Compile online</span></a>
       </div>
+    </section>
 
-      <h2 class="ab-judul">Menu</h2>
+    <section class="hm-bagian" aria-labelledby="h-menu">
+      <div class="hm-judul"><h2 id="h-menu">Menu</h2></div>
       <div class="ab-grid">
         <a href="pages/materi.html"><i data-ikon-lokal="materi" data-ikon-cadangan="materi"></i><span>Materi</span></a>
         <a href="pages/playground.html"><i data-ikon-lokal="playground" data-ikon-cadangan="editor"></i><span>Playground</span></a>
@@ -131,75 +144,48 @@
       </div>
     </section>
 
-    <section class="beranda section-container" id="beranda">
-      <div class="beranda-teks">
-        <p class="kicker">Komunitas belajar pemrograman</p>
-        <h1>Tempat kita belajar ngoding bareng.</h1>
-        <p class="beranda-isi">
-          Coding Skanetra adalah kumpulan teman yang sedang belajar pemrograman.
-          Ada materi untuk dibaca, editor untuk coba-coba kode, dan satu game
-          buat selingan. Salah itu biasa, namanya juga belajar.
-        </p>
-        <div class="beranda-aksi">
-          <a class="button button-primary" href="pages/materi.html">Mulai dari materi</a>
-          <a class="tautan-garis" href="pages/playground.html">atau langsung coba editor</a>
-        </div>
+    <div class="hm-dua">
+      <section class="hm-bagian" aria-labelledby="h-materi">
+        <div class="hm-judul"><h2 id="h-materi">Materi tersedia</h2><a href="pages/materi.html">Lihat semua</a></div>
+        <ul class="hm-materi">
+          <li><a href="pages/html-dasar.html"><span class="hm-mi" data-ikon-lokal="html">HTML</span><span class="hm-mt"><strong>HTML Dasar</strong><small>Pemula</small></span></a></li>
+          <li><a href="pages/css-dasar.html"><span class="hm-mi" data-ikon-lokal="css">CSS</span><span class="hm-mt"><strong>CSS Dasar</strong><small>Pemula</small></span></a></li>
+          <li><a href="pages/javascript-dasar.html"><span class="hm-mi" data-ikon-lokal="javascript">JS</span><span class="hm-mt"><strong>JavaScript Dasar</strong><small>Pemula</small></span></a></li>
+          <li><a href="pages/python-dasar.html"><span class="hm-mi" data-ikon-lokal="python">Py</span><span class="hm-mt"><strong>Python Dasar</strong><small>Pemula</small></span></a></li>
+          <li><a href="pages/cpp-dasar.html"><span class="hm-mi" data-ikon-lokal="cpp">C++</span><span class="hm-mt"><strong>C++ Dasar</strong><small>Menengah</small></span></a></li>
+          <li><a href="pages/proyek-mini.html"><span class="hm-mi" data-ikon-lokal="proyek-mini">&lt;/&gt;</span><span class="hm-mt"><strong>Proyek Mini</strong><small>Menengah</small></span></a></li>
+        </ul>
+      </section>
+
+      <div class="hm-kolom">
+        <section class="hm-bagian" aria-labelledby="h-terakhir">
+          <div class="hm-judul"><h2 id="h-terakhir">Proyek terakhir dibuka</h2></div>
+          <div class="hm-kartu">
+            <p class="hm-kosong" id="hm-terakhir-pesan">Belum ada proyek. Mulai dari salah satu editor di atas.</p>
+            <div class="hm-terakhir" id="hm-terakhir" hidden>
+              <div class="hm-aktif-teks"><strong id="hm-terakhir-nama"></strong><small id="hm-terakhir-info"></small></div>
+              <a class="hm-tombol" id="hm-terakhir-buka" href="pages/playground.html">Lanjutkan</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="hm-bagian" aria-labelledby="h-aktif">
+          <div class="hm-judul"><h2 id="h-aktif">Tautan berbagi aktif</h2><a href="pages/profil.html#tautan" id="hm-kelola" hidden>Kelola</a></div>
+          <div class="hm-kartu" id="hm-aktif">
+            <p class="hm-kosong" id="hm-aktif-pesan">Masuk untuk melihat tautan berbagi yang masih aktif.</p>
+            <ul class="hm-aktif-daftar" id="hm-aktif-daftar"></ul>
+            <a class="hm-tombol" id="hm-aktif-masuk" href="pages/login.html">Masuk</a>
+          </div>
+        </section>
       </div>
+    </div>
 
-      <div class="beranda-samping">
-        <div id="maskot"></div>
-
-      <nav class="daftar-isi" aria-label="Isi website">
-        <h2>Isi website</h2>
-        <ol>
-          <li>
-            <a href="pages/materi.html">
-              <span class="di-judul">Materi</span>
-              <span class="di-ket">HTML, CSS, JavaScript, Python, C++</span>
-            </a>
-          </li>
-          <li>
-            <a href="pages/playground.html">
-              <span class="di-judul">Playground</span>
-              <span class="di-ket">Tulis kode dan langsung lihat hasilnya</span>
-            </a>
-          </li>
-          <li>
-            <a href="pages/peringkat.html">
-              <span class="di-judul">Peringkat</span>
-              <span class="di-ket">Poin anggota, perlu masuk dulu</span>
-            </a>
-          </li>
-          <li>
-            <a href="pages/games.html">
-              <span class="di-judul">Games</span>
-              <span class="di-ket">Code Rush: Robot Escape</span>
-            </a>
-          </li>
-          <li>
-            <a href="pages/struktur-organisasi.html">
-              <span class="di-judul">Struktur Organisasi</span>
-              <span class="di-ket">Siapa saja yang mengurus komunitas ini</span>
-            </a>
-          </li>
-        </ol>
-      </nav>
-      </div>
-    </section>
-
-    <section class="catatan section-container" id="tentang">
-      <h2>Kenapa dibuat?</h2>
-      <div class="catatan-isi">
-        <p>
-          Belajar coding itu bukan cuma menulis baris program. Kita berpikir,
-          mencoba, salah, memperbaiki, lalu belajar dari teman yang lewat
-          jalan yang sama.
-        </p>
-        <p>
-          Website ini dibuat supaya proses itu punya tempat. Kalau ada yang
-          kurang pas atau ada ide fitur, bilang saja ke pengurus.
-          <a class="tautan-garis" href="pages/about.html">Baca selengkapnya</a>
-        </p>
+    <section class="hm-bagian hm-tentang" id="tentang" aria-labelledby="h-tentang">
+      <div id="maskot"></div>
+      <div class="hm-tentang-isi">
+        <h2 id="h-tentang">Tentang web ini</h2>
+        <p>Tempat anak eskul coding SMK Negeri Situraja belajar ngoding bareng: materi, editor online, dan game.</p>
+        <p class="hm-pembuat">Dibuat oleh <strong>Kaito Sora</strong> dan tim Coding Skanetra. <a class="tautan-garis" href="pages/about.html">Selengkapnya</a></p>
       </div>
     </section>
   </main>
