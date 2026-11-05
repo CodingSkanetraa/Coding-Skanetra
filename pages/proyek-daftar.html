@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Daftar proyek kodemu di CodingSkanetra: buat, buka, ubah nama, duplikat, dan bagikan proyek Web, Python, dan C++.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0b100e">
+  <title>Proyek | CodingSkanetra</title>
+
+  <link rel="icon" href="../favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" href="../favicon-96.png" sizes="96x96">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <script src="../js/theme.js?v=5"></script>
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <link rel="stylesheet" href="../css/nav-mobile.css?v=2">
+  <link rel="stylesheet" href="../css/app-mobile.css?v=1">
+  <link rel="stylesheet" href="../css/navbar-akun.css?v=2">
+  <link rel="stylesheet" href="../css/proyek-daftar.css?v=1">
+  <script src="../js/akun-config.js?v=1" defer></script>
+  <script src="../js/akun.js?v=4" defer></script>
+  <script src="../js/main.js?v=5" defer></script>
+  <script src="../js/ikon.js?v=4" defer></script>
+  <script src="../js/navbar-akun.js?v=3" defer></script>
+  <script src="../js/nav-mobile.js?v=4" defer></script>
+  <script src="../js/proyek-daftar.js?v=1" defer></script>
+</head>
+<body class="pd-hal">
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="CodingSkanetra, beranda">
+      <img class="brand-logo" src="../assets/images/logo-eskul.png" alt="" width="38" height="44">
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+      <a class="nav-link active" href="playground.html" data-nav="playground" aria-current="page">Playground</a>
+      <a class="nav-link" href="peringkat.html" data-nav="peringkat">Peringkat</a>
+      <a class="nav-link" href="games.html" data-nav="games">Games</a>
+      <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
+      <a class="nav-link" href="dokumentasi.html" data-nav="dokumentasi">Dokumentasi</a>
+      <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
+      <a class="nav-link" href="profil.html#tampilan" data-nav="setting">Pengaturan</a>
+    </nav>
+  </header>
+
+  <main class="pd">
+    <header class="pd-atas">
+      <a class="pd-ikon" id="pd-setting" href="profil.html#editor" aria-label="Pengaturan editor" title="Pengaturan editor"></a>
+      <h1 id="pd-judul">Proyek Web</h1>
+      <a class="pd-ikon pd-profil" id="pd-profil" href="login.html?next=proyek-daftar" aria-label="Masuk" title="Profil"></a>
+    </header>
+
+    <nav class="pd-jenis" aria-label="Pilih editor">
+      <a href="proyek-daftar.html?j=web" data-j="web">Web</a>
+      <a href="proyek-daftar.html?j=py" data-j="py">Python</a>
+      <a href="proyek-daftar.html?j=cpp" data-j="cpp">C++</a>
+    </nav>
+
+    <div class="pd-alat" id="pd-alat" hidden>
+      <input class="pd-cari" id="pd-cari" type="search" placeholder="Cari proyek" aria-label="Cari proyek" autocomplete="off" maxlength="60">
+      <select class="pd-urut" id="pd-urut" aria-label="Urutkan proyek">
+        <option value="diubah">Diubah</option>
+        <option value="dibuat">Dibuat</option>
+        <option value="nama">Nama A-Z</option>
+      </select>
+    </div>
+
+    <p class="pd-pesan" id="pd-pesan" role="status" aria-live="polite">Memuat…</p>
+    <div class="pd-impor" id="pd-impor" hidden></div>
+    <div class="pd-isi" id="pd-isi"></div>
+    <div class="pd-tamu" id="pd-tamu" hidden></div>
+
+    <button class="pd-fab" id="pd-baru" type="button" aria-label="Proyek baru" hidden>
+      <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>
+      <span class="pd-fab-teks">Proyek baru</span>
+    </button>
+  </main>
+
+  <dialog class="pd-dialog" id="pd-dialog" aria-labelledby="pd-dialog-judul"></dialog>
+  <div class="pd-menu" id="pd-menu" role="menu" hidden></div>
+</body>
+</html>

@@ -1,0 +1,159 @@
+/* Halaman daftar proyek editor (HP: daftar; desktop: kartu). */
+.pd { width: min(100% - 32px, 1120px); margin-inline: auto; padding: 14px 0 120px; }
+
+.pd-atas { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; align-items: center; gap: 8px; margin-bottom: 14px; }
+.pd-atas h1 { margin: 0; text-align: center; font-size: 1.2rem; font-weight: 700; }
+.pd-ikon {
+  display: grid; place-items: center;
+  width: 44px; height: 44px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--card-background);
+  color: var(--accent);
+  text-decoration: none;
+}
+.pd-ikon svg { width: 22px; height: 22px; }
+.pd-profil { border: 2px solid color-mix(in srgb, var(--accent) 45%, var(--border)); }
+.pd-profil .cs-avatar { --avatar-ukuran: 40px; }
+
+/* Pilih editor: tiap editor punya daftar sendiri */
+.pd-jenis { display: flex; gap: 4px; padding: 4px; margin-bottom: 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--card-background); }
+.pd-jenis a { flex: 1 1 0; padding: 9px 6px; border-radius: 9px; color: var(--muted); font-size: 0.9rem; font-weight: 600; text-align: center; text-decoration: none; }
+.pd-jenis a[aria-current="page"] { background: var(--accent-soft); color: var(--accent); }
+
+.pd-alat { display: flex; gap: 10px; margin-bottom: 8px; }
+.pd-cari, .pd-urut {
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card-background);
+  color: var(--text);
+  font: inherit; font-size: 0.9rem;
+}
+.pd-cari { flex: 1 1 auto; }
+.pd-urut { flex: 0 1 auto; }
+.pd-alat [hidden] { display: none; }
+
+.pd-pesan { margin: 14px 2px; color: var(--muted); font-size: 0.9rem; }
+.pd-pesan.galat { color: var(--danger, #ff8a80); }
+.pd-pesan:empty { display: none; }
+
+.pd-grup { margin: 18px 0 0; }
+.pd-grup h2 { margin: 0 2px 8px; font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+.pd-daftar { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+
+.pd-item { position: relative; display: flex; align-items: center; border: 1px solid var(--border); border-radius: 14px; background: var(--card-background); }
+.pd-item.terakhir { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+.pd-buka { display: flex; flex: 1 1 auto; align-items: center; gap: 12px; min-width: 0; padding: 10px 4px 10px 10px; color: var(--text); text-decoration: none; }
+.pd-tile {
+  flex: none; display: grid; place-items: center;
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-weight: 700; font-size: 0.9rem;
+  overflow: hidden;
+}
+.pd-tile img { display: block; width: 100%; height: 100%; padding: 6px; object-fit: contain; box-sizing: border-box; }
+.pd-teks { display: grid; gap: 2px; min-width: 0; }
+.pd-teks strong { font-size: 0.98rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pd-teks small { color: var(--muted); font-size: 0.76rem; }
+.pd-label { display: inline-block; margin-top: 2px; padding: 1px 7px; width: fit-content; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 0.68rem; font-weight: 600; }
+.pd-titik {
+  flex: none; display: grid; place-items: center;
+  width: 44px; height: 44px; margin-right: 4px;
+  border: 0; border-radius: 50%;
+  background: none; color: var(--muted);
+  cursor: pointer;
+}
+.pd-titik:hover, .pd-titik[aria-expanded="true"] { background: var(--surface-hover, rgb(255 255 255 / 8%)); color: var(--text); }
+.pd-titik svg { width: 22px; height: 22px; }
+
+.pd-kosong, .pd-tamu, .pd-impor { padding: 18px; border: 1px dashed var(--border); border-radius: 14px; text-align: center; color: var(--muted); }
+.pd-tamu, .pd-impor { display: grid; gap: 10px; justify-items: center; }
+.pd-tamu[hidden], .pd-impor[hidden] { display: none; }
+.pd-impor { margin-bottom: 12px; border-style: solid; background: var(--card-background); text-align: left; justify-items: start; }
+.pd-impor p, .pd-tamu p { margin: 0; }
+.pd-tamu strong { color: var(--text); }
+.pd-aksi { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.pd-btn {
+  padding: 9px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card-background);
+  color: var(--text);
+  font: inherit; font-size: 0.88rem; font-weight: 600;
+  text-decoration: none; cursor: pointer;
+}
+.pd-btn.utama { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); background: var(--accent-soft); color: var(--accent); }
+.pd-btn.bahaya { border-color: color-mix(in srgb, var(--danger, #ff8a80) 55%, var(--border)); color: var(--danger, #ff8a80); }
+.pd-btn:disabled { opacity: 0.55; cursor: default; }
+
+/* Tombol melayang di kanan bawah */
+.pd-fab {
+  position: fixed;
+  right: 16px;
+  bottom: calc(var(--bb-tinggi, 58px) + env(safe-area-inset-bottom, 0px) + 16px);
+  z-index: 110;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  width: 58px; height: 58px;
+  border: 0; border-radius: 50%;
+  background: var(--accent);
+  color: #06140c;
+  box-shadow: 0 8px 22px rgb(0 0 0 / 45%);
+  font: inherit; font-weight: 700;
+  cursor: pointer;
+}
+.pd-fab[hidden] { display: none; }
+.pd-fab:active { transform: scale(0.95); }
+.pd-fab-teks { display: none; }
+html.keyboard-terbuka .pd-fab { display: none; }
+
+/* Menu titik tiga */
+.pd-menu { position: fixed; z-index: 130; min-width: 190px; padding: 6px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); box-shadow: 0 10px 30px rgb(0 0 0 / 40%); }
+.pd-menu[hidden] { display: none; }
+.pd-menu button { display: block; width: 100%; padding: 11px 12px; border: 0; border-radius: 8px; background: none; color: var(--text); font: inherit; font-size: 0.93rem; text-align: left; cursor: pointer; }
+.pd-menu button:hover, .pd-menu button:focus-visible { background: var(--surface-hover, rgb(255 255 255 / 8%)); outline: none; }
+.pd-menu button.bahaya { color: var(--danger, #ff8a80); }
+
+/* Dialog */
+.pd-dialog { margin: auto; width: min(460px, calc(100vw - 32px)); padding: 20px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); color: var(--text); }
+.pd-dialog::backdrop { background: rgb(0 0 0 / 55%); }
+.pd-dialog h2 { margin: 0 0 6px; font-size: 1.15rem; }
+.pd-dialog p { margin: 6px 0 0; color: var(--muted); font-size: 0.9rem; line-height: 1.55; }
+.pd-dialog label { display: block; margin: 14px 0 6px; color: var(--muted); font-size: 0.85rem; }
+.pd-dialog input, .pd-dialog textarea { width: 100%; box-sizing: border-box; padding: 9px 11px; border: 1px solid var(--border); border-radius: 8px; background: var(--background); color: var(--text); font: inherit; }
+.pd-dialog textarea { resize: none; font: 0.8rem/1.45 ui-monospace, Menlo, Consolas, monospace; word-break: break-all; }
+.pd-dialog .pd-aksi { margin-top: 16px; }
+.pd-dialog .pd-galat { color: var(--danger, #ff8a80); }
+
+.pd-ikon:focus-visible, .pd-jenis a:focus-visible, .pd-buka:focus-visible, .pd-titik:focus-visible, .pd-fab:focus-visible, .pd-btn:focus-visible,
+.pd-cari:focus-visible, .pd-urut:focus-visible, .pd-dialog input:focus-visible, .pd-dialog textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* HP: header halaman menggantikan navbar atas */
+@media (max-width: 720px) {
+  body.pd-hal .navbar { display: none; }
+  .footer { display: none; }
+}
+
+/* Desktop: kartu */
+@media (min-width: 721px) {
+  .pd { padding: 28px 0 100px; }
+  .pd-atas { max-width: none; margin-bottom: 20px; }
+  .pd-atas h1 { font-size: 1.6rem; }
+  .pd-jenis { width: min(420px, 100%); margin-inline: auto; }
+  .pd-alat { max-width: 640px; margin: 0 auto 14px; }
+  .pd-daftar { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+  .pd-item { flex-direction: column; align-items: stretch; }
+  .pd-buka { flex-direction: column; align-items: flex-start; gap: 14px; padding: 18px 16px 16px; }
+  .pd-tile { width: 64px; height: 64px; border-radius: 14px; }
+  .pd-teks strong { max-width: 100%; font-size: 1.05rem; }
+  .pd-titik { position: absolute; top: 8px; right: 6px; margin: 0; }
+  .pd-fab { right: 32px; bottom: 32px; width: auto; height: 54px; padding: 0 22px 0 18px; border-radius: 999px; }
+  .pd-fab-teks { display: inline; }
+}
+@media (prefers-reduced-motion: reduce) { .pd-fab { transition: none; } }

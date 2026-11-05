@@ -19,6 +19,7 @@
   const POLA_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   const NAMA_JENIS = { web: "Editor Web", py: "Editor Python", cpp: "Editor C++" };
   const KUNCI_TUTUP_HINT = "cs-proyek-hint-tutup";
+  const KUNCI_TERAKHIR = "codingskanetra-terakhir";
 
   const el = (tag, kelas, teks) => {
     const e = document.createElement(tag);
@@ -102,7 +103,7 @@
     const statusEl = el("span", "proyek-status");
     statusEl.setAttribute("role", "status");
     statusEl.setAttribute("aria-live", "polite");
-    const daftarBtn = tombol("proyek-btn", "Proyek saya");
+    const daftarBtn = tombol("proyek-btn", "Daftar proyek");
     const jadikanBtn = tombol("proyek-btn", "Simpan sebagai proyek");
     bar.append(label, nama, info, statusEl, jadikanBtn, daftarBtn);
 
@@ -271,7 +272,20 @@
       waktuUbah = Date.now();
       tundaSampai = 0;
       setStatus("ok", "Tersimpan");
+      catatTerakhir();
+      // Muat ulang halaman membuka proyek yang sama (dan tidak membuat proyek baru lagi).
+      try {
+        const u = new URL(location.href);
+        u.searchParams.delete("baru"); u.searchParams.delete("bebas"); u.searchParams.set("p", baris.id);
+        history.replaceState(null, "", u.pathname + u.search);
+      } catch (e) { /* abaikan */ }
       beritahu("Proyek \"" + baris.nama + "\" dibuka. Perubahan disimpan otomatis.");
+    }
+
+    // Untuk kartu "Proyek terakhir dibuka" di beranda (js/terakhir.js mencatat editornya, di sini proyeknya).
+    function catatTerakhir() {
+      if (!proyek) return;
+      tulis(KUNCI_TERAKHIR, JSON.stringify({ jenis, waktu: Date.now(), id: proyek.id, nama: proyek.nama }));
     }
 
     // Sebelum membuka proyek lain: pastikan yang sekarang sudah tersimpan.
@@ -303,6 +317,7 @@
         try {
           const hasil = await gantiNama(proyek.id, baru);
           proyek.nama = hasil;
+          catatTerakhir();
           gambarBar();
         } catch (e) { setStatus("galat", e.message); }
       };
@@ -393,7 +408,7 @@
             const baru = input.value.trim();
             if (!baru) { tampilPesan("Nama tidak boleh kosong.", true); return; }
             p.nama = await gantiNama(p.id, baru);
-            if (proyek && proyek.id === p.id) { proyek.nama = p.nama; gambarBar(); }
+            if (proyek && proyek.id === p.id) { proyek.nama = p.nama; catatTerakhir(); gambarBar(); }
             tampilPesan("");
             gambarDaftar();
           });
@@ -496,12 +511,38 @@
       return dlg;
     }
 
-    daftarBtn.addEventListener("click", () => bukaDialog());
+    // Daftar proyek ada di halaman sendiri; pastikan yang sekarang sudah tersimpan sebelum pindah.
+    daftarBtn.addEventListener("click", async () => {
+      if (!(await amankanSebelumPindah())) return;
+      location.href = "proyek-daftar.html?j=" + jenis;
+    });
     jadikanBtn.addEventListener("click", () => bukaDialog({ dariKodeSekarang: true }));
 
     gambarBar();
-    // Tampil otomatis sebelum menulis, kecuali halaman dibuka dari tautan "Bagikan" (#bagikan= atau #b=): kode orang lain jangan tertimpa.
-    if (!/^#(bagikan|b)=/.test(location.hash)) bukaDialog();
+    // Dari halaman daftar proyek: ?p=<id> membuka proyek itu, ?baru=<nama> membuat proyek baru dengan isi awal editor.
+    // Tanpa keduanya (mis. ?bebas=1 atau tautan "Bagikan") kode di editor tidak disentuh.
+    async function dariAlamat() {
+      const params = new URLSearchParams(location.search);
+      const id = params.get("p");
+      const baru = params.get("baru");
+      if (id === null && baru === null) return;
+      try {
+        if (id !== null) {
+          setStatus("menyimpan", "Membuka proyek…");
+          aktifkan(await bukaProyek(id));
+        } else {
+          setStatus("menyimpan", "Membuat proyek…");
+          let isi;
+          try { isi = typeof adapter.awal === "function" ? adapter.awal() : JSON.parse(isiSekarang() || "{}"); } catch (e) { isi = JSON.parse(isiSekarang() || "{}"); }
+          const dibuat = await buatProyek(baru.trim().slice(0, 60) || "Proyek baru", isi);
+          aktifkan({ id: dibuat.id, nama: dibuat.nama, isi });
+        }
+      } catch (e) {
+        setStatus("galat", (e && e.message) || "Proyek belum bisa dibuka.");
+        beritahu((e && e.message) || "Proyek belum bisa dibuka.");
+      }
+    }
+    dariAlamat();
 
     // Sesi berakhir di tab lain: beri tahu, tetapi jangan membuang kode yang belum tersimpan.
     window.addEventListener("cs:akun", (e) => {

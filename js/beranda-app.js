@@ -14,6 +14,7 @@
 
   const POLA_FOTO = /^data:image\/(webp|jpeg);base64,[A-Za-z0-9+/]+=*$/;
   const POLA_KODE = /^[0-9a-f]{12}$/;
+  const POLA_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   const EDITOR = { web: ["Editor Web", "pages/editor-html.html"], py: ["Editor Python", "pages/editor-python.html"], cpp: ["Editor C++", "pages/editor-cpp.html"] };
 
   const fotoLokal = (uid) => {
@@ -131,10 +132,13 @@
     const pesan = document.getElementById("hm-terakhir-pesan");
     const kotak = document.getElementById("hm-terakhir");
     if (!pesan || !kotak) return;
-    let jenis = null, waktu = 0;
+    let jenis = null, waktu = 0, idProyek = null, namaProyek = "";
     try {
       const t = JSON.parse(localStorage.getItem("codingskanetra-terakhir") || "null");
-      if (t && TERAKHIR[t.jenis] && typeof t.waktu === "number") { jenis = t.jenis; waktu = t.waktu; }
+      if (t && TERAKHIR[t.jenis] && typeof t.waktu === "number") {
+        jenis = t.jenis; waktu = t.waktu;
+        if (typeof t.id === "string" && POLA_ID.test(t.id)) { idProyek = t.id; namaProyek = typeof t.nama === "string" ? t.nama.slice(0, 60) : ""; }
+      }
     } catch (e) { /* tidak ada catatan */ }
     if (!jenis) {
       // Belum ada catatan: pakai editor dengan kode tersimpan paling baru
@@ -145,9 +149,12 @@
     }
     if (!jenis) { pesan.hidden = false; kotak.hidden = true; return; }
     const simpan = Math.max(...TERAKHIR[jenis][2].map(bacaTersimpan));
-    document.getElementById("hm-terakhir-nama").textContent = TERAKHIR[jenis][0];
+    document.getElementById("hm-terakhir-nama").textContent = TERAKHIR[jenis][0] + (namaProyek ? " · " + namaProyek : "");
     document.getElementById("hm-terakhir-info").textContent = "Dibuka " + lalu(waktu) + (simpan ? " · ada kode tersimpan" : "");
-    document.getElementById("hm-terakhir-buka").setAttribute("href", TERAKHIR[jenis][1]);
+    // Proyek yang terakhir dibuka langsung terbuka; bila tidak ada, ke daftar proyek editor itu.
+    document.getElementById("hm-terakhir-buka").setAttribute("href", idProyek
+      ? TERAKHIR[jenis][1] + "?p=" + idProyek
+      : "pages/proyek-daftar.html?j=" + jenis);
     pesan.hidden = true;
     kotak.hidden = false;
   };
