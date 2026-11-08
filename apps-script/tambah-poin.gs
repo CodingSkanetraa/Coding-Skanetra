@@ -1,26 +1,22 @@
 /**
- * Aksi "tambahPoin" untuk Apps Script spreadsheet poin Coding Skanetra.
+ * Aksi "tambahPoin" untuk Apps Script Coding Skanetra (versi aman: TIDAK menulis ke sheet "Poin").
  *
- * CARA PAKAI
- *  1. Tempel seluruh isi berkas ini ke proyek Apps Script kamu (berkas baru, mis. tambah-poin.gs).
- *  2. Sesuaikan 4 nilai di KONFIGURASI sesuai spreadsheet-mu.
- *  3. Di doPost(e) yang sudah ada, setelah rahasia (secret) diperiksa, tambahkan:
- *        if (data.action === 'tambahPoin') return jsonKeluar_(tambahPoin_(data));
- *     ("data" = hasil JSON.parse(e.postData.contents); sesuaikan dengan nama variabel di kodemu.
- *      jsonKeluar_ ada di bawah; pakai pembantu milikmu sendiri bila sudah ada.)
- *  4. Deploy > Kelola deployment > Edit > Versi baru > Deploy (URL tetap sama).
+ * Poin tantangan hanya dicatat di sheet "LogTantangan" (dibuat otomatis). Peringkat menjumlahkannya
+ * lewat poinTantanganPerId_() (lihat PANDUAN: ubah getSemuaRanking satu kali).
  *
- * Penjaga ganda: kunci unik dicatat di sheet "LogTantangan", jadi pengiriman ulang
- * (karena jaringan putus, dsb.) tidak menambah poin dua kali.
+ * Pasang:
+ *  1. GANTI seluruh isi berkas ini (tambah-poin.gs) dengan kode di bawah.
+ *  2. Di doPost, sebelum "Aksi tidak dikenal":
+ *       if (action === 'tambahPoin') return jsonOutputCS_(tambahPoin_(body));
+ *  3. Deploy > Kelola deployment > pensil > Versi baru > Deploy.
+ *
+ * Kunci unik dicatat di LogTantangan, jadi kiriman ulang tidak menambah poin dua kali.
  */
 
-var KONFIGURASI = {
-  SHEET_POIN: 'Poin',        // nama sheet yang berisi poin per anggota
-  KOLOM_ID: 1,               // nomor kolom ID anggota (A = 1)
-  KOLOM_POIN: 3,             // nomor kolom total poin (C = 3)
-  BARIS_AWAL: 2              // baris pertama data (baris 1 = judul kolom)
-};
-var SHEET_LOG = 'LogTantangan';   // dibuat otomatis
+var SHEET_LOG = 'LogTantangan';
+var SHEET_POIN_ = 'Poin';
+var BARIS_AWAL_ = 7;      // baris pertama data di sheet Poin
+var KOLOM_ID_ = 1;        // kolom A = ID siswa
 
 function tambahPoin_(data) {
   var id = String(data.id || '').trim();
@@ -35,12 +31,25 @@ function tambahPoin_(data) {
   if (!kunciSkrip.tryLock(20000)) return { sukses: false, pesan: 'Sedang sibuk.' };
   try {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
+
+    // ID harus ada di sheet Poin (hanya dibaca, tidak diubah).
+    var sheet = ss.getSheetByName(SHEET_POIN_);
+    if (!sheet) return { sukses: false, pesan: 'Sheet Poin tidak ditemukan.' };
+    var baris = sheet.getLastRow();
+    var ada = false;
+    if (baris >= BARIS_AWAL_) {
+      var ids = sheet.getRange(BARIS_AWAL_, KOLOM_ID_, baris - BARIS_AWAL_ + 1, 1).getValues();
+      for (var j = 0; j < ids.length; j++) {
+        if (String(ids[j][0]).trim() === id) { ada = true; break; }
+      }
+    }
+    if (!ada) return { sukses: false, pesan: 'ID anggota tidak ada di spreadsheet.' };
+
     var log = ss.getSheetByName(SHEET_LOG);
     if (!log) {
       log = ss.insertSheet(SHEET_LOG);
       log.appendRow(['Waktu', 'Kunci', 'ID', 'Poin', 'Alasan']);
     }
-    // Sudah pernah masuk? Anggap berhasil (idempoten).
     var jumlah = log.getLastRow();
     if (jumlah > 1) {
       var kunciAda = log.getRange(2, 2, jumlah - 1, 1).getValues();
@@ -48,20 +57,6 @@ function tambahPoin_(data) {
         if (String(kunciAda[i][0]) === kunci) return { sukses: true, duplikat: true };
       }
     }
-
-    var sheet = ss.getSheetByName(KONFIGURASI.SHEET_POIN);
-    if (!sheet) return { sukses: false, pesan: 'Sheet poin tidak ditemukan.' };
-    var baris = sheet.getLastRow();
-    if (baris < KONFIGURASI.BARIS_AWAL) return { sukses: false, pesan: 'Anggota tidak ditemukan.' };
-    var ids = sheet.getRange(KONFIGURASI.BARIS_AWAL, KONFIGURASI.KOLOM_ID, baris - KONFIGURASI.BARIS_AWAL + 1, 1).getValues();
-    var target = -1;
-    for (var j = 0; j < ids.length; j++) {
-      if (String(ids[j][0]).trim() === id) { target = KONFIGURASI.BARIS_AWAL + j; break; }
-    }
-    if (target < 0) return { sukses: false, pesan: 'ID anggota tidak ada di spreadsheet.' };
-
-    var sel = sheet.getRange(target, KONFIGURASI.KOLOM_POIN);
-    sel.setValue((Number(sel.getValue()) || 0) + poin);
     log.appendRow([new Date(), kunci, id, poin, alasan]);
     SpreadsheetApp.flush();
     return { sukses: true };
@@ -70,6 +65,14 @@ function tambahPoin_(data) {
   }
 }
 
-function jsonKeluar_(objek) {
-  return ContentService.createTextOutput(JSON.stringify(objek)).setMimeType(ContentService.MimeType.JSON);
+// Jumlah poin tantangan per ID siswa: { 'S001': 3, ... }
+function poinTantanganPerId_() {
+  var log = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_LOG);
+  var hasil = {};
+  if (!log || log.getLastRow() < 2) return hasil;
+  log.getRange(2, 3, log.getLastRow() - 1, 2).getValues().forEach(function (b) {
+    var id = String(b[0]).trim();
+    if (id) hasil[id] = (hasil[id] || 0) + (Number(b[1]) || 0);
+  });
+  return hasil;
 }

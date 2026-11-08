@@ -9,7 +9,11 @@
   const KUNCI_FOTO = "codingskanetra-foto";
   const POLA_USERNAME = /^[a-z0-9_.]{3,20}$/;
   const POLA_FOTO = /^data:image\/(webp|jpeg);base64,[A-Za-z0-9+/]+=*$/;
-  const KELOMPOK_LAINNYA = ["struktur", "dokumentasi", "about", "setting"];
+  // Urutan menu: Beranda, Materi, Playground, Game (games, tantangan), Lainnya (sisanya).
+  const KELOMPOK = [
+    { id: "game", label: "Game", anggota: ["games", "tantangan"] },
+    { id: "lainnya", label: "Lainnya", anggota: ["peringkat", "struktur", "dokumentasi", "about", "setting"] }
+  ];
 
   // Username akun yang sedang masuk, atau null.
   function usernameAktif() {
@@ -63,33 +67,40 @@
     return e;
   };
 
-  // ---------- Menu "Lainnya" ----------
-  const anggota = KELOMPOK_LAINNYA.map((k) => nav.querySelector('a.nav-link[data-nav="' + k + '"]')).filter(Boolean);
-  if (anggota.length) {
-    const wadah = el("div", "nav-lainnya");
-    const tombol = el("button", "nav-link nav-lainnya-btn", "Lainnya");
+  // ---------- Menu dropdown (Game, Lainnya) ----------
+  const semuaWadah = [];
+  KELOMPOK.forEach((g) => {
+    const anggota = g.anggota.map((k) => nav.querySelector('a.nav-link[data-nav="' + k + '"]')).filter(Boolean);
+    if (!anggota.length) return;
+    const wadah = el("div", "nav-lainnya nav-" + g.id);
+    const tombol = el("button", "nav-link nav-lainnya-btn", g.label);
     tombol.type = "button";
     tombol.setAttribute("aria-haspopup", "true");
     tombol.setAttribute("aria-expanded", "false");
-    tombol.setAttribute("aria-controls", "nav-lainnya-menu");
+    tombol.setAttribute("aria-controls", "nav-" + g.id + "-menu");
     const menu = el("div", "nav-lainnya-menu");
-    menu.id = "nav-lainnya-menu";
-    anggota[0].insertAdjacentElement("beforebegin", wadah);
+    menu.id = "nav-" + g.id + "-menu";
     wadah.append(tombol, menu);
     anggota.forEach((a) => menu.appendChild(a));
+    nav.appendChild(wadah);
+    semuaWadah.push(wadah);
     if (anggota.some((a) => a.classList.contains("active") || a.getAttribute("aria-current") === "page")) tombol.classList.add("active");
 
     const buka = (ya) => {
       wadah.classList.toggle("terbuka", ya);
       tombol.setAttribute("aria-expanded", String(ya));
     };
-    tombol.addEventListener("click", () => buka(!wadah.classList.contains("terbuka")));
+    tombol.addEventListener("click", () => {
+      const ya = !wadah.classList.contains("terbuka");
+      semuaWadah.forEach((w) => { if (w !== wadah) { w.classList.remove("terbuka"); const t = w.querySelector(".nav-lainnya-btn"); if (t) t.setAttribute("aria-expanded", "false"); } });
+      buka(ya);
+    });
     document.addEventListener("click", (e) => { if (!wadah.contains(e.target)) buka(false); });
     wadah.addEventListener("focusout", (e) => { if (e.relatedTarget && !wadah.contains(e.relatedTarget)) buka(false); });
     wadah.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && wadah.classList.contains("terbuka")) { buka(false); tombol.focus(); }
     });
-  }
+  });
 
   // ---------- Masuk / @username ----------
   const acuan = nav.querySelector('a.nav-link[data-nav="setting"]') || nav.querySelector("a.nav-link");

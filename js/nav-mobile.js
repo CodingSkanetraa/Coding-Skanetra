@@ -11,7 +11,7 @@
     { kunci: "playground", ikon: "editor", label: "Editor" },
     { kunci: "peringkat", ikon: "peringkat", label: "Peringkat" }
   ];
-  const LAIN = { games: "games", struktur: "struktur", dokumentasi: "galeri", about: "tentang", setting: "pengaturan" };
+  const LAIN = { games: "games", tantangan: "centang", struktur: "struktur", dokumentasi: "galeri", about: "tentang", setting: "pengaturan" };
 
   const tautan = {};
   nav.querySelectorAll("a.nav-link").forEach((a) => {
