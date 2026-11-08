@@ -169,14 +169,14 @@
   }
 
   // ---------- Menunggu / tertunda ----------
-  async function aksi(id, jenis, tombol) {
+  async function aksi(id, jenis, tombol, poin) {
     tombol.disabled = true;
     try {
       const token = await akun().token();
       const r = await fetch("/api/tantangan/setujui", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
-        body: JSON.stringify({ id, aksi: jenis })
+        body: JSON.stringify(poin ? { id, aksi: jenis, poin } : { id, aksi: jenis })
       });
       let d = null;
       try { d = await r.json(); } catch (e) { /* bukan JSON */ }
@@ -195,9 +195,26 @@
     k.append(info);
     if (tombolDaftar.kode) k.append(el("pre", "", b.kode || "(kosong)"));
     const baris = el("div", "tg-baris-aksi");
+    let kolomPoin = null;
+    if (tombolDaftar.poin) {
+      const lab = el("label", "tg-meta", "Poin ");
+      kolomPoin = el("input"); kolomPoin.type = "number"; kolomPoin.min = "1"; kolomPoin.max = "100";
+      kolomPoin.value = String(t.poin || 10);
+      kolomPoin.setAttribute("aria-label", "Poin untuk jawaban ini");
+      kolomPoin.style.width = "80px";
+      lab.append(kolomPoin);
+      baris.append(lab);
+    }
     tombolDaftar.aksi.forEach(([teks, jenis, kelas]) => {
       const x = el("button", "tg-btn " + (kelas || ""), teks); x.type = "button";
-      x.addEventListener("click", () => aksi(b.id, jenis, x));
+      x.addEventListener("click", () => {
+        let poin = null;
+        if (jenis === "setujui" && kolomPoin) {
+          poin = Number(kolomPoin.value);
+          if (!Number.isInteger(poin) || poin < 1 || poin > 100) { pesan("Poin harus bilangan bulat 1 sampai 100.", true); return; }
+        }
+        aksi(b.id, jenis, x, poin);
+      });
       baris.append(x);
     });
     k.append(baris);
@@ -205,7 +222,7 @@
   }
 
   async function muatMenunggu() {
-    const pilih = "id,status,kode,dikirim,terkirim_sheet,tantangan(judul,bahasa),profil(username,nama,kelas)";
+    const pilih = "id,status,kode,dikirim,terkirim_sheet,tantangan(judul,bahasa,poin),profil(username,nama,kelas)";
     const [a, b] = await Promise.all([
       akun().minta("/rest/v1/tantangan_selesai?select=" + pilih + "&status=eq.menunggu&order=dikirim.asc&limit=100"),
       akun().minta("/rest/v1/tantangan_selesai?select=" + pilih + "&status=eq.selesai&terkirim_sheet=eq.false&order=dikirim.asc&limit=100")
@@ -217,7 +234,7 @@
     if (!a.ok || !b.ok) pesan("Sebagian daftar belum bisa dimuat.", true);
     if (!dA.length) antre.append(el("p", "tg-meta", "Tidak ada jawaban yang menunggu."));
     if (!dB.length) tunda.append(el("p", "tg-meta", "Semua poin sudah masuk spreadsheet."));
-    dA.forEach((x) => antre.append(kartuJawaban(x, { kode: true, aksi: [["Setujui", "setujui", "utama"], ["Tolak", "tolak", "bahaya"]] })));
+    dA.forEach((x) => antre.append(kartuJawaban(x, { kode: true, poin: true, aksi: [["Setujui", "setujui", "utama"], ["Tolak", "tolak", "bahaya"]] })));
     dB.forEach((x) => tunda.append(kartuJawaban(x, { kode: false, aksi: [["Kirim ulang poin", "kirim_ulang", "utama"]] })));
     const h = $("tg-hitung");
     h.textContent = String(dA.length + dB.length);

@@ -130,3 +130,5 @@ Anggota membuka **Tantangan**, mengerjakan soal Python, C++, atau Web, lalu meng
 - Penilaian memakai layanan publik Wandbox (sama seperti editor C++). Bila sedang sibuk, anak diminta mencoba lagi; jawabannya tidak dihitung salah.
 - Jeda kirim 5 detik per anak bersifat per instance fungsi Vercel, bukan jaminan mutlak.
 - Satu anak hanya bisa mendapat poin satu kali per soal (dijaga database dan kunci di Apps Script).
+
+**Poin khusus untuk jawaban Web yang bagus**: di tab Menunggu, kolom **Poin** sudah terisi poin standar soal. Ubah (1 sampai 100) sebelum menekan **Setujui** untuk memberi poin lebih. Setelah memperbarui ke versi ini, jalankan ulang `supabase/tantangan.sql` di SQL Editor (aman diulang).

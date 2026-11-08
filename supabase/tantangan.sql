@@ -221,7 +221,9 @@ end;
 $$;
 
 -- Penilaian manual oleh guru (dipanggil server setelah memastikan pemanggil admin).
-create or replace function public.nilai_manual(p_rahasia text, p_id bigint, p_status text)
+-- p_poin (opsional): poin khusus dari guru untuk jawaban yang bagus; kosong = poin standar soal.
+drop function if exists public.nilai_manual(text, bigint, text);
+create or replace function public.nilai_manual(p_rahasia text, p_id bigint, p_status text, p_poin integer default null)
 returns jsonb
 language plpgsql
 security definer
@@ -238,10 +240,13 @@ begin
   if p_status not in ('selesai', 'ditolak') then
     raise exception 'Status tidak valid.' using errcode = '22023';
   end if;
+  if p_poin is not null and (p_poin < 1 or p_poin > 100) then
+    raise exception 'Poin harus 1 sampai 100.' using errcode = '22023';
+  end if;
 
   update public.tantangan_selesai s
      set status = p_status,
-         poin = case when p_status = 'selesai' then (select t.poin from public.tantangan t where t.id = s.tantangan_id) else 0 end,
+         poin = case when p_status = 'selesai' then coalesce(p_poin, (select t.poin from public.tantangan t where t.id = s.tantangan_id)) else 0 end,
          dinilai = now()
    where s.id = p_id and s.status = 'menunggu'
   returning * into v_baris;
@@ -297,13 +302,13 @@ $$;
 
 revoke all on function public.ambil_tes_nilai(text, uuid) from public;
 revoke all on function public.catat_penyelesaian(text, uuid, uuid, text, text) from public;
-revoke all on function public.nilai_manual(text, bigint, text) from public;
+revoke all on function public.nilai_manual(text, bigint, text, integer) from public;
 revoke all on function public.ambil_untuk_kirim(text, bigint) from public;
 revoke all on function public.tandai_terkirim(text, uuid, uuid) from public;
 -- Server memanggilnya dengan kunci anon; yang menjaga adalah rahasia penilai di dalam fungsi.
 grant execute on function public.ambil_tes_nilai(text, uuid) to anon, authenticated;
 grant execute on function public.catat_penyelesaian(text, uuid, uuid, text, text) to anon, authenticated;
-grant execute on function public.nilai_manual(text, bigint, text) to anon, authenticated;
+grant execute on function public.nilai_manual(text, bigint, text, integer) to anon, authenticated;
 grant execute on function public.ambil_untuk_kirim(text, bigint) to anon, authenticated;
 grant execute on function public.tandai_terkirim(text, uuid, uuid) to anon, authenticated;
 

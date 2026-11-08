@@ -1,6 +1,7 @@
 // Guru menilai jawaban manual atau mengirim ulang poin yang belum masuk spreadsheet. Khusus admin.
 //
-//   POST /api/tantangan/setujui   { id: <id penyelesaian>, aksi: "setujui" | "tolak" | "kirim_ulang" }
+//   POST /api/tantangan/setujui   { id: <id penyelesaian>, aksi: "setujui" | "tolak" | "kirim_ulang", poin?: 1-100 }
+//   poin (opsional, hanya setujui) = poin khusus untuk jawaban yang bagus; tanpa itu dipakai poin standar soal.
 'use strict';
 const { json, periksaAnggota, rpcServer } = require('../_security');
 const { kirimPoinKeSheet, PESAN_BELUM_MASUK } = require('../_poin');
@@ -24,6 +25,15 @@ module.exports = async function handler(req, res) {
   if (!Number.isSafeInteger(id) || id <= 0) return json(res, 400, { sukses: false, pesan: 'Data tidak valid.' });
   if (!['setujui', 'tolak', 'kirim_ulang'].includes(aksi)) return json(res, 400, { sukses: false, pesan: 'Aksi tidak dikenal.' });
 
+  // Poin khusus (opsional, hanya untuk setujui): bilangan bulat 1-100. Kosong = poin standar soal.
+  let poinKhusus = null;
+  if (aksi === 'setujui' && badan.poin !== undefined && badan.poin !== null && badan.poin !== '') {
+    poinKhusus = Number(badan.poin);
+    if (!Number.isInteger(poinKhusus) || poinKhusus < 1 || poinKhusus > 100) {
+      return json(res, 400, { sukses: false, pesan: 'Poin harus bilangan bulat 1 sampai 100.' });
+    }
+  }
+
   try {
     if (aksi === 'tolak') {
       const hasil = await rpcServer('nilai_manual', { p_id: id, p_status: 'ditolak' });
@@ -32,7 +42,7 @@ module.exports = async function handler(req, res) {
     }
 
     if (aksi === 'setujui') {
-      const hasil = await rpcServer('nilai_manual', { p_id: id, p_status: 'selesai' });
+      const hasil = await rpcServer('nilai_manual', { p_id: id, p_status: 'selesai', p_poin: poinKhusus });
       if (!hasil || hasil.baru !== true) return json(res, 409, { sukses: false, pesan: 'Jawaban ini sudah tidak menunggu penilaian.' });
     }
 
