@@ -602,9 +602,12 @@ async function bukaDetailAnggota(id) {
 
     const detail = hasil.data;
 
+    // Total dan peringkat memakai data papan peringkat (sudah termasuk poin tantangan dan
+    // tidak bergantung letak kolom di sheet). Dari riwayat hanya identitas yang dipakai.
     tampilkanIdentitasAnggota({
       ...detail,
-      ranking: detail.ranking ?? anggota.ranking
+      ranking: anggota.ranking,
+      total: anggota.total
     });
 
     tampilkanRiwayat(detail.riwayat);
