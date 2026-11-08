@@ -78,7 +78,47 @@ async function periksaAnggota(req) {
     return { ok: false, status: 403, kode: 'belum_anggota', pesan: 'Akunmu belum disetujui sebagai anggota.' };
   }
 
-  return { ok: true, username: String(profil.username || '') };
+  // id, admin, dan idSheet dipakai fitur Tantangan. Field lama (username) tidak berubah.
+  return {
+    ok: true,
+    username: String(profil.username || ''),
+    id: String(profil.id || ''),
+    admin: profil.admin === true,
+    idSheet: profil.id_sheet ? String(profil.id_sheet) : ''
+  };
+}
+
+// Memanggil fungsi database yang dijaga RAHASIA PENILAI (supabase/tantangan.sql). Rahasianya hanya ada di
+// server Vercel (PENILAI_RAHASIA) dan harus sama dengan isi tabel pengaturan_server. Bukan kunci service_role.
+async function rpcServer(nama, parameter) {
+  const rahasia = process.env.PENILAI_RAHASIA;
+  if (!rahasia) throw new Error('PENILAI_RAHASIA harus disetel di Environment Variables Vercel.');
+  const respons = await fetchDenganBatas(`${SUPABASE_URL}/rest/v1/rpc/${nama}`, {
+    method: 'POST',
+    headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify({ ...parameter, p_rahasia: rahasia }),
+    cache: 'no-store'
+  });
+  let isi = null;
+  const teks = await respons.text();
+  if (teks) { try { isi = JSON.parse(teks); } catch { isi = teks; } }
+  if (!respons.ok) {
+    const galat = new Error((isi && isi.message) || `Supabase membalas HTTP ${respons.status}.`);
+    galat.status = respons.status;
+    galat.kode = isi && isi.code;
+    throw galat;
+  }
+  return isi;
+}
+
+// Membaca tabel dengan token pengguna sendiri (RLS tetap berlaku).
+async function restUser(path, token) {
+  const respons = await fetchDenganBatas(`${SUPABASE_URL}/rest/v1/${path}`, {
+    headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${token}`, Accept: 'application/json' },
+    cache: 'no-store'
+  });
+  if (!respons.ok) throw new Error(`Supabase membalas HTTP ${respons.status}.`);
+  return respons.json();
 }
 
 // Memanggil Google Apps Script yang membaca spreadsheet.
@@ -97,4 +137,4 @@ async function gasPost(body) {
   return response.json();
 }
 
-module.exports = { json, ambilToken, periksaAnggota, gasPost };
+module.exports = { json, ambilToken, periksaAnggota, gasPost, rpcServer, restUser };

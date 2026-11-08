@@ -1529,6 +1529,7 @@ body:has(.materi-grid) .materi-grid {
 .editor-tabs {
   display: flex;
   gap: 6px;
+  padding: 10px 12px 0;
   background: var(--background);
   border-bottom: 1px solid var(--border);
 }

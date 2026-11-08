@@ -109,3 +109,24 @@ Tidak ada cara dari browser untuk menulis ke `profil`; percobaan menulis akan di
 - Batas gratis: 500 MB database dan 50.000 pengguna aktif per bulan. Setiap akun dibatasi 60 item progres (maksimal sekitar 64 KB per item), jadi penyimpanan aman.
 - Data pribadi seminimal mungkin: hanya username, progres belajar, dan (di spreadsheet) nama, kelas, dan poin. Riwayat poin berisi tanggal dan jumlah poin saja, dan terbuka bagi sesama anggota. Beri tahu pembina dan anggota apa saja yang disimpan.
 - Di komputer bersama (lab), data akun dibersihkan dari browser saat **Keluar**.
+
+
+## F. Fitur Tantangan (soal, penilaian otomatis, poin ke spreadsheet)
+
+Anggota membuka **Tantangan**, mengerjakan soal Python, C++, atau Web, lalu mengirim jawaban. Soal Python dan C++ dinilai otomatis oleh server (tes tersembunyi disimpan di database dan tidak pernah terkirim ke browser). Soal Web dinilai guru. Yang selesai langsung menambah poin di spreadsheet.
+
+**Pemasangan (sekali saja)**
+1. Supabase > SQL Editor: jalankan seluruh `supabase/tantangan.sql` (setelah `skema.sql`).
+2. Buat **rahasia penilai**: kata sandi acak minimal 32 karakter (buatan sendiri, BUKAN service_role). Simpan di database, jalankan di SQL Editor (ganti isinya):
+   `insert into public.pengaturan_server (kunci, nilai) values ('penilai', 'ISI-KATA-SANDI-ACAK-PANJANG') on conflict (kunci) do update set nilai = excluded.nilai;`
+3. Vercel > Settings > Environment Variables: tambah `PENILAI_RAHASIA` dengan isi yang sama persis, lalu **Redeploy**.
+4. Apps Script: tempel `apps-script/tambah-poin.gs`, sesuaikan KONFIGURASI, tambahkan satu baris di `doPost` (petunjuk ada di dalam berkas), lalu Deploy versi baru.
+5. Jadikan dirimu admin: Table Editor > `profil` > kolom `admin` = true pada barismu.
+6. Buka **Tantangan > Kelola tantangan**: tab **Anggota** untuk mengisi ID spreadsheet tiap anak (wajib agar poin bisa masuk), tab **Soal** untuk menambah soal dan tes.
+
+**Pekerjaan rutin**: soal baru dan tes ditambah lewat halaman admin, tanpa commit. Jawaban Web muncul di tab **Menunggu** (Setujui / Tolak). Poin yang gagal masuk spreadsheet muncul di bagian "Poin belum masuk spreadsheet" dengan tombol **Kirim ulang**.
+
+**Batas yang perlu diketahui**
+- Penilaian memakai layanan publik Wandbox (sama seperti editor C++). Bila sedang sibuk, anak diminta mencoba lagi; jawabannya tidak dihitung salah.
+- Jeda kirim 5 detik per anak bersifat per instance fungsi Vercel, bukan jaminan mutlak.
+- Satu anak hanya bisa mendapat poin satu kali per soal (dijaga database dan kunci di Apps Script).

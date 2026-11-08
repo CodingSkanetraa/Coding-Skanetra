@@ -1,0 +1,125 @@
+/* Tantangan: daftar, halaman kerja, dan halaman admin. */
+.tg { width: min(100% - 32px, 1000px); margin-inline: auto; padding: 20px 0 100px; }
+.tg-kepala { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.tg-kepala h1 { margin: 0 0 4px; font-size: 1.6rem; }
+.tg-sub { margin: 0; color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
+.tg-pesan { margin: 14px 2px; color: var(--muted); font-size: 0.92rem; }
+.tg-pesan.galat { color: var(--danger, #ff8a80); }
+.tg-pesan:empty { display: none; }
+.tg [hidden], .tg-dialog [hidden] { display: none !important; }
+
+.tg-btn {
+  display: inline-block; padding: 9px 14px;
+  border: 1px solid var(--border); border-radius: 10px;
+  background: var(--card-background); color: var(--text);
+  font: inherit; font-size: 0.88rem; font-weight: 600; text-decoration: none; cursor: pointer;
+}
+.tg-btn.utama { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); background: var(--accent-soft); color: var(--accent); }
+.tg-btn.bahaya { border-color: color-mix(in srgb, var(--danger, #ff8a80) 55%, var(--border)); color: var(--danger, #ff8a80); }
+.tg-btn:disabled { opacity: 0.55; cursor: default; }
+.tg-btn:focus-visible, .tg-filter button:focus-visible, .tg-kartu a:focus-visible, .tg-kode:focus-visible,
+.tg-tab:focus-visible, .tg-dialog input:focus-visible, .tg-dialog textarea:focus-visible, .tg-dialog select:focus-visible,
+.tg-baris input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.tg-tamu { padding: 20px; border: 1px dashed var(--border); border-radius: 14px; text-align: center; color: var(--muted); display: grid; gap: 10px; justify-items: center; }
+.tg-tamu p { margin: 0; }
+.tg-tamu strong { color: var(--text); }
+
+/* Ringkasan dan filter */
+.tg-ringkas { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.tg-ringkas div { flex: 1 1 140px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--card-background); }
+.tg-ringkas strong { display: block; font-size: 1.4rem; color: var(--accent); }
+.tg-ringkas span { color: var(--muted); font-size: 0.8rem; }
+.tg-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.tg-filter button { padding: 7px 14px; border: 1px solid var(--border); border-radius: 999px; background: none; color: var(--muted); font: inherit; font-size: 0.86rem; cursor: pointer; }
+.tg-filter button[aria-pressed="true"] { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); background: var(--accent-soft); color: var(--accent); }
+
+/* Kartu soal */
+.tg-daftar { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.tg-kartu { border: 1px solid var(--border); border-radius: 14px; background: var(--card-background); }
+.tg-kartu.selesai { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+.tg-kartu a { display: flex; align-items: center; gap: 12px; padding: 12px; color: var(--text); text-decoration: none; }
+.tg-tile {
+  flex: none; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 12px;
+  background: var(--accent-soft); color: var(--accent);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-weight: 700; font-size: 0.85rem;
+}
+.tg-info { display: grid; gap: 3px; min-width: 0; flex: 1 1 auto; }
+.tg-info strong { font-size: 0.98rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tg-info small { color: var(--muted); font-size: 0.78rem; }
+.tg-poin { flex: none; text-align: right; font-size: 0.78rem; color: var(--muted); }
+.tg-poin b { display: block; font-size: 1.05rem; color: var(--accent); }
+.tg-label { display: inline-block; padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 0.7rem; font-weight: 600; }
+.tg-label.menunggu { background: rgb(240 215 122 / 15%); color: var(--warning, #f0d77a); }
+.tg-label.ditolak { background: rgb(255 138 128 / 15%); color: var(--danger, #ff8a80); }
+
+/* Halaman kerja */
+.tg-kembali { display: inline-block; margin-bottom: 10px; color: var(--accent); font-size: 0.88rem; text-decoration: none; }
+.tg-grid { display: grid; gap: 18px; }
+.tg-soal, .tg-jawab { min-width: 0; padding: 16px; border: 1px solid var(--border); border-radius: 14px; background: var(--card-background); }
+.tg-soal h1 { margin: 8px 0 10px; font-size: 1.35rem; }
+.tg-jawab h2 { margin: 0 0 10px; font-size: 1.05rem; }
+.tg-lencana { display: flex; flex-wrap: wrap; gap: 6px; }
+.tg-deskripsi { margin: 0 0 14px; line-height: 1.65; font-size: 0.94rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+.tg-kode {
+  display: block; width: 100%; box-sizing: border-box; min-height: 260px; padding: 12px;
+  border: 1px solid var(--border); border-radius: 10px; background: var(--background); color: var(--text);
+  font: 0.88rem/1.55 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; tab-size: 4; resize: vertical;
+}
+.tg-aksi { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 12px; }
+.tg-petunjuk { color: var(--muted); font-size: 0.78rem; }
+.tg-status { margin: 0 0 10px; padding: 8px 12px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); font-size: 0.88rem; }
+.tg-status.menunggu { background: rgb(240 215 122 / 15%); color: var(--warning, #f0d77a); }
+.tg-status.ditolak { background: rgb(255 138 128 / 15%); color: var(--danger, #ff8a80); }
+.tg-hasil { margin-top: 14px; padding: 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--background); }
+.tg-hasil.lulus { border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); }
+.tg-hasil.gagal { border-color: color-mix(in srgb, var(--danger, #ff8a80) 45%, var(--border)); }
+.tg-hasil p { margin: 0 0 8px; line-height: 1.55; font-size: 0.92rem; }
+.tg-hasil pre { margin: 8px 0 0; padding: 10px; overflow: auto; border-radius: 8px; background: var(--card-background); font-size: 0.8rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+.tg-tes { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0; padding: 0; list-style: none; }
+.tg-tes li { padding: 3px 10px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; background: rgb(255 138 128 / 15%); color: var(--danger, #ff8a80); }
+.tg-tes li.benar { background: var(--accent-soft); color: var(--accent); }
+
+/* Admin */
+.tg-tabs { display: flex; gap: 6px; margin-bottom: 16px; padding: 4px; border: 1px solid var(--border); border-radius: 12px; background: var(--card-background); overflow-x: auto; }
+.tg-tab { flex: 1 0 auto; padding: 9px 14px; border: 0; border-radius: 9px; background: none; color: var(--muted); font: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.tg-tab[aria-selected="true"] { background: var(--accent-soft); color: var(--accent); }
+.tg-tab .tg-hitung { margin-left: 6px; padding: 0 7px; border-radius: 999px; background: var(--accent); color: #06140c; font-size: 0.72rem; }
+.tg-bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
+.tg-bar h2 { margin: 0; font-size: 1.05rem; }
+.tg-bagian { margin-bottom: 26px; }
+.tg-kartu.admin { padding: 12px; display: grid; gap: 8px; }
+.tg-kartu.admin pre { margin: 0; padding: 10px; max-height: 260px; overflow: auto; border-radius: 8px; background: var(--background); font-size: 0.8rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+.tg-baris-aksi { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.tg-meta { color: var(--muted); font-size: 0.8rem; }
+.tg-anggota { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.tg-anggota li { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--card-background); }
+.tg-anggota .tg-info { flex: 1 1 180px; }
+.tg-anggota input { width: 120px; padding: 7px 9px; border: 1px solid var(--border); border-radius: 8px; background: var(--background); color: var(--text); font: inherit; font-size: 0.88rem; }
+
+.tg-dialog { margin: auto; width: min(640px, calc(100vw - 24px)); max-height: calc(100vh - 24px); padding: 18px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); color: var(--text); overflow: auto; }
+.tg-dialog::backdrop { background: rgb(0 0 0 / 55%); }
+.tg-dialog h2 { margin: 0 0 8px; font-size: 1.15rem; }
+.tg-dialog label { display: block; margin: 12px 0 5px; color: var(--muted); font-size: 0.84rem; }
+.tg-dialog input[type="text"], .tg-dialog input[type="number"], .tg-dialog select, .tg-dialog textarea {
+  width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--background); color: var(--text); font: inherit; font-size: 0.92rem;
+}
+.tg-dialog textarea { font: 0.85rem/1.5 ui-monospace, Menlo, Consolas, monospace; resize: vertical; }
+.tg-dialog .tg-dua { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+.tg-dialog .tg-cek { display: flex; align-items: center; gap: 8px; margin-top: 12px; color: var(--text); }
+.tg-dialog .tg-galat { margin: 10px 0 0; color: var(--danger, #ff8a80); font-size: 0.88rem; }
+.tg-tes-edit { display: grid; gap: 8px; margin-top: 6px; }
+.tg-baris { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: start; }
+.tg-baris textarea { min-height: 54px; }
+.tg-dialog .tg-baris-aksi { margin-top: 16px; }
+
+@media (min-width: 721px) {
+  .tg { padding: 32px 0 80px; }
+  .tg-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); align-items: start; }
+  .tg-daftar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .footer { display: none; }
+  .tg-baris { grid-template-columns: 1fr; }
+}

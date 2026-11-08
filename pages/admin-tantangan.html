@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Halaman pengelola untuk soal tantangan.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0b100e">
+  <title>Kelola Tantangan | CodingSkanetra</title>
+
+  <link rel="icon" href="../favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" href="../favicon-96.png" sizes="96x96">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <script src="../js/theme.js?v=5"></script>
+  <link rel="stylesheet" href="../css/style.css?v=5">
+  <link rel="stylesheet" href="../css/nav-mobile.css?v=2">
+  <link rel="stylesheet" href="../css/app-mobile.css?v=1">
+  <link rel="stylesheet" href="../css/navbar-akun.css?v=2">
+  <link rel="stylesheet" href="../css/tantangan.css?v=1">
+  <script src="../js/akun-config.js?v=1" defer></script>
+  <script src="../js/akun.js?v=4" defer></script>
+  <script src="../js/main.js?v=5" defer></script>
+  <script src="../js/ikon.js?v=4" defer></script>
+  <script src="../js/navbar-akun.js?v=3" defer></script>
+  <script src="../js/nav-mobile.js?v=4" defer></script>
+  <script src="../js/admin-tantangan.js?v=1" defer></script>
+</head>
+<body class="tg-hal">
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="CodingSkanetra, beranda">
+      <img class="brand-logo" src="../assets/images/logo-eskul.png" alt="" width="38" height="44">
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+      <a class="nav-link active" href="playground.html" data-nav="playground" aria-current="page">Playground</a>
+      <a class="nav-link" href="peringkat.html" data-nav="peringkat">Peringkat</a>
+      <a class="nav-link" href="games.html" data-nav="games">Games</a>
+      <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
+      <a class="nav-link" href="dokumentasi.html" data-nav="dokumentasi">Dokumentasi</a>
+      <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
+      <a class="nav-link" href="profil.html#tampilan" data-nav="setting">Pengaturan</a>
+    </nav>
+  </header>
+
+  <main class="tg">
+    <a class="tg-kembali" href="tantangan.html">&larr; Tantangan</a>
+    <header class="tg-kepala">
+      <div>
+        <h1>Kelola tantangan</h1>
+        <p class="tg-sub">Tambah soal dan tes tersembunyi, nilai jawaban manual, dan hubungkan anggota ke spreadsheet poin.</p>
+      </div>
+    </header>
+
+    <p class="tg-pesan" id="tg-pesan" role="status" aria-live="polite">Memuat…</p>
+    <div class="tg-tamu" id="tg-tamu" hidden></div>
+
+    <section id="tg-isi" hidden>
+      <div class="tg-tabs" role="tablist" aria-label="Bagian admin">
+        <button class="tg-tab" id="tab-soal" role="tab" type="button" data-t="soal" aria-selected="true" aria-controls="pn-soal">Soal</button>
+        <button class="tg-tab" id="tab-menunggu" role="tab" type="button" data-t="menunggu" aria-selected="false" aria-controls="pn-menunggu">Menunggu<span class="tg-hitung" id="tg-hitung" hidden></span></button>
+        <button class="tg-tab" id="tab-anggota" role="tab" type="button" data-t="anggota" aria-selected="false" aria-controls="pn-anggota">Anggota</button>
+      </div>
+
+      <div id="pn-soal" role="tabpanel" aria-labelledby="tab-soal">
+        <div class="tg-bar"><h2>Daftar soal</h2><button class="tg-btn utama" id="tg-baru" type="button">+ Soal baru</button></div>
+        <ul class="tg-daftar" id="tg-daftar"></ul>
+      </div>
+      <div id="pn-menunggu" role="tabpanel" aria-labelledby="tab-menunggu" hidden>
+        <div class="tg-bagian"><div class="tg-bar"><h2>Menunggu dinilai</h2></div><div class="tg-daftar" id="tg-antre"></div></div>
+        <div class="tg-bagian"><div class="tg-bar"><h2>Poin belum masuk spreadsheet</h2></div><div class="tg-daftar" id="tg-tertunda"></div></div>
+      </div>
+      <div id="pn-anggota" role="tabpanel" aria-labelledby="tab-anggota" hidden>
+        <div class="tg-bar"><h2>ID anggota di spreadsheet</h2></div>
+        <p class="tg-sub" style="margin-bottom:12px">Isi dengan ID yang sama seperti di spreadsheet poin. Anggota tanpa ID tidak bisa menerima poin tantangan.</p>
+        <ul class="tg-anggota" id="tg-anggota"></ul>
+      </div>
+    </section>
+
+    <dialog class="tg-dialog" id="tg-dialog" aria-labelledby="dlg-judul">
+      <form id="dlg-form" method="dialog">
+        <h2 id="dlg-judul">Soal</h2>
+        <label for="f-judul">Judul</label>
+        <input type="text" id="f-judul" maxlength="80" required>
+        <div class="tg-dua">
+          <div><label for="f-bahasa">Bahasa</label>
+            <select id="f-bahasa"><option value="py">Python</option><option value="cpp">C++</option><option value="web">Web</option></select></div>
+          <div><label for="f-tingkat">Tingkat</label>
+            <select id="f-tingkat"><option value="mudah">Mudah</option><option value="sedang">Sedang</option><option value="sulit">Sulit</option></select></div>
+          <div><label for="f-poin">Poin (1-100)</label>
+            <input type="number" id="f-poin" min="1" max="100" value="10"></div>
+          <div><label for="f-nilai">Penilaian</label>
+            <select id="f-nilai"><option value="otomatis">Otomatis (pakai tes)</option><option value="manual">Manual (guru)</option></select></div>
+        </div>
+        <label for="f-desk">Deskripsi soal</label>
+        <textarea id="f-desk" rows="6" maxlength="4000"></textarea>
+        <label for="f-awal">Kode awal (opsional)</label>
+        <textarea id="f-awal" rows="4" maxlength="5000" spellcheck="false"></textarea>
+        <div id="f-tes-bagian">
+          <label>Tes tersembunyi (maksimal 10). Keluaran dibandingkan setelah spasi di ujung dirapikan.</label>
+          <div class="tg-tes-edit" id="f-tes"></div>
+          <button class="tg-btn" id="f-tes-tambah" type="button" style="margin-top:8px">+ Tambah tes</button>
+        </div>
+        <label class="tg-cek"><input type="checkbox" id="f-aktif" checked> Tampilkan ke anggota</label>
+        <p class="tg-galat" id="f-galat" role="alert" hidden></p>
+        <div class="tg-baris-aksi">
+          <button class="tg-btn utama" id="f-simpan" type="submit">Simpan</button>
+          <button class="tg-btn" id="f-batal" type="button">Batal</button>
+        </div>
+      </form>
+    </dialog>
+  </main>
+</body>
+</html>
