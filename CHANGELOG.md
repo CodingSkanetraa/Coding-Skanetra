@@ -3,6 +3,48 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.17.1] - 2026-11-12
+
+### Diubah
+- **Favicon baru**: hanya roda gigi `</>` dari logo, diperbesar dan memenuhi lingkaran (Google memotong favicon menjadi lingkaran). Dibuat ulang dari `favicon.png` beresolusi tinggi: `favicon.ico`, `favicon-48.png`, `favicon-96.png`, `favicon-192.png`, dan `apple-touch-icon.png`. Tautan ikon diberi `?v=2` agar browser dan Google mengambil yang baru.
+
+## [5.17.0] - 2026-11-09
+
+### Ditambahkan
+- **Poin khusus saat menyetujui jawaban Web**: di admin Tantangan, tab Menunggu, kolom Poin (1 sampai 100) bisa diubah sebelum Setujui. Jalankan ulang `supabase/tantangan.sql` (fungsi `nilai_manual` kini punya `p_poin`).
+
+## [5.16.0] - 2026-11-08
+
+### Diubah
+- **Navbar dikelompokkan**: Beranda, Materi, Playground, **Game** (Games, Tantangan), **Lainnya** (Peringkat, Struktur Organisasi, Dokumentasi, Tentang, Pengaturan). Di HP, Tantangan masuk ke menu Lainnya; bar bawah tidak berubah.
+
+## [5.15.1] - 2026-11-08
+
+### Diperbaiki
+- Kartu **Total Poin** di detail anggota Peringkat tidak lagi berubah menjadi 0 setelah riwayat dimuat (memakai total dari papan peringkat).
+
+## [5.15.0] - 2026-11-08
+
+### Ditambahkan
+- **Tantangan**: soal Python, C++, dan Web untuk anggota. Python dan C++ dinilai otomatis di server (Wandbox) dengan tes tersembunyi di database; Web dinilai guru. Poin langsung masuk spreadsheet lewat Apps Script (`apps-script/tambah-poin.gs`, dicatat di sheet `LogTantangan`, tidak menulis ke sheet Poin).
+- **Halaman admin Tantangan** (`pages/admin-tantangan.html`): kelola soal dan tes, setujui atau tolak jawaban Web, kirim ulang poin, atur ID spreadsheet anggota.
+- Skema `supabase/tantangan.sql`, fungsi `api/tantangan/kirim.js` dan `setujui.js`. Variabel lingkungan baru: `PENILAI_RAHASIA`.
+
+## [5.14.0] - 2026-11-05
+
+### Ditambahkan
+- **Halaman daftar proyek sebelum editor** (Web, Python, C++): kartu proyek, tombol proyek baru, menu titik tiga (ubah nama, duplikat, bagikan, hapus).
+
+## [5.13.1] - 2026-11-04
+
+### Diubah
+- Beranda: logo sejajar nama, judul "Tautan berbagi aktif", kartu "Proyek terakhir dibuka".
+
+## [5.13.0] - 2026-11-04
+
+### Diubah
+- **Beranda dirombak** ala aplikasi: header logo dan profil, pintasan editor, daftar materi, tautan berbagi aktif, dan info web.
+
 ## [5.12.0] - 2026-11-02
 
 ### Diubah
