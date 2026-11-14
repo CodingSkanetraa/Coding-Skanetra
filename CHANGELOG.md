@@ -3,6 +3,12 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.17.2] - 2026-11-14
+
+### Diperbaiki
+- **Editor di HP**: teks prediktif tidak lagi macet di daftar "a…" saat mengetik (misalnya "button"). Editor memakai mode input `textarea` sehingga isi kode ikut berubah selagi keyboard HP menyusun kata.
+- **Tutup tag otomatis di HP**: mengetik `<div>` kini otomatis menambah `</div>`, mengetik `</` melengkapi tag yang masih terbuka, dan pasangan `( [ { " '` ikut bekerja. Berkas baru `js/editor-ketik.js` dipakai di Editor Web, Python, dan C++. Di komputer tetap memakai addon bawaan CodeMirror.
+
 ## [5.17.1] - 2026-11-12
 
 ### Diubah

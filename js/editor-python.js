@@ -73,6 +73,7 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
     editor = CodeMirror.fromTextArea(textarea, {
       mode: "python",
       theme: "material-darker",
+      inputStyle: "textarea", // pada HP, bawaan CodeMirror (contenteditable) tidak memperbarui isi saat mengetik dengan keyboard prediktif
       lineNumbers: true,
       indentUnit: 4,
       tabSize: 4,
@@ -88,6 +89,7 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
       }
     });
     editor.setSize("100%", "390px");
+    if (window.CodingSkanetraKetik) window.CodingSkanetraKetik.pasang(editor, "py");
     if (window.CodingSkanetraEditorPrefs) window.CodingSkanetraEditorPrefs.pasang(editor);
   }
 

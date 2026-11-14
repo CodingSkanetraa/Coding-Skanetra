@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     editor = CodeMirror.fromTextArea(textarea, {
       mode: "text/x-c++src",
       theme: "material-darker",
+      inputStyle: "textarea", // pada HP, bawaan CodeMirror (contenteditable) tidak memperbarui isi saat mengetik dengan keyboard prediktif
       lineNumbers: true,
       indentUnit: 4,
       tabSize: 4,
@@ -53,6 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
     editor.setSize("100%", "390px");
+    if (window.CodingSkanetraKetik) window.CodingSkanetraKetik.pasang(editor, "cpp");
     if (window.CodingSkanetraEditorPrefs) window.CodingSkanetraEditorPrefs.pasang(editor);
   } else {
     // Cadangan bila CodeMirror gagal dimuat: textarea biasa tetap bisa dipakai.

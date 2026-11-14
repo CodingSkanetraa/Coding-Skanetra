@@ -73,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const htmlEditor = CodeMirror.fromTextArea(htmlTextarea, {
     mode: "htmlmixed",
     theme: "material-darker",
+    inputStyle: "textarea", // pada HP, bawaan CodeMirror (contenteditable) tidak memperbarui isi saat mengetik dengan keyboard prediktif
     lineNumbers: true,
     indentUnit: 4,
     tabSize: 4,
@@ -95,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cssEditor = CodeMirror.fromTextArea(cssTextarea, {
     mode: "css",
     theme: "material-darker",
+    inputStyle: "textarea", // pada HP, bawaan CodeMirror (contenteditable) tidak memperbarui isi saat mengetik dengan keyboard prediktif
     lineNumbers: true,
     indentUnit: 4,
     tabSize: 4,
@@ -116,6 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const jsEditor = CodeMirror.fromTextArea(jsTextarea, {
     mode: "javascript",
     theme: "material-darker",
+    inputStyle: "textarea", // pada HP, bawaan CodeMirror (contenteditable) tidak memperbarui isi saat mengetik dengan keyboard prediktif
     lineNumbers: true,
     indentUnit: 2,
     tabSize: 2,
@@ -141,6 +144,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Terapkan Pengaturan editor (ukuran font, indentasi, nomor baris, line wrapping)
   if (window.CodingSkanetraEditorPrefs) {
     [htmlEditor, cssEditor, jsEditor].forEach((cm) => window.CodingSkanetraEditorPrefs.pasang(cm));
+  }
+
+  // Tutup tag dan kurung otomatis yang jalan juga di keyboard HP
+  if (window.CodingSkanetraKetik) {
+    window.CodingSkanetraKetik.pasang(htmlEditor, "html");
+    window.CodingSkanetraKetik.pasang(cssEditor, "css");
+    window.CodingSkanetraKetik.pasang(jsEditor, "js");
   }
 
   // Petunjuk kode (autocomplete) HTML, CSS, dan JavaScript
