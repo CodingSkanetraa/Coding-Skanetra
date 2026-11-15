@@ -49,5 +49,38 @@
     editors.forEach((cm) => terapkan(cm, prefs));
   });
 
-  window.CodingSkanetraEditorPrefs = { read, pasang };
+  /* ---- Pengaturan cepat (menu di toolbar editor) ---- */
+  const BAWAAN = { fontSize: 14, tabSize: 4, lineWrapping: false, lineNumbers: true, hint: true };
+  const PILIHAN_FONT = [12, 13, 14, 15, 16, 18, 20];
+
+  // Nilai yang sedang berlaku: pengaturan tersimpan, kalau belum ada ambil dari editor yang terbuka.
+  function nilai() {
+    const hasil = { ...BAWAAN };
+    const cm = editors.values().next().value;
+    if (cm) {
+      hasil.tabSize = Number(cm.getOption("tabSize")) === 2 ? 2 : 4;
+      hasil.lineWrapping = Boolean(cm.getOption("lineWrapping"));
+      hasil.lineNumbers = Boolean(cm.getOption("lineNumbers"));
+      const px = Math.round(parseFloat(getComputedStyle(cm.getWrapperElement()).fontSize));
+      if (PILIHAN_FONT.includes(px)) hasil.fontSize = px;
+    }
+    return { ...hasil, ...(read() || {}) };
+  }
+
+  function ubah(sebagian) {
+    let simpan = {};
+    try { simpan = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (error) { simpan = {}; }
+    if (typeof simpan !== "object") simpan = {};
+    const gabung = { ...nilai(), ...simpan, ...sebagian };
+    try {
+      localStorage.setItem(KEY, JSON.stringify(gabung));
+      if (window.CodingSkanetraAkun && window.CodingSkanetraAkun.sinkron) window.CodingSkanetraAkun.sinkron.catat(KEY);
+    } catch (error) { /* penyimpanan penuh atau diblokir: perubahan tetap berlaku di halaman ini */ }
+    const prefs = read() || gabung;
+    editors.forEach((cm) => terapkan(cm, { ...gabung, ...prefs }));
+    document.dispatchEvent(new CustomEvent("cs:prefs", { detail: gabung }));
+    return gabung;
+  }
+
+  window.CodingSkanetraEditorPrefs = { read, pasang, nilai, ubah, BAWAAN, PILIHAN_FONT };
 })();

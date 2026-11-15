@@ -79,7 +79,8 @@ document.addEventListener("DOMContentLoaded", () => {
     tabSize: 4,
     indentWithTabs: false,
     smartIndent: true,
-    autoCloseTags: true,
+    // Penutup tag ditangani js/editor-ketik.js (jalan di HP juga, dan <p></p> tidak dipecah jadi tiga baris).
+    autoCloseTags: false,
     autoCloseBrackets: true,
     matchBrackets: true,
     lineWrapping: false,

@@ -85,24 +85,43 @@
       cm.setCursor(kursor);
     }
 
-    cm.on("inputRead", (_cm, perubahan) => {
-      if (sibuk || Date.now() - keypressTerakhir < 150) return;
+    // Memproses karakter yang baru diketik tepat sebelum kursor.
+    function proses(c, kursor) {
       if (cm.getOption("readOnly") || cm.somethingSelected()) return;
-      const t = perubahan.text;
-      if (!t || t.length !== 1 || t[0].length !== 1) return;
-      const c = t[0];
-      const kursor = cm.getCursor();
+      const akhir = cm.getCursor();
+      if (akhir.line !== kursor.line || akhir.ch !== kursor.ch) return; // kursor sudah pindah
       const baris = cm.getLine(kursor.line);
-      if (baris.charAt(kursor.ch - 1) !== c) return; // kursor tidak tepat setelah karakter itu
+      if (baris.charAt(kursor.ch - 1) !== c) return;
       sibuk = true;
       try {
+        // Tutup tag dan "</" aman diulang (tidak menambah bila penutupnya sudah ada), jadi tidak peduli ada keypress atau tidak.
         if (bahasa === "html" && c === ">") tutupTag(kursor);
         else if (bahasa === "html" && c === "/" && baris.charAt(kursor.ch - 2) === "<") lengkapiPenutup(kursor);
-        else if (PASANGAN[c] || PENUTUP.has(c)) pasangan(c, kursor);
+        else if ((PASANGAN[c] || PENUTUP.has(c)) && Date.now() - keypressTerakhir >= 150) pasangan(c, kursor); // kalau ada keypress, addon bawaan yang bekerja
       } finally {
         sibuk = false;
       }
+    }
+
+    // Jalur utama: perubahan teks hasil ketikan (keyboard HP maupun komputer).
+    // Dibaca dari karakter terakhir yang masuk, jadi tetap jalan walau keyboard HP mengirim beberapa karakter sekaligus.
+    cm.on("change", (_cm, ch) => {
+      if (sibuk || (ch.origin !== "+input" && ch.origin !== "*compose")) return;
+      const t = ch.text;
+      const terakhir = t[t.length - 1];
+      if (!terakhir) return;
+      const c = terakhir.slice(-1);
+      const kursor = { line: ch.from.line + t.length - 1, ch: (t.length === 1 ? ch.from.ch : 0) + terakhir.length };
+      window.setTimeout(() => proses(c, kursor), 25);
     });
+
+    // Jalur cadangan untuk keyboard yang mengirim teks lewat peristiwa input saja.
+    if (bahasa === "html") {
+      cm.getInputField().addEventListener("input", (e) => {
+        if (!e.data || !/[>\/]$/.test(e.data) || /^insertFrom/.test(e.inputType || "")) return;
+        window.setTimeout(() => { const k = cm.getCursor(); proses(cm.getLine(k.line).charAt(k.ch - 1), k); }, 40);
+      });
+    }
   }
 
   window.CodingSkanetraKetik = { pasang, _tagTerbuka: tagTerbuka };

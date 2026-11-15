@@ -218,3 +218,35 @@
   .maskot-mini.bicara { opacity: 1; transform: none; }
   .maskot-mini .maskot-badan { width: 42px; }
 }
+
+/* ---------- Gerak pegas (diatur oleh js/maskot.js) ---------- */
+.maskot-hidup .maskot-gerak,
+.maskot-hidup .maskot-antena,
+.maskot-hidup.loncat .maskot-gerak,
+.maskot-hidup.sedih .maskot-gerak,
+.maskot-hidup.lambai .maskot-lengan-kanan { animation: none; }
+.maskot-hidup .maskot-wajah,
+.maskot-hidup .maskot-mata-kiri,
+.maskot-hidup .maskot-mata-kanan { transition: none; }
+.maskot-hidup.sedih .maskot-wajah { transform: none; }
+.maskot-hidup .maskot-gerak,
+.maskot-hidup .maskot-wajah,
+.maskot-hidup .maskot-antena,
+.maskot-hidup .maskot-lengan-kanan,
+.maskot-hidup .maskot-lengan-kiri,
+.maskot-hidup .maskot-telinga-kiri,
+.maskot-hidup .maskot-telinga-kanan { will-change: transform; }
+.maskot-telinga-kiri,
+.maskot-telinga-kanan,
+.maskot-lengan-kiri,
+.maskot-bayangan { transform-box: fill-box; }
+.maskot-telinga-kiri { transform-origin: 85% 100%; }
+.maskot-telinga-kanan { transform-origin: 15% 100%; }
+.maskot-lengan-kiri { transform-origin: 90% 10%; }
+.maskot-bayangan { transform-origin: 50% 50%; }
+.maskot-pipi { transition: opacity 0.4s ease; }
+.maskot.sorot .maskot-pipi { opacity: 0.95; }
+.maskot-mulut, .maskot-mulut-senang { transition: opacity 0.3s ease; }
+.maskot-badan { transition: scale 0.25s cubic-bezier(0.3, 1.4, 0.5, 1); }
+.maskot-badan:active { scale: 0.96; }
+.maskot-gelembung { transition: opacity 0.28s ease, transform 0.35s cubic-bezier(0.3, 1.3, 0.5, 1); }

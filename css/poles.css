@@ -1,0 +1,106 @@
+/* Polesan visual bersama: gerak seragam, hover, fokus, dan menu yang muncul halus.
+   Hanya mengubah transisi, bayangan, dan animasi (bukan tata letak), jadi aman dipasang di semua halaman.
+   Semua gerak mati otomatis jika pengguna memilih "kurangi gerakan". */
+
+:root {
+  --ease-keluar: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-pegas: cubic-bezier(0.3, 1.35, 0.5, 1);
+  --ease-masuk-keluar: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-cepat: 140ms;
+  --dur-sedang: 220ms;
+  --dur-lambat: 420ms;
+  --bayangan-1: 0 1px 2px rgb(0 0 0 / 22%);
+  --bayangan-2: 0 8px 24px rgb(0 0 0 / 26%);
+  --bayangan-3: 0 18px 48px rgb(0 0 0 / 34%);
+  --cincin: 0 0 0 3px rgb(112 217 154 / 22%);
+}
+
+::selection { background: rgb(112 217 154 / 30%); color: inherit; }
+
+/* Scrollbar tipis dan senada */
+* { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; border: 2px solid transparent; background-clip: content-box; }
+*::-webkit-scrollbar-thumb:hover { background: var(--accent-dark); background-clip: content-box; border: 2px solid transparent; }
+
+/* Fokus keyboard seragam */
+:where(a, button, summary, [role="tab"], [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+:where(input, select, textarea) {
+  transition: border-color var(--dur-sedang) ease, box-shadow var(--dur-sedang) ease, background-color var(--dur-sedang) ease;
+}
+:where(input, select, textarea):focus-visible {
+  outline: none;
+  border-color: var(--accent-dark);
+  box-shadow: var(--cincin);
+}
+
+/* Navbar: bayangan muncul setelah halaman digulir, garis bawah menu bergeser halus */
+.navbar { transition: box-shadow var(--dur-sedang) ease, background-color var(--dur-sedang) ease; }
+.navbar.navbar-gulir { box-shadow: 0 10px 30px rgb(0 0 0 / 30%); }
+@media (min-width: 861px) {
+  .navbar .nav-links > .nav-link { position: relative; }
+  .navbar .nav-links > .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 1px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform var(--dur-sedang) var(--ease-keluar);
+  }
+  .navbar .nav-links > .nav-link:hover::after,
+  .navbar .nav-links > .nav-link.active::after,
+  .navbar .nav-links > .nav-link[aria-current="page"]::after { transform: scaleX(1); }
+}
+.brand-logo { transition: transform var(--dur-lambat) var(--ease-pegas); }
+.brand:hover .brand-logo { transform: rotate(-8deg) scale(1.06); }
+
+/* Menu dropdown muncul dengan skala halus */
+.nav-lainnya.terbuka .nav-lainnya-menu,
+.tb-more-group.is-open,
+.download-options:not([hidden]) {
+  animation: poles-menu var(--dur-sedang) var(--ease-keluar) both;
+  transform-origin: top right;
+}
+@keyframes poles-menu { from { opacity: 0; transform: translateY(-6px) scale(0.96); } }
+
+/* Tombol: terangkat saat disentuh, tertekan saat diklik */
+:where(.button, .btn, .btn-primary, .py-btn, .py-btn-secondary, .playground-reset, .tg-btn) {
+  transition: transform var(--dur-sedang) var(--ease-keluar), box-shadow var(--dur-sedang) ease,
+              background-color var(--dur-sedang) ease, border-color var(--dur-sedang) ease, color var(--dur-sedang) ease, filter var(--dur-sedang) ease;
+}
+@media (hover: hover) {
+  :where(.button-primary, .btn-primary, .py-btn:not(.py-btn-secondary)):hover { box-shadow: 0 8px 22px rgb(112 217 154 / 24%); transform: translateY(-1px); }
+  :where(.button-secondary, .py-btn-secondary, .playground-reset):hover { transform: translateY(-1px); }
+}
+:where(.button, .btn, .btn-primary, .py-btn, .py-btn-secondary, .playground-reset, .tg-btn):active { transform: translateY(0) scale(0.98); box-shadow: none; }
+
+/* Halaman masuk halus (kecuali editor yang tingginya penuh layar) */
+body:not(.halaman-editor) > main { animation: poles-masuk 0.5s var(--ease-keluar) backwards; }
+@keyframes poles-masuk { from { opacity: 0; translate: 0 10px; } }
+
+/* Dialog dan latar belakangnya */
+dialog[open] { animation: poles-dialog 0.28s var(--ease-pegas) both; }
+dialog[open]::backdrop { animation: poles-latar 0.25s ease both; }
+@keyframes poles-dialog { from { opacity: 0; transform: translateY(14px) scale(0.97); } }
+@keyframes poles-latar { from { opacity: 0; } }
+
+/* Tab editor: indikator bergeser, bukan loncat */
+.editor-tab { transition: color var(--dur-sedang) ease, background-color var(--dur-sedang) ease, border-color var(--dur-sedang) ease; }
+
+/* Gelembung status / toast */
+.toast-tampil { animation: poles-menu var(--dur-sedang) var(--ease-pegas) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  body:not(.halaman-editor) > main,
+  dialog[open], dialog[open]::backdrop,
+  .nav-lainnya.terbuka .nav-lainnya-menu, .tb-more-group.is-open, .download-options:not([hidden]),
+  .toast-tampil { animation: none; }
+  .brand:hover .brand-logo { transform: none; }
+  :where(.button-primary, .btn-primary, .py-btn, .button-secondary, .py-btn-secondary, .playground-reset):hover { transform: none; }
+}

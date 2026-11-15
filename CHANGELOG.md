@@ -3,6 +3,31 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.18.2] - 2026-11-15
+
+### Diperbaiki
+- **Menu Unduh di menu ⋯ editor**: tombol Unduh dan daftar pilihannya tidak lagi berdampingan (tombol jadi tinggi, daftar menyempit di kanan). Kini daftar turun di bawah tombol dan ukuran hurufnya dirapikan.
+- Item **Pengaturan** di menu ⋯ memakai gaya yang sama dengan item lain (tinggi dan perataan ikon seragam).
+
+### Dihapus
+- `padding` pada `.editor-tabs` di `css/style.css` (menyebabkan tampilan tab editor bergeser).
+- Bayangan saat hover pada kartu di `css/poles.css` (terlihat kotak).
+
+## [5.18.1] - 2026-11-15
+
+### Diperbaiki
+- **Editor Web, tag blok tidak lagi dipecah jadi tiga baris**: mengetik `<p class="hai">` kini menghasilkan `<p class="hai"></p>` dengan kursor di tengah, bukan `</p>` turun ke baris bawah. Penutup tag bawaan CodeMirror dimatikan dan diganti `js/editor-ketik.js`, supaya perilakunya sama di komputer dan HP.
+- **Tutup tag otomatis di HP**: pelengkap kini membaca karakter terakhir yang masuk (bukan hanya satu karakter) dan punya jalur cadangan lewat peristiwa `input`, jadi tetap jalan walau keyboard HP mengirim beberapa karakter sekaligus.
+
+## [5.18.0] - 2026-11-15
+
+### Ditambahkan
+- **Pengaturan cepat di editor**: menu ⋯ pada Editor Web, Python, dan C++ punya item **Pengaturan**. Isinya ukuran huruf (A− / A+), lebar tab, bungkus baris, nomor baris, petunjuk kode (Editor Web), dan tema Gelap/Terang. Perubahan langsung berlaku dan memakai penyimpanan yang sama dengan halaman Pengaturan (ikut tersinkron ke akun). Ada tombol "Kembalikan bawaan" dan tautan "Semua pengaturan". Di HP tampil sebagai lembar dari bawah. Berkas baru: `js/editor-setelan.js`, `css/editor-setelan.css`; `js/editor-prefs.js` kini punya `nilai()` dan `ubah()`.
+- `css/poles.css`: polesan visual bersama (token gerak, fokus seragam, scrollbar tipis, tombol terangkat/tertekan, menu dan dialog muncul halus, garis bawah menu navbar bergeser, bayangan navbar saat digulir, halaman masuk halus). Hanya mengubah transisi dan bayangan, bukan tata letak, dan mati otomatis bila memilih "kurangi gerakan".
+
+### Diubah
+- **Maskot Skani lebih luwes**: gerak kini memakai mesin pegas, bukan keyframe kaku. Badan jongkok lalu melompat dan memipih saat mendarat, kemiringan mengikuti arah kursor, antena dan telinga bergoyang tertinggal, lengan melambai dengan ayunan halus, mata berkedip alami (kadang dua kali) dan melirik sendiri saat kursor diam, bayangan mengecil saat melompat, dan lesu halus saat error. Gerak berhenti saat tab tersembunyi atau Skani di luar layar.
+
 ## [5.17.2] - 2026-11-14
 
 ### Diperbaiki

@@ -35,3 +35,13 @@
   // Pengaman: jika observer gagal, tampilkan semuanya.
   window.setTimeout(() => semua.forEach((el) => el.classList.add("tampil")), 6000);
 })();
+
+// Bayangan navbar muncul setelah halaman digulir sedikit.
+(() => {
+  const bar = document.querySelector(".navbar");
+  if (!bar) return;
+  let tunggu = false;
+  const periksa = () => { tunggu = false; bar.classList.toggle("navbar-gulir", window.scrollY > 8); };
+  window.addEventListener("scroll", () => { if (!tunggu) { tunggu = true; requestAnimationFrame(periksa); } }, { passive: true });
+  periksa();
+})();
