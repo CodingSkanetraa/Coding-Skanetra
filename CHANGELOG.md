@@ -3,6 +3,14 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.19.0] - 2026-11-15
+
+### Ditambahkan
+- **Lihat di tab lain (Editor Web)**: item baru di menu ⋯ dan tombol **↗ Tab baru** di panel Live Preview membuka hasil kodemu di tab browser sendiri, memenuhi seluruh layar seperti web sungguhan. Klik lagi untuk menyegarkan tab yang sama. Judul tab diambil dari `<title>`. `console.log` dari tab itu tetap muncul di panel Console editor, dan `localStorage` bekerja seperti di pratinjau biasa.
+- **Aman**: kode tetap berjalan di iframe terisolasi di dalam halaman pembungkus (tanpa `allow-same-origin`), jadi kode dari tautan Bagikan orang lain tidak bisa menyentuh akun atau data situs. Bila pop-up diblokir browser, muncul pesan di status.
+- **Tautan jangkar** (`<a href="#bagian">`) kini menggulir ke bagian tujuan, di pratinjau biasa maupun tab baru (sebelumnya tidak berfungsi di iframe).
+- Ikon `tabbaru` di `js/ikon.js`.
+
 ## [5.18.2] - 2026-11-15
 
 ### Diperbaiki

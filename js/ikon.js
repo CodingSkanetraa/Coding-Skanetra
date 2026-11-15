@@ -26,6 +26,7 @@
     kamera: '<path d="M4 8h3l1.6-2.5h6.8L17 8h3v11H4z"/><circle cx="12" cy="13.2" r="3.4"/>',
     panah: '<path d="m9.5 5.5 6.5 6.5-6.5 6.5"/>',
     tampilan: '<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17" /><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/>',
+    tabbaru: '<path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M18 14v4.5a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 5 18.5v-10A1.5 1.5 0 0 1 6.5 7H11"/>',
     tutup: '<path d="M6 6l12 12M18 6 6 18"/>'
   };
 

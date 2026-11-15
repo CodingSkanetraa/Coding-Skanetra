@@ -547,9 +547,14 @@ ${html}
     }
   }
 
-  // Hanya terima pesan dari iframe preview yang sedang aktif.
+  // Tab pratinjau yang dibuka lewat "Lihat di tab lain" (halaman pembungkus kita sendiri, satu asal dengan situs).
+  let tabLuar = null;
+  let alamatTab = null;
+
+  // Hanya terima pesan dari iframe preview yang sedang aktif, atau dari tab pratinjau yang kita buka.
   window.addEventListener("message", (event) => {
-    if (!preview || event.source !== preview.contentWindow) return;
+    const dariTab = tabLuar && event.source === tabLuar && event.origin === location.origin;
+    if (!dariTab && (!preview || event.source !== preview.contentWindow)) return;
     const data = event.data;
     if (!data || typeof data !== "object") return;
     if (data.ck === "storage") {
@@ -647,6 +652,23 @@ ${html}
   pasang("sessionStorage", buatPenyimpanan({}, function () {}));
 })();`;
 
+  // Tautan jangkar (<a href="#bagian">) tidak berfungsi di dalam iframe srcdoc, jadi digulirkan manual
+  // seperti di web sungguhan.
+  const SKRIP_JANGKAR = `(function () {
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+    if (!a) return;
+    var h = a.getAttribute("href");
+    if (!h || h.charAt(0) !== "#") return;
+    e.preventDefault();
+    var id = ""; try { id = decodeURIComponent(h.slice(1)); } catch (x) { id = h.slice(1); }
+    var t = id ? (document.getElementById(id) || document.getElementsByName(id)[0]) : null;
+    if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+    else if (!id || id === "top") window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+})();`;
+
   // 6. Fungsi menjalankan HTML, CSS, dan JavaScript
   function bangunDokumen() {
     const html = htmlEditor.getValue();
@@ -676,7 +698,7 @@ ${html}
       .replace("__BATAS__", String(BATAS_PENYIMPANAN))
       .replace("__DATA__", () => dataTersimpan);
     const sambungan = "\n</script>\n<script>\n";
-    const awalSkrip = awal + "<script>\n" + skripPenyimpanan + sambungan;
+    const awalSkrip = awal + "<script>\n" + skripPenyimpanan + sambungan + SKRIP_JANGKAR + sambungan;
     const offset = (awalSkrip + SKRIP_CONSOLE + sambungan).split("\n").length - 1;
     const skrip = SKRIP_CONSOLE.replace("__OFFSET__", String(offset));
 
@@ -708,6 +730,61 @@ ${html}
   }
 
   runButton.addEventListener("click", jalankanKode);
+
+  // 6b. Lihat hasilnya di tab sendiri, layaknya situs sungguhan (memenuhi seluruh layar).
+  // Kode pengguna tetap berjalan di iframe terisolasi (tanpa allow-same-origin) di dalam halaman pembungkus,
+  // jadi kode dari tautan orang lain tidak bisa menyentuh data akun atau penyimpanan situs ini.
+  function amanUntukSkrip(teks) {
+    return JSON.stringify(teks).replace(/</g, "\\u003c").replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029");
+  }
+
+  function bukaDiTabBaru() {
+    const dokumen = bangunDokumen();
+    const cocok = /<title[^>]*>([^<]*)<\/title>/i.exec(htmlEditor.getValue());
+    const judul = ((cocok && cocok[1].trim()) || "Pratinjau").replace(/[<>&"]/g, "").slice(0, 80);
+    const pembungkus = `<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${judul} | Pratinjau CodingSkanetra</title>
+<style>html,body{margin:0;height:100%;background:#fff}iframe{display:block;width:100%;height:100%;border:0}</style></head>
+<body><iframe id="f" title="Pratinjau" sandbox="allow-scripts allow-modals allow-forms allow-popups" referrerpolicy="no-referrer"></iframe>
+<script>
+var f = document.getElementById("f");
+f.srcdoc = ${amanUntukSkrip(dokumen)};
+window.addEventListener("message", function (e) {
+  if (e.source !== f.contentWindow || !window.opener) return;
+  try { window.opener.postMessage(e.data, location.origin); } catch (x) {}
+});
+</script></body></html>`;
+
+    const alamat = URL.createObjectURL(new Blob([pembungkus], { type: "text/html;charset=utf-8" }));
+    const jendela = window.open(alamat, "codingskanetra-pratinjau");
+    if (!jendela) {
+      URL.revokeObjectURL(alamat);
+      status.textContent = "Tab baru diblokir browser. Izinkan pop-up untuk situs ini, lalu coba lagi.";
+      return;
+    }
+    const lama = alamatTab;
+    alamatTab = alamat;
+    tabLuar = jendela;
+    if (lama) window.setTimeout(() => URL.revokeObjectURL(lama), 5000);
+    bersihkanConsole();
+    status.textContent = "Pratinjau dibuka di tab lain.";
+  }
+  window.addEventListener("pagehide", () => { if (alamatTab) URL.revokeObjectURL(alamatTab); });
+
+  const tombolTabBaru = document.querySelector("#open-preview-tab");
+  if (tombolTabBaru) tombolTabBaru.addEventListener("click", bukaDiTabBaru);
+  const grupMenu = document.querySelector("#tb-more-group");
+  if (grupMenu && window.CodingSkanetraIkon) {
+    const kelas = document.querySelector(".tb-more-btn");
+    const itemTab = document.createElement("button");
+    itemTab.type = "button";
+    itemTab.className = (kelas && kelas.classList.contains("playground-reset") ? "playground-reset" : "py-btn-secondary") + " tb-btn tb-item-tab";
+    itemTab.title = "Buka hasil di tab baru, memenuhi layar seperti web sungguhan";
+    window.CodingSkanetraIkon.isiTombol(itemTab, "tabbaru", "Lihat di tab lain");
+    itemTab.addEventListener("click", bukaDiTabBaru);
+    grupMenu.prepend(itemTab);
+  }
 
   // 7. Perbesar preview atau kembali ke editor
   enlargePreviewButton.addEventListener("click", () => {
