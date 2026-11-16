@@ -83,21 +83,6 @@
   I.isiTombol(kembali, "kembali", "Playground");
   aksi.prepend(kembali);
 
-  /* ---------- Desktop: Mode fokus keluar dari menu ⋯ agar selalu terlihat ---------- */
-  const desktop = window.matchMedia("(min-width: 721px)");
-  const susunDesktop = () => {
-    const fokus = qs('[data-alat="fokus"]');
-    if (!fokus) return;
-    if (desktop.matches) {
-      if (fokus.parentElement === grup) save.insertAdjacentElement("afterend", fokus);
-    } else if (fokus.parentElement !== grup) {
-      grup.prepend(fokus);
-    }
-  };
-  desktop.addEventListener("change", susunDesktop);
-  window.addEventListener("alat:siap", susunDesktop);
-  susunDesktop();
-
   /* ---------- Tab Kode | Output (HP) ---------- */
   let setTab = () => {};
   if (cfg.tab && layout) {
@@ -172,23 +157,6 @@
       });
     }
   }
-
-  /* ---------- Mode fokus (desktop): output sebagai panel geser ---------- */
-  const root = document.documentElement;
-  run.addEventListener("click", () => {
-    if (!hp.matches && root.classList.contains("mode-fokus")) root.classList.add("output-buka");
-  });
-  document.addEventListener("pointerdown", (e) => {
-    if (!root.classList.contains("output-buka")) return;
-    if (e.target.closest(".py-output-panel, .tb-btn#"+run.id)) return;
-    root.classList.remove("output-buka");
-  });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") root.classList.remove("output-buka"); });
-  new MutationObserver(() => {
-    // classList.remove pada kelas yang tidak ada tetap memicu observer lagi (putaran tanpa henti), jadi cek dulu.
-    if (!root.classList.contains("mode-fokus") && root.classList.contains("output-buka")) root.classList.remove("output-buka");
-  })
-    .observe(root, { attributes: true, attributeFilter: ["class"] });
 
   /* ---------- Editor selalu mengisi ruang yang tersedia ---------- */
   const segarkan = () => qsa(".CodeMirror").forEach((c) => { if (c.CodeMirror) c.CodeMirror.refresh(); });

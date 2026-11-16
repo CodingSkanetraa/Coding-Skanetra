@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (restoredNote) status.textContent = restoredNote;
   }
 
-  // Tombol Bagikan dan Mode fokus (js/editor-alat.js).
+  // Tombol Bagikan (js/editor-alat.js).
   if (window.CodingSkanetraAlat && saveButton) {
     window.CodingSkanetraAlat.daftar({
       jenis: "cpp",

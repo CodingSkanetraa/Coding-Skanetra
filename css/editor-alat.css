@@ -1,4 +1,4 @@
-/* Bagikan, mode fokus, dan penjelasan error ramah (editor Python, C++, HTML) */
+/* Bagikan dan penjelasan error ramah (editor Python, C++, HTML) */
 
 .alat-banner {
   display: flex;
@@ -93,40 +93,8 @@
   white-space: pre-wrap;
 }
 
-/* Mode fokus */
-html.mode-fokus { overflow-x: hidden; }
-html.mode-fokus .navbar,
-html.mode-fokus .footer,
-html.mode-fokus .py-editor-heading,
-html.mode-fokus .playground-heading { display: none !important; }
-html.mode-fokus main { padding-top: 14px; padding-bottom: 14px; }
-/* Tinggi editor saat fokus di HP; di desktop tata letak IDE (editor-mobile.css) sudah memenuhi layar. */
-@media (max-width: 720px) {
-  html.mode-fokus .py-editor-layout .CodeMirror,
-  html.mode-fokus .py-code-panel .CodeMirror { height: calc(100dvh - 190px) !important; min-height: 240px; }
-  html.mode-fokus .py-output { max-height: calc(100dvh - 130px); min-height: 200px; }
-  html.mode-fokus .playground-workspace { min-height: calc(100dvh - 40px); height: calc(100dvh - 40px); }
-}
-
-.alat-keluar-fokus {
-  position: fixed;
-  top: 10px;
-  right: 12px;
-  z-index: 80;
-  padding: 7px 12px;
-  border: 1px solid var(--accent-dark);
-  border-radius: 8px;
-  background: var(--surface);
-  color: var(--text);
-  font: 0.85rem/1 inherit;
-  cursor: pointer;
-  box-shadow: 0 6px 18px rgb(0 0 0 / 35%);
-}
-.alat-keluar-fokus:hover { border-color: var(--accent); }
-
-@media print { .alat-keluar-fokus, .alat-banner { display: none; } }
+@media print { .alat-banner { display: none; } }
 
 @media (max-width: 720px) {
   .error-ramah { margin: 10px 10px 0; }
-  .alat-keluar-fokus { top: auto; bottom: 14px; left: 12px; right: auto; }
 }

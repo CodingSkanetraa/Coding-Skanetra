@@ -16,7 +16,6 @@
     jalankan: '<path d="M7 5v14l12-7z" fill="currentColor"/>',
     simpan: '<path d="M5 3.5h11l3.5 3.5v13.5H5z"/><path d="M8 3.5v5h7v-5"/><rect x="8" y="13" width="8" height="7.5"/>',
     bagikan: '<circle cx="6" cy="12" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="18" cy="18" r="2.4"/><path d="m8.2 10.9 7.6-3.8M8.2 13.1l7.6 3.8"/>',
-    fokus: '<path d="M4 9V5h4M20 9V5h-4M4 15v4h4M20 15v4h-4"/>',
     reset: '<path d="M4 12a8 8 0 1 0 2.6-5.9"/><path d="M4 4v5h5"/>',
     bersihkan: '<path d="M5 7h14M10 7V4.5h4V7M7 7l1 13h8l1-13"/>',
     unduh: '<path d="M12 4v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M5 20h14"/>',

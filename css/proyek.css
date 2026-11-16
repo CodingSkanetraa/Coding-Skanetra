@@ -100,8 +100,6 @@ html.proyek-aktif button[data-save].proyek-kotor::after {
   vertical-align: middle;
 }
 
-html.mode-fokus .proyek-bar { display: none; }
-
 /* Dialog */
 .proyek-dialog {
   margin: auto;

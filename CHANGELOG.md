@@ -3,6 +3,12 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.19.1] - 2026-11-16
+
+### Dihapus
+- **Mode fokus** di ketiga editor (Python, C++, Web): tombol, tombol keluar, pintasan Esc, panel output geser, dan semua CSS/JS terkait. Editor sekarang sudah memenuhi layar, jadi fitur ini tidak diperlukan lagi dan sempat menimbulkan bug.
+- Ikon `fokus` di `js/ikon.js`.
+
 ## [5.19.0] - 2026-11-15
 
 ### Ditambahkan

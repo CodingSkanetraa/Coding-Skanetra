@@ -1,6 +1,5 @@
 /* Alat bersama untuk editor Python, C++, dan HTML:
    - Bagikan: kode dikemas ke dalam tautan, jadi cukup kirim linknya ke guru/admin/teman.
-   - Mode fokus: sembunyikan semua selain editor dan output (nyaman di HP).
    Isi tautan ada di bagian setelah "#", yang tidak pernah dikirim ke server. */
 (() => {
   const AWAL = "#bagikan=";
@@ -244,31 +243,6 @@
     (login && !pendek ? buat : nama).focus();
   }
 
-  /* ---------- Mode fokus ---------- */
-  let keluarFokus = null;
-  function setFokus(aktif, tombol) {
-    const root = document.documentElement;
-    root.classList.toggle("mode-fokus", aktif);
-    if (tombol) {
-      tombol.setAttribute("aria-pressed", String(aktif));
-      if (window.CodingSkanetraIkon) window.CodingSkanetraIkon.isiTombol(tombol, aktif ? "tutup" : "fokus", aktif ? "Keluar fokus" : "Mode fokus");
-      else tombol.textContent = aktif ? "✕ Keluar fokus" : "🎯 Mode fokus";
-    }
-    if (aktif && !keluarFokus) {
-      keluarFokus = el("button", "alat-keluar-fokus", "✕ Keluar mode fokus");
-      keluarFokus.type = "button";
-      keluarFokus.addEventListener("click", () => setFokus(false, tombol));
-      document.body.appendChild(keluarFokus);
-    } else if (!aktif && keluarFokus) {
-      keluarFokus.remove(); keluarFokus = null;
-    }
-    window.scrollTo(0, 0);
-    window.setTimeout(() => {
-      document.querySelectorAll(".CodeMirror").forEach((cm) => { if (cm.CodeMirror) cm.CodeMirror.refresh(); });
-      window.dispatchEvent(new Event("resize"));
-    }, 60);
-  }
-
   /* ---------- Pendaftaran editor ---------- */
   // adapter: { jenis, ambil(), terapkan(data), beritahu(teks), tombolSimpan }
   async function daftar(adapter) {
@@ -283,26 +257,12 @@
     if (I) I.isiTombol(bagikan, "bagikan", "Bagikan"); else bagikan.textContent = "🔗 Bagikan";
     bagikan.addEventListener("click", () => bagikanDialog(adapter, bagikan));
 
-    const fokus = el("button", dasar);
-    fokus.type = "button";
-    fokus.setAttribute("aria-pressed", "false");
-    fokus.title = "Sembunyikan semua selain editor dan output (Esc untuk keluar)";
-    if (I) I.isiTombol(fokus, "fokus", "Mode fokus"); else fokus.textContent = "🎯 Mode fokus";
-    fokus.addEventListener("click", () => setFokus(!document.documentElement.classList.contains("mode-fokus"), fokus));
-
-    fokus.dataset.alat = "fokus";
     const grup = document.querySelector("#tb-more-group");
-    if (grup) grup.prepend(bagikan, fokus);
-    else { simpan.insertAdjacentElement("afterend", bagikan); bagikan.insertAdjacentElement("afterend", fokus); }
+    if (grup) grup.prepend(bagikan);
+    else simpan.insertAdjacentElement("afterend", bagikan);
     window.dispatchEvent(new Event("alat:siap"));
     // Daftar proyek di akun (js/proyek.js), bila dimuat oleh halaman ini.
     if (window.CodingSkanetraProyek) window.CodingSkanetraProyek.pasang(adapter);
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && document.documentElement.classList.contains("mode-fokus") && !document.querySelector("dialog[open]")) {
-        setFokus(false, fokus);
-      }
-    });
 
     // Tautan pendek dari database: #b=kode
     const cocokDb = /^#b=([0-9a-f]{12})$/.exec(location.hash || "");

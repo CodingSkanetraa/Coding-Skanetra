@@ -41,7 +41,6 @@ Fitur pendukung belajar:
 - **Skani**, maskot yang menyapa di beranda, ikut bereaksi saat program berhasil, error, atau kuis dijawab.
 - **Penjelasan error ramah**: error Python, C++, dan JavaScript diterjemahkan ke bahasa sederhana lengkap dengan saran.
 - **Bagikan lewat tautan**: kode dikemas ke dalam link sehingga bisa dikirim ke guru atau admin untuk diperiksa.
-- **Mode fokus** di editor, nyaman dipakai di HP.
 - **Simpan kode** (Ctrl + S), terpisah untuk tiap editor. Tanpa login tersimpan di browser; setelah login juga tersimpan di akun.
 
 ## Teknologi
@@ -82,7 +81,7 @@ Berkas JavaScript yang paling sering disentuh:
 | `js/editor-cpp.js`, `js/cpp-runner.js` | Editor C++ dan penghubung ke compiler online |
 | `js/playground.js` | Editor Web (HTML, CSS, JS) dan pratinjaunya |
 | `js/editor-hint.js` | Petunjuk kode (autocomplete) di Editor Web; daftar tag, atribut, properti, dan fungsi ada di bagian atas berkas |
-| `js/editor-alat.js` | Tombol Bagikan dan Mode fokus |
+| `js/editor-alat.js` | Tombol Bagikan |
 | `js/error-ramah.js` | Daftar aturan penjelasan error |
 | `js/maskot.js`, `js/gerak.js` | Maskot Skani dan animasi kartu |
 | `js/code-storage.js` | Penyimpanan kode di browser |

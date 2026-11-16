@@ -226,10 +226,6 @@
 
   /* Skani naik di atas toast */
   body.halaman-editor .maskot-mini { bottom: calc(var(--bb-tinggi, 58px) + env(safe-area-inset-bottom, 0px) + 66px); }
-
-  /* Mode fokus: tanpa bar bawah */
-  html.mode-fokus .bar-bawah { display: none; }
-  html.mode-fokus body.punya-bar-bawah { padding-bottom: 0; }
 }
 
 /* ---------- Desktop: tombol berikon, tata letak sama ---------- */
@@ -273,7 +269,7 @@
    Desktop / laptop (>= 721px): editor seperti VS Code
    - Tanpa navbar situs: ada tombol kembali ke Playground di toolbar.
    - Editor memenuhi lebar dan tinggi layar (tanpa jarak kiri-kanan).
-   - Toolbar tipis: Jalankan, Simpan, Mode fokus, dan menu ⋯ untuk sisanya.
+   - Toolbar tipis: Jalankan, Simpan, dan menu ⋯ untuk sisanya.
    ================================================================ */
 @media (min-width: 721px) {
   :root { --tb-h: 40px; }
@@ -323,7 +319,7 @@
     height: 30px; padding: 0 10px; border-radius: 7px; font-size: 0.85rem; gap: 6px; line-height: 1;
   }
   .py-actions .tb-ikon-saja, .editor-actions .tb-ikon-saja,
-  .py-actions .tb-more-btn, .editor-actions .tb-more-btn, .tb-fokus-btn { width: 32px; padding: 0; flex: none; }
+  .py-actions .tb-more-btn, .editor-actions .tb-more-btn { width: 32px; padding: 0; flex: none; }
   .tb-ikon-saja .tb-label { display: none; }
   .py-actions .tb-btn .ik, .editor-actions .tb-btn .ik { width: 16px; height: 16px; }
   .tb-more-btn { display: inline-flex; }
@@ -381,7 +377,7 @@
   .playground-workspace .preview-panel { height: 100%; }
 }
 
-/* ---------- Desktop: laci Contoh & referensi (geser dari kanan) dan Mode fokus ---------- */
+/* ---------- Desktop: laci Contoh & referensi (geser dari kanan) ---------- */
 @media (min-width: 721px) {
   .py-laci {
     display: none;
@@ -402,25 +398,5 @@
   .py-laci-isi .py-basics { margin-top: 12px; }
   .py-laci-latar { position: fixed; inset: var(--tb-h) 0 0 0; z-index: 155; background: rgb(0 0 0 / 28%); }
   body.laci-buka .py-laci-latar { display: block; }
-
-  /* Mode fokus: hanya kode. Output muncul sebagai panel geser saat program dijalankan. */
-  html.mode-fokus .py-editor-layout { grid-template-columns: minmax(0, 1fr); }
-  html.mode-fokus .py-output-panel {
-    position: fixed;
-    top: var(--tb-h);
-    right: 0;
-    bottom: 0;
-    z-index: 70;
-    width: min(540px, 46vw);
-    border-left: 1px solid var(--border);
-    box-shadow: -14px 0 34px rgb(0 0 0 / 40%);
-    transform: translateX(104%);
-    transition: transform 0.2s ease;
-  }
-  html.mode-fokus.output-buka .py-output-panel { transform: none; }
-  .alat-keluar-fokus { display: none; }
-}
-@media (min-width: 721px) and (prefers-reduced-motion: reduce) {
-  html.mode-fokus .py-output-panel { transition: none; }
 }
 @media (max-width: 720px) { .tb-kembali { display: none !important; } }
