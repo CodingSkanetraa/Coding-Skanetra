@@ -3,6 +3,25 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.20.0] - 2026-11-17
+
+### Diubah
+- **Poin pindah dari Google Sheets ke database Supabase** (`supabase/poin.sql`). Satu sumber data: poin ditambah dan dibatalkan lewat situs, tidak ada lagi kode Apps Script yang tabrakan. Peringkat dan riwayat (`api/points/*`) membaca fungsi database `poin_peringkat` dan `poin_riwayat` dengan token login pemanggil, tanpa Apps Script. Bentuk data ke halaman Peringkat tetap sama.
+- **Pembatalan hanya menandai catatan** (`dibatalkan`), angkanya tidak pernah ditimpa, jadi total tidak bisa lagi salah hitung. Poin lama hasil impor tidak bisa dibatalkan dari web.
+- **Poin Tantangan** masuk ke database lewat `tambah_poin_tantangan` (dijaga rahasia penilai, idempoten lewat kunci unik), bukan lagi lewat Apps Script. Teks "spreadsheet" di Tantangan diganti "daftar poin".
+
+### Ditambahkan
+- **Semester**: peringkat hanya menghitung semester aktif. Tombol **Mulai semester baru** di Kelola poin memulai peringkat dari 0; poin semester lama tetap tersimpan, 5 besarnya tampil di halaman Peringkat ("5 Besar Semester Lalu"), dan tiap semester bisa diunduh sebagai CSV.
+- **Halaman Kelola poin** (`pages/admin-poin.html`, khusus admin, tautannya di halaman Peringkat): tambah poin banyak anggota sekaligus (cari, filter kelas, pilih yang tampil), riwayat input dengan pembatalan utuh atau per anggota, kelola anggota (tambah, ubah, nonaktif), dan semester.
+- **Skrip impor sekali jalan** dari spreadsheet lama: satu transaksi yang memeriksa total tiap anggota terhadap kolom TOTAL dan membatalkan semuanya bila ada selisih. Poin yang hanya ada sebagai angka manual di sel (10 Agu sampai 7 Sep, 2.145 poin) ikut diimpor sebagai "saldo awal", bukan hanya dari sheet Riwayat.
+
+### Diperbaiki
+- Anggota di baris terakhir spreadsheet (S132) tidak ikut peringkat karena kode membaca sampai baris 137 saja.
+- Riwayat anggota di web membaca total dari kolom Q (yang sudah menjadi kolom tanggal), dan pembatalan batch untuk tanggal 16 Nov ke atas gagal atau menulis ke kolom yang salah. Penyebab: sebagian fungsi Apps Script masih memakai asumsi lama 12 kolom tanggal (E:P); kini tidak relevan karena poin tidak lagi dihitung dari sel.
+
+### Tidak dipakai lagi
+- `APPS_SCRIPT_URL` dan `APPS_SCRIPT_SECRET` untuk poin. `apps-script/tambah-poin.gs` tinggal arsip.
+
 ## [5.19.1] - 2026-11-16
 
 ### Dihapus

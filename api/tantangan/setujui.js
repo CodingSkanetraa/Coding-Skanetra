@@ -1,4 +1,4 @@
-// Guru menilai jawaban manual atau mengirim ulang poin yang belum masuk spreadsheet. Khusus admin.
+// Guru menilai jawaban manual atau mengirim ulang poin yang belum masuk daftar poin. Khusus admin.
 //
 //   POST /api/tantangan/setujui   { id: <id penyelesaian>, aksi: "setujui" | "tolak" | "kirim_ulang", poin?: 1-100 }
 //   poin (opsional, hanya setujui) = poin khusus untuk jawaban yang bagus; tanpa itu dipakai poin standar soal.
@@ -46,16 +46,16 @@ module.exports = async function handler(req, res) {
       if (!hasil || hasil.baru !== true) return json(res, 409, { sukses: false, pesan: 'Jawaban ini sudah tidak menunggu penilaian.' });
     }
 
-    // setujui (baru saja) atau kirim_ulang: kirim poin ke spreadsheet
+    // setujui (baru saja) atau kirim_ulang: kirim poin ke daftar poin
     const baris = await rpcServer('ambil_untuk_kirim', { p_id: id });
     if (!baris) return json(res, 404, { sukses: false, pesan: 'Penyelesaian tidak ditemukan atau belum selesai.' });
-    if (baris.terkirim_sheet === true) return json(res, 200, { sukses: true, status: 'selesai', terkirim: true, pesan: 'Poin sudah masuk spreadsheet.' });
+    if (baris.terkirim_sheet === true) return json(res, 200, { sukses: true, status: 'selesai', terkirim: true, pesan: 'Poin sudah masuk.' });
     const k = await kirimPoinKeSheet({
       userId: baris.user_id, tantanganId: baris.tantangan_id, judul: baris.judul, poin: baris.poin, idSheet: baris.id_sheet
     });
     return json(res, 200, {
       sukses: true, status: 'selesai', terkirim: k.terkirim,
-      pesan: k.terkirim ? `Disetujui. +${baris.poin} poin masuk spreadsheet.` : PESAN_BELUM_MASUK[k.alasan]
+      pesan: k.terkirim ? `Disetujui. +${baris.poin} poin masuk ke poin anggota.` : PESAN_BELUM_MASUK[k.alasan]
     });
   } catch (error) {
     console.error('Setujui error:', error.message);

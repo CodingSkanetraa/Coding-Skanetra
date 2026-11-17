@@ -6,8 +6,8 @@
 // ========================================
 
 // Login memakai akun Supabase (window.CodingSkanetraAkun, js/akun.js).
-// Data poin diambil dari Google Sheets lewat fungsi di folder api/ (Vercel). Fungsi itu
-// memeriksa token login dan status anggota dulu, baru membaca spreadsheet lewat Apps Script.
+// Data poin diambil dari database Supabase lewat fungsi di folder api/ (Vercel). Fungsi itu
+// memeriksa token login dan status anggota dulu, baru membaca poin semester aktif.
 const akun = window.CodingSkanetraAkun;
 const HALAMAN_LOGIN = "login.html?next=peringkat";
 
@@ -94,6 +94,12 @@ const el = {
   searchResultCount: document.getElementById("searchResultCount"),
   allEmpty: document.getElementById("allEmpty"),
 
+  semesterNama: document.getElementById("semesterNama"),
+  arsipSection: document.getElementById("arsipSection"),
+  arsipRanking: document.getElementById("arsipRanking"),
+  arsipNama: document.getElementById("arsipNama"),
+  adminPoinLink: document.getElementById("adminPoinLink"),
+
   refreshButton: document.getElementById("refreshButton"),
   retryButton: document.getElementById("retryButton"),
 
@@ -171,7 +177,7 @@ function kelasMedali(peringkat) {
 }
 
 
-function buatKartuPeringkat(anggota, indeks) {
+function buatKartuPeringkat(anggota, indeks, bisaDibuka = true) {
   const peringkat = ambilPeringkat(anggota, indeks);
   const medali = kelasMedali(peringkat);
 
@@ -180,13 +186,16 @@ function buatKartuPeringkat(anggota, indeks) {
     ["ranking-item", medali].filter(Boolean).join(" ")
   );
 
-  kartu.dataset.memberId = String(anggota.id);
-  kartu.tabIndex = 0;
-  kartu.setAttribute("role", "button");
-  kartu.setAttribute(
-    "aria-label",
-    `Lihat detail ${anggota.nama || "anggota"}, peringkat ${peringkat}`
-  );
+  // Kartu arsip (semester lalu) hanya dibaca, tidak membuka detail.
+  if (bisaDibuka) {
+    kartu.dataset.memberId = String(anggota.id);
+    kartu.tabIndex = 0;
+    kartu.setAttribute("role", "button");
+    kartu.setAttribute(
+      "aria-label",
+      `Lihat detail ${anggota.nama || "anggota"}, peringkat ${peringkat}`
+    );
+  }
 
   const nomor = buatElemen(
     "div",
@@ -270,7 +279,7 @@ function tampilkanError(pesan) {
 
 
 // ========================================
-// 5. MENGAMBIL DATA DARI APPS SCRIPT
+// 5. MENGAMBIL DATA DARI SERVER
 // ========================================
 
 async function muatPeringkat() {
@@ -287,7 +296,7 @@ async function muatPeringkat() {
 
     if (!Array.isArray(hasil.data)) {
       throw new Error(
-        "Format JSON tidak sesuai. Periksa respons Apps Script."
+        "Format data tidak sesuai. Periksa respons server."
       );
     }
 
@@ -312,6 +321,7 @@ async function muatPeringkat() {
     tampilkanRingkasan();
     tampilkanLimaBesar();
     tampilkanDaftarLengkap();
+    tampilkanSemester(hasil);
 
     // Catat waktu pembaruan.
     el.lastUpdated.textContent =
@@ -351,6 +361,45 @@ async function muatPeringkat() {
   } finally {
     sedangMemuat = false;
     sembunyikanLoading();
+  }
+}
+
+
+// Nama semester aktif dan 5 besar semester sebelumnya (arsip).
+function tampilkanSemester(hasil) {
+  if (el.semesterNama) {
+    el.semesterNama.textContent = hasil.semester && hasil.semester.nama
+      ? hasil.semester.nama + ". Peringkat dihitung dari poin semester ini."
+      : "Pantau pencapaian dan kontribusi anggota.";
+  }
+
+  if (!el.arsipSection || !el.arsipRanking) return;
+
+  const lama = hasil.sebelumnya;
+  const daftar = lama && Array.isArray(lama.data) ? lama.data : [];
+
+  el.arsipRanking.replaceChildren();
+  el.arsipSection.hidden = daftar.length === 0;
+  if (daftar.length === 0) return;
+
+  if (el.arsipNama) el.arsipNama.textContent = lama.nama || "Semester sebelumnya";
+
+  daftar.forEach((anggota, indeks) => {
+    el.arsipRanking.append(buatKartuPeringkat(anggota, indeks, false));
+  });
+}
+
+
+// Tautan "Kelola poin" hanya untuk admin (pemeriksaan sebenarnya ada di database).
+async function tampilkanTautanAdmin() {
+  if (!el.adminPoinLink || !akun || !akun.minta) return;
+
+  try {
+    const r = await akun.minta("/rest/v1/profil?select=admin&limit=1");
+    const p = r.ok && Array.isArray(r.data) ? r.data[0] : null;
+    el.adminPoinLink.hidden = !(p && p.admin === true);
+  } catch (e) {
+    el.adminPoinLink.hidden = true;
   }
 }
 
@@ -714,7 +763,7 @@ el.clearSearchButton.addEventListener("click", () => {
 });
 
 
-// Muat ulang dari Apps Script.
+// Muat ulang dari server.
 el.refreshButton.addEventListener("click", muatPeringkat);
 
 
@@ -780,6 +829,7 @@ function tampilkanMenunggu(pengguna) {
 
     // Peringkat baru dimuat setelah status anggota terverifikasi.
     muatPeringkat();
+    tampilkanTautanAdmin();
   } catch (error) {
     if (error && error.kode === "sesi") {
       window.location.replace(HALAMAN_LOGIN);

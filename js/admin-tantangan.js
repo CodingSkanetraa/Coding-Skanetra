@@ -1,4 +1,4 @@
-// Halaman admin Tantangan: kelola soal dan tes tersembunyi, nilai jawaban manual, atur ID spreadsheet anggota.
+// Halaman admin Tantangan: kelola soal dan tes tersembunyi, nilai jawaban manual, atur ID anggota di daftar poin.
 // Akses dijaga di database (RLS + fungsi adalah_admin) dan di server (api/tantangan/setujui). Pemeriksaan di sini hanya untuk tampilan.
 (() => {
   "use strict";
@@ -73,7 +73,7 @@
   }
 
   async function hapusSoal(s) {
-    if (!confirm("Hapus soal \"" + s.judul + "\"? Semua jawaban anak untuk soal ini ikut terhapus. Poin yang sudah masuk spreadsheet tidak ditarik.")) return;
+    if (!confirm("Hapus soal \"" + s.judul + "\"? Semua jawaban anak untuk soal ini ikut terhapus. Poin yang sudah masuk tidak ditarik.")) return;
     const r = await akun().minta("/rest/v1/tantangan?id=eq." + encodeURIComponent(s.id), { metode: "DELETE" });
     if (!r.ok) { pesan(pesanGalat(r, "Soal belum bisa dihapus."), true); return; }
     pesan("");
@@ -233,7 +233,7 @@
     const dB = b.ok && Array.isArray(b.data) ? b.data : [];
     if (!a.ok || !b.ok) pesan("Sebagian daftar belum bisa dimuat.", true);
     if (!dA.length) antre.append(el("p", "tg-meta", "Tidak ada jawaban yang menunggu."));
-    if (!dB.length) tunda.append(el("p", "tg-meta", "Semua poin sudah masuk spreadsheet."));
+    if (!dB.length) tunda.append(el("p", "tg-meta", "Semua poin sudah masuk."));
     dA.forEach((x) => antre.append(kartuJawaban(x, { kode: true, poin: true, aksi: [["Setujui", "setujui", "utama"], ["Tolak", "tolak", "bahaya"]] })));
     dB.forEach((x) => tunda.append(kartuJawaban(x, { kode: false, aksi: [["Kirim ulang poin", "kirim_ulang", "utama"]] })));
     const h = $("tg-hitung");
@@ -254,7 +254,7 @@
       const info = el("div", "tg-info");
       info.append(el("strong", "", p.nama || p.username), el("small", "", "@" + p.username + (p.kelas ? " · " + p.kelas : "")));
       const input = el("input"); input.type = "text"; input.value = p.id_sheet || ""; input.maxLength = 64;
-      input.placeholder = "ID spreadsheet"; input.setAttribute("aria-label", "ID spreadsheet untuk " + (p.nama || p.username));
+      input.placeholder = "ID anggota (S001)"; input.setAttribute("aria-label", "ID anggota untuk " + (p.nama || p.username));
       const simpan = el("button", "tg-btn", "Simpan"); simpan.type = "button";
       const status = el("span", "tg-meta", p.id_sheet ? "" : "belum diisi");
       simpan.addEventListener("click", async () => {

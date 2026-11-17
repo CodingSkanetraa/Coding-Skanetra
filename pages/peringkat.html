@@ -14,7 +14,7 @@
   <meta name="robots" content="noindex, follow">
   <script src="../js/theme.js?v=5"></script>
   <link rel="stylesheet" href="../css/style.css?v=6">
-  <link rel="stylesheet" href="../css/peringkat.css?v=5">
+  <link rel="stylesheet" href="../css/peringkat.css?v=6">
   <link rel="stylesheet" href="../css/gerak.css?v=1">
   <link rel="stylesheet" href="../css/nav-mobile.css?v=2">
   <link rel="stylesheet" href="../css/app-mobile.css?v=1">
@@ -59,7 +59,8 @@
       <div class="header-content">
         <span class="eyebrow">Coding Skanetra</span>
         <h1>Peringkat Poin</h1>
-        <p>Pantau pencapaian dan kontribusi anggota.</p>
+        <p id="semesterNama">Pantau pencapaian dan kontribusi anggota.</p>
+        <a id="adminPoinLink" class="text-button" href="admin-poin.html" hidden>Kelola poin</a>
       </div>
 
       
@@ -143,6 +144,17 @@
         Lihat Selengkapnya
         <span aria-hidden="true">→</span>
       </button>
+    </section>
+
+    <!-- Arsip: 5 besar semester sebelumnya (muncul bila sudah ada semester yang selesai) -->
+    <section id="arsipSection" class="ranking-section" hidden>
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow" id="arsipNama">Semester sebelumnya</span>
+          <h2>📜 5 Besar Semester Lalu</h2>
+        </div>
+      </div>
+      <div id="arsipRanking" class="ranking-list"></div>
     </section>
 
     <!-- Daftar lengkap, disembunyikan sampai tombol ditekan -->
@@ -267,6 +279,6 @@
   </section>
 </dialog>
 
-  <script src="../js/peringkat.js?v=10" defer></script>
+  <script src="../js/peringkat.js?v=11" defer></script>
 </body>
 </html>

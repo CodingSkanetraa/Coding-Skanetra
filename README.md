@@ -31,7 +31,7 @@ Nama, logo, dan identitas resmi CodingSkanetra dikelola oleh organisasi.
 | **Bagikan** | Di editor, tombol Bagikan membuat tautan pendek yang berlaku 7 hari (untuk akun login), atau tautan panjang tanpa kedaluwarsa. Tautan aktif bisa dikelola di Profil |
 | **Dokumentasi** | Galeri foto kegiatan eskul. Kartu dibuat otomatis dari satu daftar array (`js/dokumentasi-data.js`) dengan foto lokal di `assets/dokumentasi/`. Klik kartu untuk detail (tanggal, lokasi, deskripsi), klik foto untuk tampilan penuh dengan zoom |
 | **Proyek** | Khusus akun yang login. Di editor Web, Python, dan C++ ada daftar "Proyek saya": buat, buka, ganti nama, hapus. Perubahan disimpan otomatis, dan ada peringatan bila halaman ditutup sebelum tersimpan |
-| **Peringkat** | Poin anggota dari **Google Sheets** (hanya dilihat), khusus akun yang sudah disetujui pengelola. Login tetap lewat akun Supabase; sesama anggota bisa melihat riwayat poin satu sama lain |
+| **Peringkat** | Poin anggota per semester dari **database Supabase** (hanya dilihat), khusus akun yang sudah disetujui pengelola. Sesama anggota bisa melihat riwayat poin satu sama lain. 5 besar semester lalu tampil sebagai arsip. Admin menambah dan membatalkan poin di halaman **Kelola poin** |
 | **Games** | Code Rush: Robot Escape |
 | **Struktur Organisasi / Tentang** | Pengurus, anggota, dan profil komunitas |
 | **Pengaturan** | Mode terang/gelap, warna tema, pengaturan editor (ukuran font, nomor baris, dll.), dan sakelar maskot |
@@ -52,7 +52,7 @@ Situs ini sengaja dibuat sederhana: **HTML, CSS, dan JavaScript murni** tanpa fr
 - **Python di browser**: [Pyodide](https://pyodide.org) (dimuat dari CDN saat editor Python dibuka)
 - **Compiler C++**: [Wandbox](https://wandbox.org) dengan cadangan [Compiler Explorer](https://godbolt.org)
 - **Akun dan progres**: [Supabase](https://supabase.com) (Auth + Postgres), dipanggil langsung dari browser lewat REST tanpa library tambahan. Keamanan data lewat Row Level Security di `supabase/skema.sql`
-- **Poin peringkat**: Google Sheets, dibaca lewat Google Apps Script. Fungsi di folder `api/` (Vercel) memeriksa token login Supabase lebih dulu, lalu memanggil Apps Script dengan rahasia yang hanya ada di server
+- **Poin peringkat**: tabel `poin_*` di Supabase (`supabase/poin.sql`). Fungsi di folder `api/` (Vercel) memeriksa token login Supabase lebih dulu, lalu memanggil fungsi database dengan token yang sama. Pembatalan hanya menandai catatan, dan semester baru memulai peringkat dari 0 tanpa menghapus data lama
 - **Font**: Plus Jakarta Sans dan Fraunces, dihosting sendiri di `assets/fonts`
 - **SEO**: JSON-LD, `sitemap.xml`, `robots.txt`, dan `llms.txt`
 
@@ -65,8 +65,8 @@ Situs ini sengaja dibuat sederhana: **HTML, CSS, dan JavaScript murni** tanpa fr
 ├── css/                  Gaya. style.css = gaya dasar, sisanya per halaman/fitur
 ├── js/                   Skrip. main.js = umum, sisanya per halaman/fitur
 ├── assets/               Gambar dan font
-├── supabase/             skema.sql (tabel + RLS) dan PANDUAN.md untuk pengelola
-├── api/                  Fungsi serverless Vercel: peringkat dan riwayat poin dari Google Sheets (lewat Apps Script)
+├── supabase/             skema.sql, tantangan.sql, poin.sql (tabel + RLS) dan PANDUAN.md untuk pengelola
+├── api/                  Fungsi serverless Vercel: peringkat, riwayat poin, dan penilaian Tantangan
 ├── sitemap.xml  robots.txt  llms.txt   Berkas untuk mesin pencari
 └── favicon*.png, logo-512.png, og-image.png
 ```
@@ -82,6 +82,7 @@ Berkas JavaScript yang paling sering disentuh:
 | `js/playground.js` | Editor Web (HTML, CSS, JS) dan pratinjaunya |
 | `js/editor-hint.js` | Petunjuk kode (autocomplete) di Editor Web; daftar tag, atribut, properti, dan fungsi ada di bagian atas berkas |
 | `js/editor-alat.js` | Tombol Bagikan |
+| `js/admin-poin.js` | Halaman Kelola poin (admin): tambah, batalkan, anggota, semester |
 | `js/error-ramah.js` | Daftar aturan penjelasan error |
 | `js/maskot.js`, `js/gerak.js` | Maskot Skani dan animasi kartu |
 | `js/code-storage.js` | Penyimpanan kode di browser |
@@ -101,12 +102,10 @@ Halaman, editor Web, dan editor Python dapat dicoba seperti itu (Python dan Code
 ## Deploy
 
 1. Hubungkan repositori ke Vercel (atau unggah folder proyek).
-2. Isi *Environment Variables* di Vercel (hanya dua, untuk halaman Peringkat):
-   - `APPS_SCRIPT_URL`: alamat web app Google Apps Script yang membaca spreadsheet poin
-   - `APPS_SCRIPT_SECRET`: kunci rahasia yang sama dengan yang ada di Apps Script
+2. Isi *Environment Variables* di Vercel: `PENILAI_RAHASIA` (untuk penilaian dan poin Tantangan, lihat `supabase/PANDUAN.md` bagian F). Peringkat tidak memerlukan variabel apa pun; `APPS_SCRIPT_URL` dan `APPS_SCRIPT_SECRET` lama tidak dipakai lagi.
 
    URL project dan kunci `anon` Supabase ada di `js/akun-config.js` (kunci `anon` memang publik). `SESSION_SECRET` tidak diperlukan lagi.
-3. Pasang database sekali: ikuti `supabase/PANDUAN.md` (jalankan `supabase/skema.sql`, matikan *Confirm email*, jadikan akun pertama sebagai admin, lalu setujui anggota).
+3. Pasang database sekali: ikuti `supabase/PANDUAN.md` (jalankan `supabase/skema.sql`, `tantangan.sql`, dan `poin.sql`, matikan *Confirm email*, jadikan akun pertama sebagai admin, lalu setujui anggota).
 4. Deploy. Tidak ada langkah build.
 
 > Jangan pernah menaruh kunci `service_role` / `secret` Supabase di dalam kode atau di repositori GitHub.

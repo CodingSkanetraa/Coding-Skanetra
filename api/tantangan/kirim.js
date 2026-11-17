@@ -1,4 +1,4 @@
-// Anak mengirim jawaban Tantangan. Server yang menilai, mencatat, dan mengirim poin ke spreadsheet.
+// Anak mengirim jawaban Tantangan. Server yang menilai, mencatat, dan mengirim poin ke daftar poin.
 //
 //   POST /api/tantangan/kirim   { id: <uuid soal>, kode: "<jawaban>" }   Authorization: Bearer <token login>
 //
@@ -119,7 +119,7 @@ module.exports = async function handler(req, res) {
     if (catatan && catatan.baru) {
       const k = await kirimPoinKeSheet({ userId: anggota.id, tantanganId: id, judul: soal.judul, poin: soal.poin, idSheet: anggota.idSheet });
       terkirim = k.terkirim;
-      pesan = terkirim ? `Benar semua! +${soal.poin} poin masuk spreadsheet.` : PESAN_BELUM_MASUK[k.alasan];
+      pesan = terkirim ? `Benar semua! +${soal.poin} poin masuk ke poinmu.` : PESAN_BELUM_MASUK[k.alasan];
     } else {
       pesan = 'Soal ini sudah kamu selesaikan sebelumnya.';
     }

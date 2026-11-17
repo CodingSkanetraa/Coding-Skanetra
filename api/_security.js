@@ -1,14 +1,15 @@
-// Pembantu untuk fungsi serverless di folder api/ (peringkat dari Google Sheets).
+// Pembantu untuk fungsi serverless di folder api/ (peringkat dan poin dari database Supabase).
 //
 // Alurnya:
-//   browser (login Supabase) --token--> fungsi api/ di Vercel --rahasia--> Google Apps Script --> Spreadsheet
+//   browser (login Supabase) --token--> fungsi api/ di Vercel --token yang sama--> fungsi database poin_*
 //
 // * Akun dan login tetap lewat Supabase (js/akun.js). Browser mengirim token login-nya
 //   di header "Authorization: Bearer ...".
 // * Fungsi di sini MEMERIKSA token itu ke Supabase dan memastikan akunnya sudah disetujui
-//   (profil.anggota = true) sebelum membaca spreadsheet.
-// * Rahasia Apps Script (APPS_SCRIPT_URL, APPS_SCRIPT_SECRET) hanya ada di server Vercel,
-//   tidak pernah dikirim ke browser.
+//   (profil.anggota = true) sebelum membaca poin.
+// * Rahasia penilai (PENILAI_RAHASIA) hanya ada di server Vercel, tidak pernah dikirim ke browser.
+// * APPS_SCRIPT_URL dan APPS_SCRIPT_SECRET tidak dipakai lagi oleh peringkat dan poin (gasPost
+//   tinggal dipakai api/auth/login.js yang lama).
 
 // Kedua nilai Supabase ini publik (sama dengan js/akun-config.js). Boleh ditimpa lewat
 // Environment Variables SUPABASE_URL dan SUPABASE_ANON_KEY bila project Supabase diganti.
@@ -111,6 +112,26 @@ async function rpcServer(nama, parameter) {
   return isi;
 }
 
+// Memanggil fungsi database dengan token pengguna sendiri. Fungsi poin_* memeriksa sendiri bahwa
+// pemanggilnya anggota yang disetujui, jadi token yang palsu atau akun biasa hanya mendapat hasil kosong.
+async function rpcUser(nama, parameter, token) {
+  const respons = await fetchDenganBatas(`${SUPABASE_URL}/rest/v1/rpc/${nama}`, {
+    method: 'POST',
+    headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify(parameter || {}),
+    cache: 'no-store'
+  });
+  const teks = await respons.text();
+  let isi = null;
+  if (teks) { try { isi = JSON.parse(teks); } catch { isi = null; } }
+  if (!respons.ok) {
+    const galat = new Error((isi && isi.message) || `Supabase membalas HTTP ${respons.status}.`);
+    galat.status = respons.status;
+    throw galat;
+  }
+  return isi;
+}
+
 // Membaca tabel dengan token pengguna sendiri (RLS tetap berlaku).
 async function restUser(path, token) {
   const respons = await fetchDenganBatas(`${SUPABASE_URL}/rest/v1/${path}`, {
@@ -121,7 +142,7 @@ async function restUser(path, token) {
   return respons.json();
 }
 
-// Memanggil Google Apps Script yang membaca spreadsheet.
+// Memanggil Google Apps Script (lama; tidak dipakai lagi untuk poin).
 async function gasPost(body) {
   const url = process.env.APPS_SCRIPT_URL;
   const secret = process.env.APPS_SCRIPT_SECRET;
@@ -137,4 +158,4 @@ async function gasPost(body) {
   return response.json();
 }
 
-module.exports = { json, ambilToken, periksaAnggota, gasPost, rpcServer, restUser };
+module.exports = { json, ambilToken, periksaAnggota, gasPost, rpcServer, rpcUser, restUser };

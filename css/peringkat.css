@@ -1056,3 +1056,8 @@ dialog.member-modal::backdrop {
 .member-history__points {
   flex-shrink: 0;
 }
+
+/* Tautan "Kelola poin" (admin) memakai gaya tombol teks. */
+a.text-button { display: inline-flex; align-items: center; text-decoration: none; }
+a.text-button[hidden] { display: none; }
+.header-content #adminPoinLink { margin-top: 12px; }

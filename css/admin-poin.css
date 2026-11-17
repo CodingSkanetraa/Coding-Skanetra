@@ -1,0 +1,55 @@
+/* Kelola poin (halaman admin). Memakai kelas tg-* dari tantangan.css; di sini hanya tambahan. */
+.ap-form label, .ap-cari label { display: block; margin: 12px 0 5px; color: var(--muted); font-size: 0.84rem; }
+.ap-form input[type="text"], .ap-form input[type="number"], .ap-form input[type="date"], .ap-form input[type="search"], .ap-form select,
+.ap-cari-tunggal, .tg-dialog input[type="date"], .tg-dialog input[type="text"] {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px;
+  background: var(--card-background); color: var(--text); font: inherit; font-size: 0.95rem;
+}
+.ap-form input:focus-visible, .ap-form select:focus-visible, .ap-cari-tunggal:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.ap-dua { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.ap-cari-baris { display: grid; grid-template-columns: 1fr minmax(120px, 40%); gap: 8px; margin-bottom: 8px; }
+.ap-cari-tunggal { margin-bottom: 12px; }
+
+.ap-daftar {
+  display: grid; gap: 6px; margin: 12px 0; padding: 8px; list-style: none;
+  max-height: min(52vh, 420px); overflow-y: auto; overscroll-behavior: contain;
+  border: 1px solid var(--border); border-radius: 12px; background: var(--card-background);
+}
+.ap-daftar li { margin: 0; }
+.ap-form .ap-item {
+  margin: 0;
+  display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 6px 10px;
+  border: 1px solid transparent; border-radius: 10px; cursor: pointer;
+}
+.ap-item:hover { background: var(--accent-soft); }
+.ap-item:has(input:checked) { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); background: var(--accent-soft); }
+.ap-item input { flex: none; width: 20px; height: 20px; margin: 0; accent-color: var(--accent); }
+.ap-item .tg-info strong { white-space: normal; }
+.ap-kosong { padding: 14px; color: var(--muted); text-align: center; font-size: 0.9rem; }
+
+.ap-ringkas {
+  margin: 4px 0 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px;
+  background: var(--card-background); font-size: 0.92rem; line-height: 1.55;
+}
+.ap-ringkas.siap { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); }
+.ap-ringkas b { color: var(--accent); }
+.ap-ringkas .ap-awas { display: block; margin-top: 4px; color: var(--warning, #f0d77a); }
+.tg-galat { margin: 8px 0; color: var(--danger, #ff8a80); font-size: 0.88rem; }
+
+.ap-isi { margin: 8px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.ap-isi li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 10px; font-size: 0.86rem; }
+.ap-isi li.batal { opacity: 0.55; text-decoration: line-through; }
+.ap-isi .tg-info { flex: 1 1 160px; }
+.tg-kartu.admin .tg-baris-aksi .tg-btn { padding: 7px 12px; }
+.ap-lencana-lama { color: var(--muted); font-size: 0.78rem; }
+
+.ap .tg-daftar { grid-template-columns: 1fr; }
+.ap .tg-kartu.admin { align-content: start; }
+.ap .tg-info > .tg-label { justify-self: start; margin-top: 2px; }
+
+@media (max-width: 520px) {
+  .ap .tg-tabs { gap: 2px; }
+  .ap .tg-tab { padding: 9px 8px; font-size: 0.86rem; }
+  .ap-cari-baris { grid-template-columns: 1fr; }
+  .ap-daftar { max-height: 46vh; }
+}

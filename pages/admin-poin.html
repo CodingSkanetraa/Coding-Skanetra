@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Halaman pengelola untuk menambah dan membatalkan poin anggota.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0b100e">
+  <title>Kelola Poin | CodingSkanetra</title>
+
+  <link rel="icon" href="../favicon.ico?v=2" sizes="48x48">
+  <link rel="icon" type="image/png" href="../favicon-96.png?v=2" sizes="96x96">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2">
+  <script src="../js/theme.js?v=5"></script>
+  <link rel="stylesheet" href="../css/style.css?v=6">
+  <link rel="stylesheet" href="../css/nav-mobile.css?v=2">
+  <link rel="stylesheet" href="../css/app-mobile.css?v=1">
+  <link rel="stylesheet" href="../css/navbar-akun.css?v=3">
+  <link rel="stylesheet" href="../css/tantangan.css?v=1">
+  <link rel="stylesheet" href="../css/admin-poin.css?v=1">
+  <script src="../js/akun-config.js?v=1" defer></script>
+  <script src="../js/akun.js?v=4" defer></script>
+  <script src="../js/main.js?v=5" defer></script>
+  <script src="../js/ikon.js?v=5" defer></script>
+  <script src="../js/navbar-akun.js?v=4" defer></script>
+  <script src="../js/nav-mobile.js?v=5" defer></script>
+  <script src="../js/admin-poin.js?v=1" defer></script>
+  <link rel="stylesheet" href="../css/poles.css?v=2">
+</head>
+<body class="tg-hal">
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="CodingSkanetra, beranda">
+      <img class="brand-logo" src="../assets/images/logo-eskul.png" alt="" width="38" height="44">
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+      <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link active" href="peringkat.html" data-nav="peringkat" aria-current="page">Peringkat</a>
+      <a class="nav-link" href="games.html" data-nav="games">Games</a>
+      <a class="nav-link" href="tantangan.html" data-nav="tantangan">Tantangan</a>
+      <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
+      <a class="nav-link" href="dokumentasi.html" data-nav="dokumentasi">Dokumentasi</a>
+      <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
+      <a class="nav-link" href="profil.html#tampilan" data-nav="setting">Pengaturan</a>
+    </nav>
+  </header>
+
+  <main class="tg ap">
+    <a class="tg-kembali" href="peringkat.html">&larr; Peringkat</a>
+    <header class="tg-kepala">
+      <div>
+        <h1>Kelola poin</h1>
+        <p class="tg-sub" id="ap-semester">Memuat semester…</p>
+      </div>
+    </header>
+
+    <p class="tg-pesan" id="tg-pesan" role="status" aria-live="polite">Memuat…</p>
+    <div class="tg-tamu" id="tg-tamu" hidden></div>
+
+    <section id="tg-isi" hidden>
+      <div class="tg-tabs" role="tablist" aria-label="Bagian kelola poin">
+        <button class="tg-tab" id="tab-tambah" role="tab" type="button" data-t="tambah" aria-selected="true" aria-controls="pn-tambah">Tambah</button>
+        <button class="tg-tab" id="tab-riwayat" role="tab" type="button" data-t="riwayat" aria-selected="false" aria-controls="pn-riwayat">Riwayat</button>
+        <button class="tg-tab" id="tab-anggota" role="tab" type="button" data-t="anggota" aria-selected="false" aria-controls="pn-anggota">Anggota</button>
+        <button class="tg-tab" id="tab-semester" role="tab" type="button" data-t="semester" aria-selected="false" aria-controls="pn-semester">Semester</button>
+      </div>
+
+      <!-- ===== Tambah poin ===== -->
+      <div id="pn-tambah" role="tabpanel" aria-labelledby="tab-tambah">
+        <form id="ap-form" class="ap-form" novalidate>
+          <div class="ap-dua">
+            <div>
+              <label for="ap-tanggal">Tanggal kegiatan</label>
+              <input type="date" id="ap-tanggal" required>
+            </div>
+            <div>
+              <label for="ap-poin">Poin per anggota</label>
+              <input type="number" id="ap-poin" min="1" max="1000" inputmode="numeric" placeholder="Contoh: 5" required>
+            </div>
+          </div>
+          <label for="ap-ket">Keterangan</label>
+          <input type="text" id="ap-ket" maxlength="200" placeholder="Contoh: Hadir, Mengerjakan tugas, dll.">
+
+          <div class="ap-cari">
+            <label for="ap-cari">Pilih anggota</label>
+            <div class="ap-cari-baris">
+              <input type="search" id="ap-cari" placeholder="Cari nama atau ID…" autocomplete="off">
+              <select id="ap-kelas" aria-label="Filter kelas"><option value="">Semua kelas</option></select>
+            </div>
+            <div class="tg-baris-aksi">
+              <button class="tg-btn" id="ap-semua" type="button">Pilih yang tampil</button>
+              <button class="tg-btn" id="ap-kosong" type="button">Bersihkan pilihan</button>
+            </div>
+          </div>
+
+          <ul class="ap-daftar" id="ap-daftar" aria-label="Daftar anggota"></ul>
+
+          <div class="ap-ringkas" id="ap-ringkas" aria-live="polite">Belum ada anggota yang dipilih.</div>
+          <p class="tg-galat" id="ap-galat" role="alert" hidden></p>
+          <div class="tg-baris-aksi">
+            <button class="tg-btn utama" id="ap-simpan" type="submit">Simpan poin</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ===== Riwayat input ===== -->
+      <div id="pn-riwayat" role="tabpanel" aria-labelledby="tab-riwayat" hidden>
+        <div class="tg-bar"><h2>Input semester aktif</h2><button class="tg-btn" id="ap-muat-riwayat" type="button">Muat ulang</button></div>
+        <p class="tg-sub" style="margin-bottom:12px">Pembatalan hanya menandai catatan, angkanya tidak dihapus. Poin lama hasil impor dari spreadsheet tidak bisa dibatalkan dari sini.</p>
+        <ul class="tg-daftar" id="ap-riwayat"></ul>
+      </div>
+
+      <!-- ===== Anggota ===== -->
+      <div id="pn-anggota" role="tabpanel" aria-labelledby="tab-anggota" hidden>
+        <div class="tg-bar"><h2>Daftar anggota</h2><button class="tg-btn utama" id="ap-anggota-baru" type="button">+ Anggota</button></div>
+        <p class="tg-sub" style="margin-bottom:12px">Anggota nonaktif tidak muncul di input poin, dan di peringkat hanya muncul kalau punya poin pada semester itu.</p>
+        <input type="search" id="ap-cari-anggota" class="ap-cari-tunggal" placeholder="Cari nama atau ID…" autocomplete="off" aria-label="Cari anggota">
+        <ul class="tg-anggota" id="ap-anggota"></ul>
+      </div>
+
+      <!-- ===== Semester ===== -->
+      <div id="pn-semester" role="tabpanel" aria-labelledby="tab-semester" hidden>
+        <div class="tg-bar"><h2>Semester</h2><button class="tg-btn utama" id="ap-sem-baru" type="button">Mulai semester baru</button></div>
+        <p class="tg-sub" style="margin-bottom:12px">Peringkat hanya menghitung semester aktif. Poin semester lama tetap tersimpan dan 5 besarnya tampil di halaman Peringkat.</p>
+        <ul class="tg-anggota" id="ap-sem"></ul>
+      </div>
+    </section>
+
+    <dialog class="tg-dialog" id="ap-dlg-anggota" aria-labelledby="ap-dlg-anggota-judul">
+      <form id="ap-form-anggota" method="dialog">
+        <h2 id="ap-dlg-anggota-judul">Anggota</h2>
+        <label for="aa-id">ID anggota</label>
+        <input type="text" id="aa-id" maxlength="20" required autocomplete="off" placeholder="Contoh: S133">
+        <label for="aa-nama">Nama</label>
+        <input type="text" id="aa-nama" maxlength="80" required autocomplete="off">
+        <label for="aa-kelas">Kelas</label>
+        <input type="text" id="aa-kelas" maxlength="40" autocomplete="off" placeholder="Contoh: X PPLG 1">
+        <label class="tg-cek"><input type="checkbox" id="aa-aktif" checked> Anggota aktif</label>
+        <p class="tg-galat" id="aa-galat" role="alert" hidden></p>
+        <div class="tg-baris-aksi">
+          <button class="tg-btn utama" id="aa-simpan" type="submit">Simpan</button>
+          <button class="tg-btn" id="aa-batal" type="button">Batal</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="tg-dialog" id="ap-dlg-sem" aria-labelledby="ap-dlg-sem-judul">
+      <form id="ap-form-sem" method="dialog">
+        <h2 id="ap-dlg-sem-judul">Mulai semester baru</h2>
+        <p class="tg-sub">Peringkat akan mulai dari 0. Poin semester sekarang tetap tersimpan sebagai arsip (5 besarnya tampil di halaman Peringkat). Tindakan ini tidak bisa dibatalkan dari web.</p>
+        <label for="as-mulai">Tanggal mulai</label>
+        <input type="date" id="as-mulai" required>
+        <label for="as-nama">Nama semester</label>
+        <input type="text" id="as-nama" maxlength="60" required autocomplete="off">
+        <p class="tg-galat" id="as-galat" role="alert" hidden></p>
+        <div class="tg-baris-aksi">
+          <button class="tg-btn bahaya" id="as-simpan" type="submit">Mulai semester baru</button>
+          <button class="tg-btn" id="as-batal" type="button">Batal</button>
+        </div>
+      </form>
+    </dialog>
+  </main>
+</body>
+</html>
