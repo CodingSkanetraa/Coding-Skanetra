@@ -135,3 +135,7 @@ Anggota membuka **Tantangan**, mengerjakan soal Python, C++, atau Web, lalu meng
 - Satu anak hanya bisa mendapat poin satu kali per soal (dijaga database lewat kunci unik).
 
 **Poin khusus untuk jawaban Web yang bagus**: di tab Menunggu, kolom **Poin** sudah terisi poin standar soal. Ubah (1 sampai 100) sebelum menekan **Setujui** untuk memberi poin lebih. Setelah memperbarui ke versi ini, jalankan ulang `supabase/tantangan.sql` di SQL Editor (aman diulang).
+
+## Ganti nama tampilan
+
+Anggota bisa mengganti **nama** sendiri di Profil > Akun. Username tidak bisa diganti. Pasang sekali: Supabase > SQL Editor, jalankan seluruh `supabase/nama.sql` (aman diulang). Tanpa langkah ini, tombol simpan nama akan menampilkan "Nama belum tersimpan".

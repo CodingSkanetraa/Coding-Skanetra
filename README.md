@@ -65,7 +65,7 @@ Situs ini sengaja dibuat sederhana: **HTML, CSS, dan JavaScript murni** tanpa fr
 ├── css/                  Gaya. style.css = gaya dasar, sisanya per halaman/fitur
 ├── js/                   Skrip. main.js = umum, sisanya per halaman/fitur
 ├── assets/               Gambar dan font
-├── supabase/             skema.sql, tantangan.sql, poin.sql (tabel + RLS) dan PANDUAN.md untuk pengelola
+├── supabase/             skema.sql, tantangan.sql, poin.sql, nama.sql (tabel, RLS, ganti nama) dan PANDUAN.md untuk pengelola
 ├── api/                  Fungsi serverless Vercel: peringkat, riwayat poin, dan penilaian Tantangan
 ├── sitemap.xml  robots.txt  llms.txt   Berkas untuk mesin pencari
 └── favicon*.png, logo-512.png, og-image.png
@@ -83,6 +83,7 @@ Berkas JavaScript yang paling sering disentuh:
 | `js/editor-hint.js` | Petunjuk kode (autocomplete) di Editor Web; daftar tag, atribut, properti, dan fungsi ada di bagian atas berkas |
 | `js/editor-alat.js` | Tombol Bagikan |
 | `js/admin-poin.js` | Halaman Kelola poin (admin): tambah, batalkan, anggota, semester |
+| `js/urutan-kelas.js` | Urutan kelas (angkatan, lalu PPLG, TJKT, TKL, TO), dipakai Peringkat dan Kelola poin |
 | `js/error-ramah.js` | Daftar aturan penjelasan error |
 | `js/maskot.js`, `js/gerak.js` | Maskot Skani dan animasi kartu |
 | `js/code-storage.js` | Penyimpanan kode di browser |
@@ -105,7 +106,7 @@ Halaman, editor Web, dan editor Python dapat dicoba seperti itu (Python dan Code
 2. Isi *Environment Variables* di Vercel: `PENILAI_RAHASIA` (untuk penilaian dan poin Tantangan, lihat `supabase/PANDUAN.md` bagian F). Peringkat tidak memerlukan variabel apa pun; `APPS_SCRIPT_URL` dan `APPS_SCRIPT_SECRET` lama tidak dipakai lagi.
 
    URL project dan kunci `anon` Supabase ada di `js/akun-config.js` (kunci `anon` memang publik). `SESSION_SECRET` tidak diperlukan lagi.
-3. Pasang database sekali: ikuti `supabase/PANDUAN.md` (jalankan `supabase/skema.sql`, `tantangan.sql`, dan `poin.sql`, matikan *Confirm email*, jadikan akun pertama sebagai admin, lalu setujui anggota).
+3. Pasang database sekali: ikuti `supabase/PANDUAN.md` (jalankan `supabase/skema.sql`, `tantangan.sql`, `poin.sql`, dan `nama.sql`, matikan *Confirm email*, jadikan akun pertama sebagai admin, lalu setujui anggota).
 4. Deploy. Tidak ada langkah build.
 
 > Jangan pernah menaruh kunci `service_role` / `secret` Supabase di dalam kode atau di repositori GitHub.

@@ -19,6 +19,7 @@
 .cs-avatar.berfoto { overflow: hidden; background: var(--surface); }
 .cs-avatar.berfoto img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .cs-avatar.besar { --avatar-ukuran: 84px; }
+.cs-avatar.raksasa { --avatar-ukuran: min(78vw, 340px); }
 .cs-avatar.kecil { --avatar-ukuran: 22px; }
 
 /* Desktop lebar: "Lainnya" berupa dropdown */

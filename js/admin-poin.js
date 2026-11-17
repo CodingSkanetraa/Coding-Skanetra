@@ -154,12 +154,18 @@
   }
 
   // ---------- Tambah poin ----------
+  // Urutan kelas yang umum di sini (js/urutan-kelas.js): angkatan, lalu PPLG, TJKT, TKL, TO.
+  const bandingKelas = (window.CodingSkanetraKelas && window.CodingSkanetraKelas.banding)
+    || ((a, b) => String(a).localeCompare(String(b), "id"));
+  const urutKelasLaluNama = (a, b) => bandingKelas(a.kelas, b.kelas) || a.nama.localeCompare(b.nama, "id");
+
   function anggotaTampil() {
     const kata = $("ap-cari").value.trim().toLocaleLowerCase("id-ID");
     const kelas = $("ap-kelas").value;
-    return anggota.filter((a) => a.aktif
+    const hasil = anggota.filter((a) => a.aktif
       && (!kelas || a.kelas === kelas)
       && (!kata || a.nama.toLocaleLowerCase("id-ID").includes(kata) || a.id_siswa.toLocaleLowerCase("id-ID").includes(kata)));
+    return hasil.sort($("ap-urut").value === "nama" ? (a, b) => a.nama.localeCompare(b.nama, "id") : urutKelasLaluNama);
   }
 
   function gambarDaftar() {
@@ -183,7 +189,7 @@
 
   function isiFilterKelas() {
     const pilih = $("ap-kelas"), lama = pilih.value;
-    const kelas = [...new Set(anggota.filter((a) => a.aktif && a.kelas).map((a) => a.kelas))].sort((a, b) => a.localeCompare(b, "id"));
+    const kelas = [...new Set(anggota.filter((a) => a.aktif && a.kelas).map((a) => a.kelas))].sort(bandingKelas);
     pilih.textContent = "";
     pilih.append(new Option("Semua kelas", ""));
     kelas.forEach((k) => pilih.append(new Option(k, k)));
@@ -339,7 +345,7 @@
     } catch (err) { /* total hanya tambahan; daftar tetap tampil */ }
     const kata = $("ap-cari-anggota").value.trim().toLocaleLowerCase("id-ID");
     ul.textContent = "";
-    const tampil = anggota.filter((a) => !kata || a.nama.toLocaleLowerCase("id-ID").includes(kata) || a.id_siswa.toLocaleLowerCase("id-ID").includes(kata));
+    const tampil = anggota.filter((a) => !kata || a.nama.toLocaleLowerCase("id-ID").includes(kata) || a.id_siswa.toLocaleLowerCase("id-ID").includes(kata)).sort(urutKelasLaluNama);
     if (!tampil.length) { ul.append(el("li", "tg-meta", "Tidak ada anggota yang cocok.")); return; }
     tampil.forEach((a) => {
       const li = el("li");
@@ -403,6 +409,7 @@
     $("ap-ket").addEventListener("input", ringkasan);
     $("ap-cari").addEventListener("input", gambarDaftar);
     $("ap-kelas").addEventListener("change", gambarDaftar);
+    $("ap-urut").addEventListener("change", gambarDaftar);
     $("ap-semua").addEventListener("click", () => { anggotaTampil().forEach((a) => dipilih.add(a.id_siswa)); gambarDaftar(); ringkasan(); });
     $("ap-kosong").addEventListener("click", () => { dipilih = new Set(); gambarDaftar(); ringkasan(); });
     $("ap-daftar").addEventListener("change", (e) => {

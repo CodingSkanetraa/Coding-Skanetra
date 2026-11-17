@@ -90,6 +90,7 @@ const el = {
   allRanking: document.getElementById("allRanking"),
 
   searchInput: document.getElementById("searchInput"),
+  sortSelect: document.getElementById("sortSelect"),
   clearSearchButton: document.getElementById("clearSearchButton"),
   searchResultCount: document.getElementById("searchResultCount"),
   allEmpty: document.getElementById("allEmpty"),
@@ -518,6 +519,17 @@ function tampilkanDaftarLengkap() {
     );
   });
 
+  // Urutan "Kelas": PPLG, TJKT, TKL, TO per angkatan; di dalam kelas, poin tertinggi dulu.
+  // Nomor peringkat yang tampil tetap peringkat keseluruhan.
+  if (el.sortSelect && el.sortSelect.value === "kelas") {
+    const banding = (window.CodingSkanetraKelas || {}).banding;
+    hasilFilter.sort((a, b) =>
+      (banding ? banding(a.kelas, b.kelas) : 0) ||
+      (Number(b.total) || 0) - (Number(a.total) || 0) ||
+      String(a.nama || "").localeCompare(String(b.nama || ""), "id")
+    );
+  }
+
   el.allRanking.replaceChildren();
 
   hasilFilter.forEach((anggota, indeks) => {
@@ -753,6 +765,14 @@ el.hideAllButton.addEventListener("click", () => {
 el.searchInput.addEventListener("input", () => {
   tampilkanDaftarLengkap();
 });
+
+
+// Ganti urutan daftar (poin atau kelas).
+if (el.sortSelect) {
+  el.sortSelect.addEventListener("change", () => {
+    tampilkanDaftarLengkap();
+  });
+}
 
 
 // Kosongkan pencarian.

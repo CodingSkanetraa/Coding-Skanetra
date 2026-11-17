@@ -6,7 +6,9 @@
   const el = {
     tamu: $("profil-tamu"), isi: $("profil-isi"), avatar: $("profil-avatar"), username: $("profil-username"),
     status: $("profil-status"), baris: $("profil-username-baris"),
-    barisNama: $("baris-nama"), nama: $("profil-nama"), barisKelas: $("baris-kelas"), kelas: $("profil-kelas"),
+    barisNama: $("baris-nama"), nama: $("profil-nama"), namaBuka: $("ubah-nama-buka"), namaForm: $("form-nama"),
+    namaBaru: $("nama-baru"), namaPesan: $("nama-pesan"), namaSimpan: $("nama-simpan"), namaBatal: $("nama-batal"),
+    besar: $("foto-besar"), besarTutup: $("foto-besar-tutup"), besarIsi: $("foto-besar-isi"), barisKelas: $("baris-kelas"), kelas: $("profil-kelas"),
     buka: $("ubah-sandi-buka"), form: $("form-sandi"), baru: $("sandi-baru"), ulang: $("sandi-ulang"),
     lihat: $("sandi-lihat"), pesan: $("sandi-pesan"), simpan: $("sandi-simpan"), batal: $("sandi-batal"),
     sukses: $("sandi-sukses"), sinkron: $("profil-sinkron"), keluar: $("profil-keluar"),
@@ -56,12 +58,12 @@
     document.body.classList.toggle("pf-masuk", Boolean(p));
     window.dispatchEvent(new Event("pf:render"));
     if (!p) { tutupForm(); el.tautan.hidden = true; return; }
-    el.username.textContent = "@" + p.username;
+    el.username.textContent = data && data.nama ? data.nama : "@" + p.username;
     el.baris.textContent = "@" + p.username;
     gambarAvatar();
-    el.barisNama.hidden = !(data && data.nama);
     el.barisKelas.hidden = !(data && data.kelas);
-    if (data && data.nama) el.nama.textContent = data.nama;
+    el.nama.textContent = data && data.nama ? data.nama : "Belum diisi";
+    el.namaBuka.hidden = data === null;
     if (data && data.kelas) el.kelas.textContent = data.kelas;
     el.status.textContent = data === null ? "Akunmu aktif di perangkat ini."
       : data.anggota ? "Anggota: halaman Peringkat terbuka untukmu."
@@ -166,6 +168,68 @@
     el.fotoGanti.disabled = false; el.fotoHapus.disabled = false;
   });
   window.addEventListener("cs:foto", gambarAvatar);
+
+  // ---------- Perbesar foto ----------
+  let fokusSebelum = null;
+  function tutupBesar() {
+    if (el.besar.hidden) return;
+    el.besar.hidden = true;
+    el.besarIsi.textContent = "";
+    document.body.style.overflow = "";
+    if (fokusSebelum && fokusSebelum.focus) fokusSebelum.focus();
+  }
+  function bukaBesar() {
+    const p = akun.pengguna();
+    if (!p || !window.CodingSkanetraAvatar) return;
+    fokusSebelum = document.activeElement;
+    el.besarIsi.textContent = "";
+    el.besarIsi.appendChild(window.CodingSkanetraAvatar.buat(p.username, "raksasa"));
+    el.besar.hidden = false;
+    document.body.style.overflow = "hidden";
+    el.besarTutup.focus();
+  }
+  document.body.appendChild(el.besar); // di luar kontainer halaman supaya selalu di atas navbar
+  el.avatar.addEventListener("click", bukaBesar);
+  el.besarTutup.addEventListener("click", tutupBesar);
+  el.besar.addEventListener("click", (e) => { if (e.target === el.besar || e.target === el.besarIsi) tutupBesar(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") tutupBesar(); });
+
+  // ---------- Ganti nama tampilan (username tidak bisa diganti) ----------
+  function pesanNama(teks, galat) {
+    el.namaPesan.textContent = teks || "";
+    el.namaPesan.classList.toggle("galat", Boolean(galat));
+  }
+  function tutupNama() {
+    el.namaForm.hidden = true;
+    el.namaBuka.setAttribute("aria-expanded", "false");
+    pesanNama("");
+  }
+  el.namaBuka.addEventListener("click", () => {
+    if (!el.namaForm.hidden) { tutupNama(); return; }
+    el.namaBaru.value = (data && data.nama) || "";
+    pesanNama("");
+    el.namaForm.hidden = false;
+    el.namaBuka.setAttribute("aria-expanded", "true");
+    el.namaBaru.focus();
+  });
+  el.namaBatal.addEventListener("click", () => { tutupNama(); el.namaBuka.focus(); });
+  el.namaForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const nama = el.namaBaru.value.replace(/\s+/g, " ").trim();
+    if (nama.length > 40) { pesanNama("Nama maksimal 40 huruf.", true); return; }
+    el.namaSimpan.disabled = true;
+    pesanNama("Menyimpan…");
+    try {
+      const hasil = await akun.rpc("ubah_nama_saya", { p_nama: nama });
+      data = Object.assign({ kelas: "", anggota: false }, data, { nama: typeof hasil === "string" ? hasil : "" });
+      tutupNama();
+      render();
+      el.status.textContent = nama ? "Nama tersimpan." : "Nama dihapus. Tampilan memakai username.";
+    } catch (err) {
+      pesanNama("Nama belum tersimpan. Coba lagi sebentar lagi.", true);
+    }
+    el.namaSimpan.disabled = false;
+  });
 
   // ---------- Tautan Bagikan aktif ----------
   const EDITOR = { web: ["Editor Web", "editor-html.html"], py: ["Editor Python", "editor-python.html"], cpp: ["Editor C++", "editor-cpp.html"] };

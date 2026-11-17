@@ -3,6 +3,20 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.22.0] - 2026-11-17
+
+### Ditambahkan
+- **Ganti nama tampilan** di Profil > Akun (tombol Ubah di baris Nama). Hanya kolom `nama` milik akun sendiri yang berubah, lewat fungsi database `ubah_nama_saya` (`supabase/nama.sql`, jalankan sekali di SQL Editor). Username tetap tidak bisa diganti. Nama dirapikan (spasi ganda dibuang), maksimal 40 huruf, dan bila dikosongkan kembali memakai username. Nama juga tampil sebagai judul di kepala Profil.
+- **Foto profil bisa diperbesar**: ketuk atau klik foto di Profil untuk melihatnya besar; tutup dengan tombol silang, klik di luar, atau Esc.
+- **Tempel kode dari luar dimatikan di editor** (Web, Python, C++; `js/tanpa-tempel.js`). Saat dicoba muncul pemberitahuan ramah, bukan peringatan menakutkan. Mengetik, menyalin dan menempel kode dari editor itu sendiri, dan menyeret teks di dalam editor tetap boleh. Ini penghalang belajar, bukan pengaman mutlak: orang yang bertekad masih bisa mengakalinya (misalnya lewat alat pengembang browser).
+
+## [5.21.0] - 2026-11-17
+
+### Ditambahkan
+- **Urutan kelas** (`js/urutan-kelas.js`): angkatan dulu (X, XI, XII), lalu di dalamnya PPLG, TJKT, TKL, dan TO, lalu nomor kelas. Nama lama ikut satu kelompok (RPL = PPLG, TKJ = TJKT, OTOTRONIK = TO); jurusan yang belum dikenal (misalnya TPTL) ditaruh setelahnya.
+- Halaman Peringkat: pilihan **Urutkan** (Poin tertinggi atau Kelas) di daftar "Semua Peringkat". Di urutan Kelas, anggota satu kelas diurut dari poin tertinggi, dan nomor peringkat yang tampil tetap peringkat keseluruhan.
+- Kelola poin: daftar anggota (tab Tambah dan Anggota) dan pilihan filter kelas kini berurutan menurut kelas; tab Tambah punya pilihan **Urut: Kelas / Nama A-Z**.
+
 ## [5.20.0] - 2026-11-17
 
 ### Diubah
