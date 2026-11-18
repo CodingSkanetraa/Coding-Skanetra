@@ -41,7 +41,19 @@
     waktu = setTimeout(() => { const k = document.getElementById("cs-tanpa-tempel"); if (k) k.remove(); }, 5000);
   }
 
-  const dariEditor = (teks) => salinan !== null && rapikan(teks) === salinan;
+  // Admin boleh menempel apa saja. Status admin dibaca dari profil akun yang sedang masuk;
+  // selama belum diketahui (atau tidak masuk), editor memperlakukan pengguna sebagai bukan admin.
+  // Catatan: ini pengaturan tampilan di browser, bukan pengaman server.
+  let admin = false;
+  function cekAdmin() {
+    const akun = window.CodingSkanetraAkun;
+    if (!akun || !akun.pengguna || !akun.pengguna() || !akun.profil) { admin = false; return; }
+    akun.profil().then((p) => { admin = Boolean(p && p.admin === true); }).catch(() => { admin = false; });
+  }
+  window.addEventListener("load", cekAdmin);
+  window.addEventListener("cs:sesi", cekAdmin);
+
+  const dariEditor = (teks) => admin || (salinan !== null && rapikan(teks) === salinan);
 
   CodeMirror.defineInitHook((cm) => {
     const catat = () => { const t = cm.getSelection(); if (t) salinan = rapikan(t); };

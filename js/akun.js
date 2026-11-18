@@ -258,7 +258,7 @@
 
   async function profil() {
     if (!sesi) return null;
-    const baris = await ambil("profil?select=username,nama,kelas,anggota&id=eq." + encodeURIComponent(sesi.user.id));
+    const baris = await ambil("profil?select=username,nama,kelas,anggota,admin&id=eq." + encodeURIComponent(sesi.user.id));
     return Array.isArray(baris) && baris[0] ? baris[0] : null;
   }
 
