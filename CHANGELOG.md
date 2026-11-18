@@ -3,6 +3,11 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.23.0] - 2026-11-19
+
+### Ditambahkan
+- **Daftar aset ikon di halaman Tentang** (bagian "Ikon dibuat oleh anggota"): kartu per ikon berisi gambar ikon, nama halaman, pembuat, kelas, dan tautan sumber (opsional). Datanya ada di satu berkas, `assets/data/aset-ikon.json`, sudah berisi template kosong untuk 14 ikon (Profil, Struktur, Dokumentasi, Games, Peringkat, Playground, Proyek Mini, JavaScript, CSS, C++, Python, HTML, Materi, Pengaturan). Pembuat yang kosong tampil "Belum diisi". Gambar diambil dari `assets/icon/<berkas>` (nama file sama dengan yang dipakai situs); bila file belum ada tampil huruf awal. Teks dari data selalu ditampilkan sebagai teks biasa dan tautan hanya https.
+
 ## [5.22.2] - 2026-11-18
 
 ### Diperbaiki

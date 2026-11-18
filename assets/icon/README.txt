@@ -13,3 +13,7 @@ Halaman Materi:
   html.png  css.png  javascript.png  python.png  cpp.png  proyek-mini.png
 
 Setelah menambah file, muat ulang halaman (kalau tidak berubah, hapus cache atau tambah ?v= di js/ikon-lokal.js).
+
+DAFTAR PEMBUAT IKON (halaman Tentang)
+  Isi nama pembuat di assets/data/aset-ikon.json (kolom "pembuat", "kelas", "tautan" opsional).
+  Gambar di kartu memakai file yang sama dengan di folder ini (kolom "berkas").
