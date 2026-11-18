@@ -396,7 +396,7 @@ async function tampilkanTautanAdmin() {
   if (!el.adminPoinLink || !akun || !akun.minta) return;
 
   try {
-    const r = await akun.minta("/rest/v1/profil?select=admin&limit=1");
+    const r = await akun.minta("/rest/v1/profil?select=admin&id=eq." + encodeURIComponent((akun.pengguna() || {}).id || "") + "&limit=1");
     const p = r.ok && Array.isArray(r.data) ? r.data[0] : null;
     el.adminPoinLink.hidden = !(p && p.admin === true);
   } catch (e) {

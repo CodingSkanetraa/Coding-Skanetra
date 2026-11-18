@@ -52,9 +52,22 @@ async function periksaAnggota(req) {
   const token = ambilToken(req);
   if (!token) return { ok: false, status: 401, kode: 'sesi', pesan: 'Silakan login terlebih dahulu.' };
 
+  // Profil dicari dengan id pemilik token. Tanpa filter id, akun admin (yang boleh membaca semua
+  // profil) bisa mendapat baris orang lain. Id diambil dari Supabase, yang sekaligus memeriksa token.
   let respons;
   try {
-    respons = await fetchDenganBatas(`${SUPABASE_URL}/rest/v1/profil?select=*&limit=1`, {
+    const u = await fetchDenganBatas(`${SUPABASE_URL}/auth/v1/user`, {
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${token}`, Accept: 'application/json' },
+      cache: 'no-store'
+    });
+    if (u.status === 401 || u.status === 403) {
+      return { ok: false, status: 401, kode: 'sesi', pesan: 'Sesi tidak berlaku. Silakan masuk lagi.' };
+    }
+    if (!u.ok) throw new Error('auth HTTP ' + u.status);
+    const dataUser = await u.json();
+    const uid = String((dataUser && dataUser.id) || '');
+    if (!/^[0-9a-f-]{36}$/i.test(uid)) throw new Error('id pengguna tidak valid');
+    respons = await fetchDenganBatas(`${SUPABASE_URL}/rest/v1/profil?select=*&id=eq.${uid}&limit=1`, {
       headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${token}`, Accept: 'application/json' },
       cache: 'no-store'
     });

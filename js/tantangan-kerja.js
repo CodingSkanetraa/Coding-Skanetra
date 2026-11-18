@@ -148,7 +148,7 @@
     if (!akun.pengguna()) { tamu("Masuk untuk mengerjakan tantangan", "Poinmu tercatat di akunmu dan masuk ke peringkat.", ["Masuk", "login.html?next=tantangan"]); return; }
 
     try {
-      const prof = await akun.minta("/rest/v1/profil?select=anggota&limit=1");
+      const prof = await akun.minta("/rest/v1/profil?select=anggota&id=eq." + encodeURIComponent((akun.pengguna() || {}).id || "") + "&limit=1");
       const p = prof.ok && Array.isArray(prof.data) ? prof.data[0] : null;
       if (!p) { pesan("Akunmu belum bisa diperiksa. Muat ulang halaman ini.", true); return; }
       if (p.anggota !== true) { tamu("Akunmu menunggu persetujuan", "Tantangan hanya untuk anggota. Hubungi guru agar akunmu disetujui.", null); return; }

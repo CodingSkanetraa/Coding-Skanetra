@@ -3,6 +3,16 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.22.2] - 2026-11-18
+
+### Diperbaiki
+- **Admin ditolak di halaman admin** ("Khusus pengelola, akunmu tidak punya akses") walau akunnya admin. Penyebab: pemeriksaan membaca "profil pertama" tanpa menyaring id, padahal admin boleh membaca semua profil (aturan dari `tantangan.sql`), sehingga yang terbaca bisa profil orang lain. Kini profil selalu dicari dengan id akun sendiri di Kelola poin, Kelola tantangan, Peringkat (tautan Kelola poin), Tantangan, dan `api/_security.js` (pemeriksaan anggota untuk Peringkat dan Riwayat; id diambil dari Supabase `/auth/v1/user`). Tidak ada SQL yang perlu dijalankan.
+
+## [5.22.1] - 2026-11-18
+
+### Diubah
+- **Admin boleh menempel kode** di editor. Status admin dibaca dari profil akun yang sedang masuk (`admin = true`); anggota biasa dan tamu tetap tidak bisa menempel kode dari luar. Ini pengaturan tampilan di browser, bukan pengaman server.
+
 ## [5.22.0] - 2026-11-17
 
 ### Ditambahkan

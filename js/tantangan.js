@@ -77,7 +77,7 @@
     if (!pengguna) { tamu("Masuk untuk mengerjakan tantangan", "Poinmu tercatat di akunmu dan masuk ke peringkat.", ["Masuk", "login.html?next=tantangan"]); return; }
 
     try {
-      const prof = await akun.minta("/rest/v1/profil?select=anggota,admin&limit=1");
+      const prof = await akun.minta("/rest/v1/profil?select=anggota,admin&id=eq." + encodeURIComponent((akun.pengguna() || {}).id || "") + "&limit=1");
       const p = prof.ok && Array.isArray(prof.data) ? prof.data[0] : null;
       if (!p) { pesan("Akunmu belum bisa diperiksa. Muat ulang halaman ini.", true); return; }
       if (p.admin === true) $("tg-admin").hidden = false;

@@ -275,7 +275,7 @@
     try { await a.siap; } catch (e) { /* lanjut sebagai tamu */ }
     if (!a.pengguna()) { tamu("Masuk dulu", "Halaman ini khusus pengelola.", ["Masuk", "login.html?next=admin-tantangan"]); return; }
     try {
-      const r = await a.minta("/rest/v1/profil?select=admin&limit=1");
+      const r = await a.minta("/rest/v1/profil?select=admin&id=eq." + encodeURIComponent((a.pengguna() || {}).id || "") + "&limit=1");
       const p = r.ok && Array.isArray(r.data) ? r.data[0] : null;
       if (!p) { pesan("Akunmu belum bisa diperiksa. Muat ulang halaman ini.", true); return; }
       if (p.admin !== true) { tamu("Khusus pengelola", "Akunmu tidak punya akses ke halaman ini.", ["Kembali", "tantangan.html"]); return; }
