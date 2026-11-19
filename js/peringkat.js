@@ -100,6 +100,7 @@ const el = {
   arsipRanking: document.getElementById("arsipRanking"),
   arsipNama: document.getElementById("arsipNama"),
   adminPoinLink: document.getElementById("adminPoinLink"),
+  adminAsetLink: document.getElementById("adminAsetLink"),
 
   refreshButton: document.getElementById("refreshButton"),
   retryButton: document.getElementById("retryButton"),
@@ -399,6 +400,7 @@ async function tampilkanTautanAdmin() {
     const r = await akun.minta("/rest/v1/profil?select=admin&id=eq." + encodeURIComponent((akun.pengguna() || {}).id || "") + "&limit=1");
     const p = r.ok && Array.isArray(r.data) ? r.data[0] : null;
     el.adminPoinLink.hidden = !(p && p.admin === true);
+    if (el.adminAsetLink) el.adminAsetLink.hidden = !(p && p.admin === true);
   } catch (e) {
     el.adminPoinLink.hidden = true;
   }

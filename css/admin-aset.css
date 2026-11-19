@@ -1,0 +1,18 @@
+.aa-total { margin: 0 0 12px; font-weight: 700; }
+.aa-tabel-bungkus { overflow-x: auto; border: 1px solid var(--border); border-radius: 14px; }
+.aa-tabel { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.aa-tabel th, .aa-tabel td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+.aa-tabel tr:last-child td { border-bottom: 0; }
+.aa-tabel th { color: var(--muted); font-weight: 600; font-size: .82rem; }
+.aa-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.aa-lihat, .aa-hapus { font: inherit; font-size: .85rem; min-height: 36px; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
+.aa-hapus { color: #ff8b8b; }
+.aa-lihat:focus-visible, .aa-hapus:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.aa-detail { margin-top: 20px; }
+.aa-detail h2 { margin: 0 0 8px; font-size: 1.15rem; }
+.aa-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.aa-kartu { display: grid; gap: 6px; padding: 10px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+.aa-gambar { aspect-ratio: 1; border-radius: 10px; background: var(--surface-hover); overflow: hidden; display: grid; place-items: center; }
+.aa-gambar img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.aa-kartu code { font-size: .8rem; overflow-wrap: anywhere; }
+.aa-uk { font-size: .78rem; color: var(--muted); }

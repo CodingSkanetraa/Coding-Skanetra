@@ -3,6 +3,18 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.24.0] - 2026-11-19
+
+### Ditambahkan
+- **Aset gambar di editor Web.** Tombol **Aset** di editor: unggah PNG, JPG, WebP, atau GIF, lalu pakai namanya di kode (`<img src="kucing.png">`, `background: url(kucing.png)`, `img.src = "kucing.png"`). Gambar tampil di pratinjau (termasuk "Lihat di tab sendiri") selama kamu masuk. Panel menampilkan daftar bergambar kecil, kuota ("12 dari 30 gambar"), salin nama atau tag `<img>`, dan hapus (dua langkah).
+- **Dikecilkan otomatis di browser:** sisi terpanjang maksimal 1280 px dan di bawah 500 KB. PNG besar diubah ke WebP bila perlu (transparansi tetap). GIF tidak dikecilkan: maksimal 500 KB. Nama file dirapikan (huruf kecil, spasi jadi strip) dan diberi akhiran -2, -3 bila bentrok.
+- **Batas per akun:** 30 gambar, 500 KB per file, hanya anggota yang disetujui. Dijaga di database dan Storage (`supabase/aset.sql`), bukan hanya di browser. Bucket privat: gambar hanya terbuka lewat tautan bertanda tangan berumur 1 jam.
+- **Halaman pengelola Kelola aset** (`pages/admin-aset.html`, tautan di halaman Peringkat untuk admin): ringkasan per anggota, lihat gambar, hapus gambar bermasalah.
+- Batasan: gambar hanya tampil di pratinjau akun pemilik. Tautan Bagikan, unduhan HTML, dan tamu (tanpa login) tidak membawa gambar (rencana update berikutnya).
+
+### Perlu dijalankan
+- `supabase/aset.sql` di SQL Editor (sudah dijalankan saat Tahap 0; aman diulang).
+
 ## [5.23.0] - 2026-11-19
 
 ### Ditambahkan

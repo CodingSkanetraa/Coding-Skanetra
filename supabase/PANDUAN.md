@@ -139,3 +139,14 @@ Anggota membuka **Tantangan**, mengerjakan soal Python, C++, atau Web, lalu meng
 ## Ganti nama tampilan
 
 Anggota bisa mengganti **nama** sendiri di Profil > Akun. Username tidak bisa diganti. Pasang sekali: Supabase > SQL Editor, jalankan seluruh `supabase/nama.sql` (aman diulang). Tanpa langkah ini, tombol simpan nama akan menampilkan "Nama belum tersimpan".
+
+## Aset gambar (editor Web)
+
+Jalankan sekali `supabase/aset.sql` di SQL Editor (aman diulang). Isinya bucket privat `aset` (maks 500 KB per file, hanya PNG/JPG/WebP/GIF), kebijakan akses (anggota hanya ke foldernya sendiri, maks 30 gambar, admin boleh melihat dan menghapus semua), dan fungsi pemakaian.
+
+Menguji di Supabase asli: buka halaman Profil, masuk sebagai anggota, tempel `supabase/uji-aset-konsol.js` di Console (F12). Semua baris tabel harus OK dan berkas ujinya dihapus otomatis.
+
+Mengubah batas: ubah angka di `aset_batas_jumlah()` dan `aset_batas_byte()` serta `file_size_limit` pada `aset.sql`, lalu samakan konstanta `BATAS_JUMLAH` dan `BATAS_BYTE` di `js/aset.js`.
+
+Halaman pengelola: `pages/admin-aset.html` (tautan "Kelola aset" muncul di halaman Peringkat untuk admin).
+

@@ -671,9 +671,13 @@ ${html}
 
   // 6. Fungsi menjalankan HTML, CSS, dan JavaScript
   function bangunDokumen() {
-    const html = htmlEditor.getValue();
-    const css = cssEditor.getValue();
-    const js = jsEditor.getValue().replace(/<\/script/gi, "<\\/script");
+    // Nama file gambar dari Aset akun diganti tautan bertanda tangan (hanya bila sudah masuk dan punya aset).
+    const AP = window.CodingSkanetraAsetPratinjau;
+    const petaAset = window.CodingSkanetraAset && AP ? window.CodingSkanetraAset.peta() : null;
+    const ada = petaAset && Object.keys(petaAset).length > 0;
+    const html = ada ? AP.ganti.html(htmlEditor.getValue(), petaAset) : htmlEditor.getValue();
+    const css = ada ? AP.ganti.css(cssEditor.getValue(), petaAset) : cssEditor.getValue();
+    const js = (ada ? AP.ganti.js(jsEditor.getValue(), petaAset) : jsEditor.getValue()).replace(/<\/script/gi, "<\\/script");
 
     const awal = `<!DOCTYPE html>
 <html lang="id">
@@ -729,7 +733,13 @@ ${html}
     status.textContent = "Pratinjau diperbarui.";
   }
 
-  runButton.addEventListener("click", jalankanKode);
+  // Tautan gambar (Aset) dimuat/diperbarui lebih dulu bila perlu; tanpa aset atau tanpa login langsung jalan.
+  function jalankanDenganAset() {
+    const siap = window.CodingSkanetraAset && window.CodingSkanetraAset.siapkan();
+    if (siap) siap.then(jalankanKode, jalankanKode);
+    else jalankanKode();
+  }
+  runButton.addEventListener("click", jalankanDenganAset);
 
   // 6b. Lihat hasilnya di tab sendiri, layaknya situs sungguhan (memenuhi seluruh layar).
   // Kode pengguna tetap berjalan di iframe terisolasi (tanpa allow-same-origin) di dalam halaman pembungkus,

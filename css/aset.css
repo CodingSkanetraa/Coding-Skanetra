@@ -1,0 +1,24 @@
+/* Panel Aset gambar di editor Web */
+.aset-dialog { width: min(640px, 94vw); max-height: 88vh; overflow: auto; }
+.aset-ket { margin: 0 0 10px; font-size: .9rem; color: var(--muted); }
+.aset-ket code { padding: 1px 6px; border-radius: 6px; background: var(--surface-hover); color: var(--text); font-size: .85em; }
+.aset-kuota { margin: 0 0 10px; font-weight: 700; font-size: .92rem; }
+.aset-aksi { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.aset-status { min-height: 1.3em; margin: 0 0 8px; font-size: .88rem; color: var(--accent); overflow-wrap: anywhere; }
+.aset-status.galat { color: #ff8b8b; }
+.aset-daftar { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.aset-baris { display: grid; grid-template-columns: 56px 1fr; gap: 6px 12px; align-items: center; padding: 8px; border: 1px solid var(--border); border-radius: 12px; }
+.aset-mini { width: 56px; height: 56px; border-radius: 10px; background: var(--surface-hover); overflow: hidden; display: grid; place-items: center; }
+.aset-mini img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.aset-info { min-width: 0; display: grid; gap: 2px; }
+.aset-nama { font-size: .9rem; overflow-wrap: anywhere; }
+.aset-ukuran { font-size: .8rem; color: var(--muted); }
+.aset-tombol { grid-column: 1 / -1; display: flex; gap: 6px; flex-wrap: wrap; }
+.aset-kecil { font: inherit; font-size: .8rem; padding: 6px 10px; min-height: 34px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
+.aset-kecil.bahaya { color: #ff8b8b; }
+.aset-kecil:focus-visible, .aset-unggah:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.aset-kosong { margin: 6px 0; color: var(--muted); }
+@media (min-width: 560px) {
+  .aset-baris { grid-template-columns: 56px 1fr auto; }
+  .aset-tombol { grid-column: auto; }
+}
