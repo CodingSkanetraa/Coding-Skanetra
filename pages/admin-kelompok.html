@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Halaman pengelola: kelompok, tugas, dan tinjauan kiriman.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0b100e">
+  <title>Kelola Kelompok | CodingSkanetra</title>
+
+  <link rel="icon" href="../favicon.ico?v=2" sizes="48x48">
+  <link rel="icon" type="image/png" href="../favicon-96.png?v=2" sizes="96x96">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2">
+  <script src="../js/theme.js?v=5"></script>
+  <link rel="stylesheet" href="../css/style.css?v=6">
+  <link rel="stylesheet" href="../css/nav-mobile.css?v=2">
+  <link rel="stylesheet" href="../css/app-mobile.css?v=1">
+  <link rel="stylesheet" href="../css/navbar-akun.css?v=3">
+  <link rel="stylesheet" href="../css/tantangan.css?v=1">
+  <link rel="stylesheet" href="../css/kelompok.css?v=1">
+  <script src="../js/akun-config.js?v=1" defer></script>
+  <script src="../js/akun.js?v=5" defer></script>
+  <script src="../js/main.js?v=5" defer></script>
+  <script src="../js/ikon.js?v=6" defer></script>
+  <script src="../js/navbar-akun.js?v=5" defer></script>
+  <script src="../js/nav-mobile.js?v=6" defer></script>
+  <script src="../js/kelompok-api.js?v=1" defer></script>
+  <script src="../js/admin-kelompok.js?v=1" defer></script>
+  <link rel="stylesheet" href="../css/poles.css?v=2">
+</head>
+<body class="tg-hal">
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="CodingSkanetra, beranda">
+      <img class="brand-logo" src="../assets/images/logo-eskul.png" alt="" width="38" height="44">
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+      <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link" href="peringkat.html" data-nav="peringkat">Peringkat</a>
+      <a class="nav-link" href="games.html" data-nav="games">Games</a>
+      <a class="nav-link" href="tantangan.html" data-nav="tantangan">Tantangan</a>
+      <a class="nav-link active" href="kelompok.html" data-nav="kelompok" aria-current="page">Tugas Kelompok</a>
+      <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
+      <a class="nav-link" href="dokumentasi.html" data-nav="dokumentasi">Dokumentasi</a>
+      <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
+      <a class="nav-link" href="profil.html#tampilan" data-nav="setting">Pengaturan</a>
+    </nav>
+  </header>
+
+  <main class="tg kg">
+    <a class="tg-kembali" href="peringkat.html">&larr; Peringkat</a>
+    <header class="tg-kepala">
+      <div>
+        <h1>Kelola kelompok</h1>
+        <p class="tg-sub">Bentuk kelompok (maksimal 10 anggota), buat tugas, berikan ke kelompok, lalu tinjau kiriman.</p>
+      </div>
+    </header>
+    <p class="tg-pesan" id="tg-pesan" role="status" aria-live="polite">Memuat…</p>
+    <div class="tg-tamu" id="tg-tamu" hidden></div>
+
+    <section id="tg-isi" hidden>
+      <div class="tg-tabs" role="tablist" aria-label="Bagian pengelola">
+        <button class="tg-tab" id="tab-kelompok" role="tab" type="button" data-t="kelompok" aria-selected="true" aria-controls="pn-kelompok">Kelompok</button>
+        <button class="tg-tab" id="tab-tugas" role="tab" type="button" data-t="tugas" aria-selected="false" aria-controls="pn-tugas">Tugas</button>
+        <button class="tg-tab" id="tab-tinjau" role="tab" type="button" data-t="tinjau" aria-selected="false" aria-controls="pn-tinjau">Tinjau<span class="tg-hitung" id="kg-hitung" hidden></span></button>
+      </div>
+
+      <div id="pn-kelompok" role="tabpanel" aria-labelledby="tab-kelompok">
+        <div class="tg-bar"><h2>Daftar kelompok</h2><button class="tg-btn utama" id="kg-kel-baru" type="button">+ Kelompok baru</button></div>
+        <ul class="kg-daftar-admin" id="kg-kel-daftar"></ul>
+      </div>
+      <div id="pn-tugas" role="tabpanel" aria-labelledby="tab-tugas" hidden>
+        <div class="tg-bar"><h2>Daftar tugas</h2><button class="tg-btn utama" id="kg-tugas-baru" type="button">+ Tugas baru</button></div>
+        <ul class="kg-daftar-admin" id="kg-tugas-daftar"></ul>
+      </div>
+      <div id="pn-tinjau" role="tabpanel" aria-labelledby="tab-tinjau" hidden>
+        <div class="tg-bar"><h2>Kiriman kelompok</h2></div>
+        <div class="tg-filter" id="kg-filter"></div>
+        <ul class="kg-daftar-admin" id="kg-kirim-daftar"></ul>
+      </div>
+    </section>
+
+    <dialog class="tg-dialog" id="kg-dialog" aria-labelledby="kg-dlg-judul">
+      <form id="kg-dlg-form" method="dialog">
+        <h2 id="kg-dlg-judul"></h2>
+        <div id="kg-dlg-isi"></div>
+        <p class="tg-galat" id="kg-dlg-galat" role="alert" hidden></p>
+        <div class="tg-baris-aksi">
+          <button class="tg-btn utama" id="kg-dlg-ok" type="submit">Simpan</button>
+          <button class="tg-btn" id="kg-dlg-batal" type="button">Batal</button>
+        </div>
+      </form>
+    </dialog>
+  </main>
+</body>
+</html>

@@ -3,6 +3,20 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.25.0] - 2026-11-19
+
+### Ditambahkan
+- **Proyek Kelompok (satu website dikerjakan bersama).** Pengelola membentuk kelompok (maksimal 10 anggota, tepat 1 ketua), membuat tugas (penjelasan, tenggat, syarat wajib/opsional, template bagian), lalu memberikannya ke kelompok. Halaman baru: `pages/kelompok.html` (daftar tugas), `kelompok-tugas.html` (detail, bagian, kiriman), `kelompok-editor.html` (editor), `kelompok-kiriman.html` (pratinjau dan tinjauan), `admin-kelompok.html` (pengelola, tautan "Kelola kelompok" di Peringkat). Menu **Tugas Kelompok** ada di Lainnya.
+- **Editor kelompok.** Website dibagi per **bagian** (Header, Footer, dan seterusnya) ditambah bagian **Umum** (CSS dan JS bersama). Tiap bagian punya tab HTML, CSS, JS. Ketua membagi pemilik bagian; bagian orang lain bisa dibaca tetapi tidak bisa diubah (dijaga di database, bukan hanya di tampilan). Pratinjau menggabungkan semua bagian, dan tab **Kode utuh** menampilkan seluruh kode berpenanda bagian.
+- **Simpan berversi.** Simpan otomatis 4 detik setelah berhenti mengetik. Bila bagian sudah diubah orang lain, muncul pilihan: muat versi terbaru, timpa (versi orang lain tetap di Riwayat), atau salin kodemu. Riwayat 20 versi per bagian dengan tombol Pulihkan. Bagian orang lain disegarkan tiap 20 detik.
+- **Submit.** Anggota mengirim ke pengelola dengan konfirmasi syarat wajib; kiriman berupa **snapshot** yang tidak berubah walau kode terus diedit. Kiriman bisa **ditarik kembali** selama belum ditinjau. Pengelola mencentang syarat, memberi catatan, lalu memilih **Diterima** atau **Perlu revisi**; setelah revisi kelompok **kirim ulang**. Kiriman setelah tenggat diberi tanda terlambat. Maksimal 8 tugas yang belum diterima per kelompok.
+
+### Perlu dijalankan
+- `supabase/kelompok.sql` di SQL Editor (sekali; aman diulang). Semua tabel dikunci (RLS tanpa policy), akses hanya lewat fungsi database.
+
+### Catatan
+- Gambar Aset belum ikut tampil di pratinjau kelompok.
+
 ## [5.24.0] - 2026-11-19
 
 ### Ditambahkan

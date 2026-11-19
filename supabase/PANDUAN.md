@@ -150,3 +150,20 @@ Mengubah batas: ubah angka di `aset_batas_jumlah()` dan `aset_batas_byte()` sert
 
 Halaman pengelola: `pages/admin-aset.html` (tautan "Kelola aset" muncul di halaman Peringkat untuk admin).
 
+## Proyek Kelompok
+
+**Pemasangan (sekali):** Supabase > SQL Editor, tempel seluruh `supabase/kelompok.sql`, lalu Run (aman diulang). Butuh `skema.sql` sudah dijalankan. Bila muncul galat, salin pesannya beserta nomor barisnya.
+
+**Alur pengelola** (halaman `pages/admin-kelompok.html`, tautan "Kelola kelompok" di Peringkat):
+1. Tab **Kelompok**: buat kelompok, centang anggota (maksimal 10) dan pilih **satu ketua**. Hanya akun yang sudah disetujui (`anggota = true`) yang muncul.
+2. Tab **Tugas**: buat tugas (judul, penjelasan, tenggat opsional, syarat wajib/opsional, template bagian opsional), lalu **Beri ke kelompok**. Kelompok mendapat bagian **Umum** ditambah satu bagian per template.
+3. Tab **Tinjau**: buka kiriman, centang syarat yang terpenuhi, tulis catatan, lalu **Diterima** atau **Perlu revisi**.
+
+**Aturan penting:**
+- Ketua kelompok membagi pemilik bagian dari halaman detail tugas. Bagian tanpa pemilik boleh diisi siapa saja; bagian Umum bersama.
+- Kiriman adalah salinan (snapshot) kode saat dikirim; mengedit sesudahnya tidak mengubah kiriman.
+- Mengeluarkan anggota dari kelompok membuat bagiannya tanpa pemilik (kodenya tetap).
+- Mencabut tugas dari kelompok atau menghapus kelompok/tugas menghapus kode dan kiriman terkait secara permanen. Untuk menutup kelompok tanpa kehilangan data, pakai **Arsipkan** (semuanya jadi hanya baca).
+- Ukuran: maksimal 60.000 karakter per bagian, 15 bagian per tugas, 8 tugas belum diterima per kelompok. Teks kecil, jatah gratis Supabase sangat aman.
+- Keamanan: tabel `kelompok*`, `tugas_*`, `kerja_*`, dan `pengumpulan*` tidak bisa diakses langsung dari browser. Semua lewat fungsi database yang memeriksa keanggotaan, peran ketua, dan pemilik bagian.
+

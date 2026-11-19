@@ -12,7 +12,7 @@
   // Urutan menu: Beranda, Materi, Playground, Game (games, tantangan), Lainnya (sisanya).
   const KELOMPOK = [
     { id: "game", label: "Game", anggota: ["games", "tantangan"] },
-    { id: "lainnya", label: "Lainnya", anggota: ["peringkat", "struktur", "dokumentasi", "about", "setting"] }
+    { id: "lainnya", label: "Lainnya", anggota: ["peringkat", "kelompok", "struktur", "dokumentasi", "about", "setting"] }
   ];
 
   // Username akun yang sedang masuk, atau null.

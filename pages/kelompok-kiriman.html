@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pratinjau kiriman kelompok dan tinjauan pengelola.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0b100e">
+  <title>Kiriman Kelompok | CodingSkanetra</title>
+
+  <link rel="icon" href="../favicon.ico?v=2" sizes="48x48">
+  <link rel="icon" type="image/png" href="../favicon-96.png?v=2" sizes="96x96">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2">
+  <script src="../js/theme.js?v=5"></script>
+  <link rel="stylesheet" href="../css/style.css?v=6">
+  <link rel="stylesheet" href="../css/nav-mobile.css?v=2">
+  <link rel="stylesheet" href="../css/app-mobile.css?v=1">
+  <link rel="stylesheet" href="../css/navbar-akun.css?v=3">
+  <link rel="stylesheet" href="../css/tantangan.css?v=1">
+  <link rel="stylesheet" href="../css/kelompok.css?v=1">
+  <script src="../js/akun-config.js?v=1" defer></script>
+  <script src="../js/akun.js?v=5" defer></script>
+  <script src="../js/main.js?v=5" defer></script>
+  <script src="../js/ikon.js?v=6" defer></script>
+  <script src="../js/navbar-akun.js?v=5" defer></script>
+  <script src="../js/nav-mobile.js?v=6" defer></script>
+  <script src="../js/kelompok-api.js?v=1" defer></script>
+  <script src="../js/kelompok-kiriman.js?v=1" defer></script>
+  <link rel="stylesheet" href="../css/poles.css?v=2">
+</head>
+<body class="tg-hal">
+  <header class="navbar">
+    <a class="brand" href="../index.html#beranda" aria-label="CodingSkanetra, beranda">
+      <img class="brand-logo" src="../assets/images/logo-eskul.png" alt="" width="38" height="44">
+      <span>Coding<span class="brand-accent">Skanetra</span></span>
+    </a>
+    <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+      <a class="nav-link" href="../index.html#beranda" data-nav="beranda">Beranda</a>
+      <a class="nav-link" href="materi.html" data-nav="materi">Materi</a>
+      <a class="nav-link" href="playground.html" data-nav="playground">Playground</a>
+      <a class="nav-link" href="peringkat.html" data-nav="peringkat">Peringkat</a>
+      <a class="nav-link" href="games.html" data-nav="games">Games</a>
+      <a class="nav-link" href="tantangan.html" data-nav="tantangan">Tantangan</a>
+      <a class="nav-link active" href="kelompok.html" data-nav="kelompok" aria-current="page">Tugas Kelompok</a>
+      <a class="nav-link" href="struktur-organisasi.html" data-nav="struktur">Struktur Organisasi</a>
+      <a class="nav-link" href="dokumentasi.html" data-nav="dokumentasi">Dokumentasi</a>
+      <a class="nav-link" href="about.html" data-nav="about">Tentang</a>
+      <a class="nav-link" href="profil.html#tampilan" data-nav="setting">Pengaturan</a>
+    </nav>
+  </header>
+
+  <main class="tg kg">
+    <a class="tg-kembali" id="kg-balik" href="kelompok.html">&larr; Kembali</a>
+    <p class="tg-pesan" id="tg-pesan" role="status" aria-live="polite">Memuat…</p>
+    <div class="tg-tamu" id="tg-tamu" hidden></div>
+    <section id="tg-isi" hidden>
+      <header class="kg-judul">
+        <div>
+          <h1 id="kg-judul"></h1>
+          <p class="tg-sub" id="kg-sub"></p>
+        </div>
+        <div class="kg-lencana" id="kg-lencana"></div>
+      </header>
+      <div class="kg-pratinjau-bungkus">
+        <div class="kg-tab" role="tablist" aria-label="Tampilan kiriman">
+          <button type="button" role="tab" class="kg-tab-btn" data-v="hasil" aria-selected="true">Hasil</button>
+          <button type="button" role="tab" class="kg-tab-btn" data-v="kode" aria-selected="false">Kode utuh</button>
+        </div>
+        <iframe class="kg-iframe" id="kg-iframe" title="Pratinjau kiriman"></iframe>
+        <pre class="kg-kode" id="kg-kode" hidden></pre>
+      </div>
+      <section class="kg-kotak" id="kg-tinjau" hidden>
+        <h2>Tinjauan pengelola</h2>
+        <ul class="kg-cek" id="kg-cek"></ul>
+        <label for="kg-catatan" class="kg-label">Catatan untuk kelompok</label>
+        <textarea id="kg-catatan" rows="4" maxlength="2000" class="kg-teks"></textarea>
+        <div class="tg-baris-aksi">
+          <button class="tg-btn utama" id="kg-terima" type="button">Diterima</button>
+          <button class="tg-btn bahaya" id="kg-revisi" type="button">Perlu revisi</button>
+        </div>
+        <p class="tg-pesan" id="kg-tinjau-pesan" role="status" aria-live="polite"></p>
+      </section>
+      <section class="kg-kotak">
+        <h2>Syarat dan catatan</h2>
+        <ul class="kg-syarat" id="kg-syarat"></ul>
+        <ul class="kg-catatan" id="kg-catatan-daftar"></ul>
+      </section>
+    </section>
+  </main>
+</body>
+</html>

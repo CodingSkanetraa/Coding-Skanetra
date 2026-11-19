@@ -153,3 +153,7 @@ Ada ide fitur atau menemukan bug? Hubungi pengurus Coding Skanetra atau buka *is
 Kode sumber proyek ini dirilis di bawah lisensi [MIT](LICENSE).
 
 Lihat berkas `LICENSE` untuk ketentuan penggunaan, penyalinan, modifikasi, dan distribusi kode.
+
+## Proyek Kelompok
+
+Anggota mengerjakan satu website bersama, dibagi per bagian, lalu mengirimnya ke pengelola untuk ditinjau. Pemasangan dan alur: lihat `supabase/PANDUAN.md` bagian "Proyek Kelompok" dan `supabase/kelompok.sql`.
