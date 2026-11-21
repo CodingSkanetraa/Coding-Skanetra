@@ -80,7 +80,6 @@
       const prof = await akun.minta("/rest/v1/profil?select=anggota,admin&id=eq." + encodeURIComponent((akun.pengguna() || {}).id || "") + "&limit=1");
       const p = prof.ok && Array.isArray(prof.data) ? prof.data[0] : null;
       if (!p) { pesan("Akunmu belum bisa diperiksa. Muat ulang halaman ini.", true); return; }
-      if (p.admin === true) $("tg-admin").hidden = false;
       if (p.anggota !== true) { tamu("Akunmu menunggu persetujuan", "Tantangan hanya untuk anggota. Hubungi guru agar akunmu disetujui.", null); return; }
 
       const [rs, rt] = await Promise.all([

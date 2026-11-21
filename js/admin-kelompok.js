@@ -392,7 +392,7 @@
       li.appendChild(kepala);
       li.appendChild(el("span", "tg-meta", "Kiriman " + k.nomor + " · " + waktu(k.dikirim) + (k.oleh ? " · oleh @" + k.oleh : "")));
       const buka = el("a", "tg-btn" + (k.status === "dikirim" ? " utama" : ""), k.status === "dikirim" ? "Tinjau" : "Lihat");
-      buka.href = "kelompok-kiriman.html?id=" + encodeURIComponent(k.id);
+      buka.href = "kelompok-kiriman.html?dari=admin&id=" + encodeURIComponent(k.id);
       li.appendChild(buka);
       ul.appendChild(li);
     });

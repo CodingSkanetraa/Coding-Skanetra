@@ -34,9 +34,11 @@
     return tumpukan;
   }
 
-  function pasang(cm, bahasa) {
+  // bahasa boleh berupa teks ("html", "css", ...) atau fungsi yang mengembalikannya (editor yang berganti tab).
+  function pasang(cm, bahasaAtauFungsi) {
     if (!cm || cm.state.csKetik) return;
     cm.state.csKetik = true;
+    const lang = () => (typeof bahasaAtauFungsi === "function" ? bahasaAtauFungsi() : bahasaAtauFungsi);
     let keypressTerakhir = 0;
     let sibuk = false;
 
@@ -95,13 +97,33 @@
       sibuk = true;
       try {
         // Tutup tag dan "</" aman diulang (tidak menambah bila penutupnya sudah ada), jadi tidak peduli ada keypress atau tidak.
-        if (bahasa === "html" && c === ">") tutupTag(kursor);
-        else if (bahasa === "html" && c === "/" && baris.charAt(kursor.ch - 2) === "<") lengkapiPenutup(kursor);
+        if (lang() === "html" && c === ">") tutupTag(kursor);
+        else if (lang() === "html" && c === "/" && baris.charAt(kursor.ch - 2) === "<") lengkapiPenutup(kursor);
         else if ((PASANGAN[c] || PENUTUP.has(c)) && Date.now() - keypressTerakhir >= 150) pasangan(c, kursor); // kalau ada keypress, addon bawaan yang bekerja
       } finally {
         sibuk = false;
       }
     }
+
+    // Enter tepat di antara tag pembuka dan penutup (<p>|</p>): isi pindah ke baris sendiri, menjorok satu satuan indentasi,
+    // dan penutup turun ke baris berikutnya. Di tempat lain Enter berjalan seperti biasa.
+    cm.addKeyMap({
+      Enter: () => {
+        if (lang() !== "html" || cm.getOption("readOnly") || cm.somethingSelected()) return window.CodeMirror.Pass;
+        const k = cm.getCursor();
+        const baris = cm.getLine(k.line);
+        const m = POLA_BUKA.exec(baris.slice(0, k.ch));
+        if (!m || TAG_TUNGGAL.has(m[1].toLowerCase())) return window.CodeMirror.Pass;
+        if (!baris.slice(k.ch).toLowerCase().startsWith("</" + m[1].toLowerCase() + ">")) return window.CodeMirror.Pass;
+        const dasar = /^\s*/.exec(baris)[0];
+        const satuan = cm.getOption("indentWithTabs") ? "\t" : " ".repeat(cm.getOption("indentUnit") || 4);
+        cm.operation(() => {
+          cm.replaceRange("\n" + dasar + satuan + "\n" + dasar, k, k, "+input");
+          cm.setCursor({ line: k.line + 1, ch: dasar.length + satuan.length });
+        });
+        return undefined;
+      }
+    });
 
     // Jalur utama: perubahan teks hasil ketikan (keyboard HP maupun komputer).
     // Dibaca dari karakter terakhir yang masuk, jadi tetap jalan walau keyboard HP mengirim beberapa karakter sekaligus.
@@ -116,9 +138,9 @@
     });
 
     // Jalur cadangan untuk keyboard yang mengirim teks lewat peristiwa input saja.
-    if (bahasa === "html") {
+    {
       cm.getInputField().addEventListener("input", (e) => {
-        if (!e.data || !/[>\/]$/.test(e.data) || /^insertFrom/.test(e.inputType || "")) return;
+        if (lang() !== "html" || !e.data || !/[>\/]$/.test(e.data) || /^insertFrom/.test(e.inputType || "")) return;
         window.setTimeout(() => { const k = cm.getCursor(); proses(cm.getLine(k.line).charAt(k.ch - 1), k); }, 40);
       });
     }

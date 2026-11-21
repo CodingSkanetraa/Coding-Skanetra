@@ -1,0 +1,7 @@
+/* Pusat pengelola */
+.ad-kartu { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.ad-k { display: flex; flex-direction: column; gap: 6px; height: 100%; padding: 18px; border: 1px solid var(--border, rgba(255,255,255,.12)); border-radius: 14px; background: var(--surface, transparent); color: inherit; text-decoration: none; transition: border-color .15s, transform .15s; }
+.ad-k strong { font-size: 1.05rem; color: var(--accent); }
+.ad-k span { color: var(--muted); font-size: .9rem; line-height: 1.5; }
+.ad-k:hover, .ad-k:focus-visible { border-color: var(--accent); transform: translateY(-2px); }
+@media (prefers-reduced-motion: reduce) { .ad-k { transition: none; } .ad-k:hover { transform: none; } }

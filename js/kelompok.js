@@ -58,11 +58,6 @@
       isi.appendChild(bagian);
     });
 
-    if (adaAdmin) {
-      const a = el("a", "tg-btn", "Kelola kelompok (pengelola)");
-      a.href = "admin-kelompok.html";
-      isi.appendChild(a);
-    }
   }
 
   async function mulai() {

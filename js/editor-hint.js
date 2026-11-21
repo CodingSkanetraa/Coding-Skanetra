@@ -322,9 +322,11 @@
 
   // ---------- Pemasangan pada satu editor ----------
 
-  function pasang(cm, bahasa) {
+  // bahasa boleh berupa teks atau fungsi yang mengembalikannya (editor yang berganti tab).
+  function pasang(cm, bahasaAtauFungsi) {
     if (!cm || cm.__csHint) return;
     cm.__csHint = true;
+    const bahasaKini = () => (typeof bahasaAtauFungsi === "function" ? bahasaAtauFungsi() : bahasaAtauFungsi);
 
     let popup = null;
     let daftar = [];
@@ -352,6 +354,7 @@
       const kursor = cm.getCursor();
       if (cm.somethingSelected()) return null;
       const T = cm.getRange({ line: 0, ch: 0 }, kursor);
+      const bahasa = bahasaKini();
       let k = null;
       if (bahasa === "html") k = konteksHtml(T);
       else if (bahasa === "css") k = konteksCss(T);
@@ -487,7 +490,7 @@
         sisip = teks + '=""';
         geser = teks.length + 2;
         lanjut = Boolean(NILAI_ATRIBUT[teks]);
-      } else if (jenis === "properti" && bahasa === "css") {
+      } else if (jenis === "properti" && bahasaKini() === "css") {
         sisip = teks + ": ";
         lanjut = Boolean(NILAI_CSS[teks]);
       }

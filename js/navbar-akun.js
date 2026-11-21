@@ -7,6 +7,8 @@
   "use strict";
   const KUNCI_SESI = "codingskanetra-sesi";
   const KUNCI_FOTO = "codingskanetra-foto";
+  const KUNCI_ADMIN = "codingskanetra-admin"; // { uid, admin, t }: hanya untuk menampilkan tab; hak admin sebenarnya dicek database
+  const UMUR_ADMIN = 6 * 3600 * 1000;
   const POLA_USERNAME = /^[a-z0-9_.]{3,20}$/;
   const POLA_FOTO = /^data:image\/(webp|jpeg);base64,[A-Za-z0-9+/]+=*$/;
   // Urutan menu: Beranda, Materi, Playground, Game (games, tantangan), Lainnya (sisanya).
@@ -135,6 +137,47 @@
     }
   }
   gambar();
+
+  // ---------- Tab "Pengelola" (hanya untuk admin) ----------
+  const tabAdmin = el("a", "nav-link nav-admin", "Pengelola");
+  tabAdmin.href = new URL("admin.html", acuan.href).href;
+  tabAdmin.dataset.nav = "admin";
+  tabAdmin.hidden = true;
+  if (berkas === "admin" || berkas.startsWith("admin-")) {
+    tabAdmin.classList.add("active");
+    tabAdmin.setAttribute("aria-current", "page");
+  }
+  nav.insertBefore(tabAdmin, slot);
+
+  function uidAktif() {
+    try { const s = JSON.parse(localStorage.getItem(KUNCI_SESI)); return s && s.user && s.user.id ? s.user.id : null; } catch (e) { return null; }
+  }
+  function adminTersimpan(uid) {
+    try {
+      const o = JSON.parse(localStorage.getItem(KUNCI_ADMIN));
+      if (o && o.uid === uid && typeof o.admin === "boolean" && Date.now() - o.t < UMUR_ADMIN) return o.admin;
+    } catch (e) { /* tidak ada simpanan */ }
+    return null;
+  }
+  async function perbaruiAdmin() {
+    const uid = uidAktif();
+    if (!uid || !usernameAktif()) { tabAdmin.hidden = true; return; }
+    const simpan = adminTersimpan(uid);
+    tabAdmin.hidden = simpan !== true;
+    if (simpan !== null) return;
+    const akun = window.CodingSkanetraAkun;
+    if (!akun || !akun.tersedia || !akun.profil) return;
+    try {
+      await akun.siap;
+      const p = await akun.profil();
+      const ya = Boolean(p && p.admin === true);
+      try { localStorage.setItem(KUNCI_ADMIN, JSON.stringify({ uid, admin: ya, t: Date.now() })); } catch (e) { /* abaikan */ }
+      if (uidAktif() === uid) tabAdmin.hidden = !ya;
+    } catch (e) { /* jaringan: tab tetap tersembunyi, dicoba lagi saat halaman dibuka berikutnya */ }
+  }
+  perbaruiAdmin();
+  window.addEventListener("cs:akun", perbaruiAdmin);
+  window.addEventListener("storage", (e) => { if (e.key === KUNCI_SESI || e.key === KUNCI_ADMIN) perbaruiAdmin(); });
   window.addEventListener("storage", (e) => { if (e.key === KUNCI_SESI || e.key === KUNCI_FOTO) gambar(); });
   window.addEventListener("cs:foto", gambar);
   window.addEventListener("cs:akun", gambar);

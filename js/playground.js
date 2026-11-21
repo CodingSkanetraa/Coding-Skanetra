@@ -121,8 +121,8 @@ document.addEventListener("DOMContentLoaded", () => {
     theme: "material-darker",
     inputStyle: "textarea", // pada HP, bawaan CodeMirror (contenteditable) tidak memperbarui isi saat mengetik dengan keyboard prediktif
     lineNumbers: true,
-    indentUnit: 2,
-    tabSize: 2,
+    indentUnit: 4,
+    tabSize: 4,
     indentWithTabs: false,
     smartIndent: true,
     autoCloseBrackets: true,

@@ -117,3 +117,7 @@
 @media (prefers-reduced-motion: reduce) {
   .nav-lainnya-btn::after { transition: none; }
 }
+
+/* Tab Pengelola (hanya muncul untuk admin) */
+.navbar .nav-admin[hidden] { display: none; }
+.navbar .nav-admin { color: var(--accent); }

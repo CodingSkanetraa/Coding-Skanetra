@@ -1,11 +1,15 @@
 // Halaman kiriman kelompok: pratinjau snapshot (tidak berubah), syarat, catatan, dan tinjauan pengelola.
+// Panel tinjauan hanya tampil bila halaman dibuka dari halaman pengelola (?dari=admin) oleh akun admin.
+// Dibuka dari riwayat kiriman di halaman kelompok, admin pun hanya melihat, sama seperti anggota.
 (() => {
   "use strict";
   const K = window.CSKelompok;
   const $ = (id) => document.getElementById(id);
   const { el, rpc, waktu, lencana } = K;
 
-  const id = new URLSearchParams(location.search).get("id") || "";
+  const params = new URLSearchParams(location.search);
+  const id = params.get("id") || "";
+  const dariAdmin = params.get("dari") === "admin";
   let d = null;
   let admin = false;
   const kotakCek = new Map(); // syarat_id -> checkbox
@@ -117,7 +121,7 @@
     try {
       const [detail, profil] = await Promise.all([rpc("pengumpulan_detail", { p_id: id }), K.akun().profil().catch(() => null)]);
       d = detail;
-      admin = Boolean(profil && profil.admin === true);
+      admin = dariAdmin && Boolean(profil && profil.admin === true);
       pesan("");
       $("tg-isi").hidden = false;
       gambar();

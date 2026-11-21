@@ -3,6 +3,29 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.28.0] - 2026-11-21
+
+### Ditambahkan
+- Halaman **Pusat pengelola** (`pages/admin.html`): satu pintu ke Kelompok, Tantangan, Poin, dan Aset.
+- Tab **Pengelola** di navbar, hanya tampil untuk akun admin (status admin disimpan sementara di browser selama 6 jam hanya untuk menampilkan tab; hak akses sebenarnya tetap dicek di database).
+
+### Diubah
+- Tautan admin yang tersebar (Kelola poin/aset/kelompok di Peringkat, Kelola tantangan di Tantangan, tombol pengelola di Tugas Kelompok) dihapus. Tombol Kembali di empat halaman admin kini menuju Pusat pengelola.
+
+## [5.27.0] - 2026-11-21
+
+### Diubah
+- **Perilaku editor disamakan di semua editor** (Editor Web, Python, C++, dan editor kelompok). Editor kelompok kini memakai pengaturan, tutup tag/kurung otomatis, dan petunjuk kode yang sama persis dengan Editor Web, sehingga mengetik `<p>Hai</p>` tidak lagi dipecah jadi tiga baris sendiri.
+- Indentasi bawaan konsisten **4 spasi** (editor JavaScript di Editor Web sebelumnya 2 spasi; contoh kode CSS dan JavaScript ikut diubah). Pilihan 2 spasi di Pengaturan editor tetap bisa dipakai.
+
+### Ditambahkan
+- Di editor HTML (Editor Web dan editor kelompok): menekan **Enter tepat di antara tag pembuka dan penutup** (`<p>|</p>`) menghasilkan `<p>`, baris baru yang menjorok satu tingkat dengan kursor di sana, lalu `</p>` di baris sendiri.
+
+## [5.26.1] - 2026-11-21
+
+### Diperbaiki
+- Panel **Tinjauan pengelola** (centang syarat, Diterima, Perlu revisi) muncul di halaman kiriman saat admin membukanya dari **riwayat kiriman di halaman kelompok**, sehingga status bisa diubah dari sana. Kini panel itu hanya tampil bila halaman dibuka dari halaman pengelola (tab Tinjau, tautan memakai `?dari=admin`). Dari halaman kelompok, admin hanya melihat kiriman, sama seperti anggota, dan tombol Kembali mengarah ke tugas kelompok. Pemeriksaan hak admin di database tidak berubah.
+
 ## [5.26.0] - 2026-11-21
 
 ### Diubah

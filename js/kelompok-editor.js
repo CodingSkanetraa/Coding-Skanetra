@@ -499,14 +499,30 @@
 
       pesan("");
       $("tg-isi").hidden = false;
+      // Opsi sama dengan editor web (playground.js) supaya perilakunya identik.
       cm = window.CodeMirror($("kg-cm"), {
-        lineNumbers: true, theme: "material-darker", tabSize: 2, indentUnit: 2, lineWrapping: true,
-        autoCloseBrackets: true, autoCloseTags: true, spellcheck: false,
+        theme: "material-darker",
+        inputStyle: "textarea", // keyboard prediktif di HP
+        lineNumbers: true,
+        indentUnit: 4,
+        tabSize: 4,
+        indentWithTabs: false,
+        smartIndent: true,
+        autoCloseBrackets: true,
+        autoCloseTags: false, // tutup tag ditangani editor-ketik.js
+        matchBrackets: true,
+        lineWrapping: false,
+        spellcheck: false,
         extraKeys: {
           "Ctrl-S": () => { simpanTombol(); },
-          "Cmd-S": () => { simpanTombol(); }
+          "Cmd-S": () => { simpanTombol(); },
+          Tab: (c) => c.execCommand("insertSoftTab"),
+          "Shift-Tab": (c) => c.execCommand("indentLess")
         }
       });
+      if (window.CodingSkanetraEditorPrefs) window.CodingSkanetraEditorPrefs.pasang(cm);
+      if (window.CodingSkanetraKetik) window.CodingSkanetraKetik.pasang(cm, () => bahasa);
+      if (window.CodingSkanetraHint) window.CodingSkanetraHint.pasang(cm, () => bahasa);
       b = buatBerkas(r);
       pasangTab();
       pasangPesanPratinjau();
