@@ -3,6 +3,11 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.29.1] - 2026-11-21
+
+### Diperbaiki
+- Panel **Aset** di editor kelompok tampil polos tanpa gaya (memakai kelas editor web yang tidak dimuat di halaman kelompok). Kini memakai gaya halaman kelompok.
+
 ## [5.29.0] - 2026-11-21
 
 ### Ditambahkan

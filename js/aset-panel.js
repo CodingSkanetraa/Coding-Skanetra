@@ -11,7 +11,7 @@
   const el = (tag, kelas, teks) => { const e = document.createElement(tag); if (kelas) e.className = kelas; if (teks != null) e.textContent = teks; return e; };
   const KB = (b) => b >= 1048576 ? (b / 1048576).toFixed(1).replace(".", ",") + " MB" : Math.max(1, Math.round(b / 1024)) + " KB";
 
-  const dlg = el("dialog", "alat-dialog aset-dialog");
+  const dlg = el("dialog", (kelompok ? "tg-dialog" : "alat-dialog") + " aset-dialog");
   dlg.setAttribute("aria-labelledby", "aset-judul");
   const judul = el("h2", "", kelompok ? "Aset gambar kelompok" : "Aset gambar"); judul.id = "aset-judul";
   const ket = el("p", "aset-ket");
@@ -19,10 +19,10 @@
   const k1 = el("code", "", '<img src="kucing.png">'); ket.append(k1, " atau ", el("code", "", "background: url(kucing.png)"), kelompok ? ". Gambar tampil di Hasil utuh. Siapa pun di kelompok bisa menghapusnya, dan gambar tidak ikut terkirim bersama kode saat Submit." : ". Gambar tampil di pratinjau editor saat kamu masuk.");
   const kuota = el("p", "aset-kuota"); kuota.setAttribute("aria-live", "polite");
   const pilih = el("input"); pilih.type = "file"; pilih.multiple = true; pilih.accept = "image/png,image/jpeg,image/webp,image/gif"; pilih.hidden = true;
-  const tombolUnggah = el("button", "btn btn-primary aset-unggah", "+ Unggah gambar"); tombolUnggah.type = "button";
+  const tombolUnggah = el("button", (kelompok ? "tg-btn utama" : "btn btn-primary") + " aset-unggah", "+ Unggah gambar"); tombolUnggah.type = "button";
   const status = el("p", "aset-status"); status.setAttribute("role", "status"); status.setAttribute("aria-live", "polite");
   const daftarEl = el("ul", "aset-daftar");
-  const tutup = el("button", "playground-reset", "Tutup"); tutup.type = "button";
+  const tutup = el("button", kelompok ? "tg-btn" : "playground-reset", "Tutup"); tutup.type = "button";
   const aksi = el("div", "aset-aksi"); aksi.append(tombolUnggah, tutup);
   dlg.append(judul, ket, kuota, aksi, pilih, status, daftarEl);
   document.body.appendChild(dlg);
