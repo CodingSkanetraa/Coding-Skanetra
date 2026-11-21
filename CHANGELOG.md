@@ -3,6 +3,15 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.29.0] - 2026-11-21
+
+### Ditambahkan
+- **Aset gambar untuk kelompok.** Tombol **Aset** di editor kelompok membuka panel unggah gambar yang dipakai bersama seluruh anggota. Nama file dipakai di kode (`<img src="logo.png">`, `url(logo.png)`) dan gambarnya tampil di **Hasil utuh** dan **Tab lain**. Semua anggota boleh mengunggah dan menghapus; batas 30 gambar per kelompok, 500 KB per gambar. Kelompok yang diarsipkan hanya bisa melihat. Gambar tidak ikut dibekukan pada kiriman (kiriman hanya menyimpan kode), jadi di halaman tinjauan gambar tidak tampil.
+- `supabase/aset-kelompok.sql` (jalankan setelah `aset.sql` dan `kelompok.sql`): fungsi akses `aset_kelompok_boleh`, batas jumlah, `aset_kelompok_pemakaian`, dan kebijakan storage untuk jalur `k-<id-kelompok>/`.
+
+### Diubah
+- `js/aset.js` kini berupa layanan yang bisa dipakai per folder (`CodingSkanetraAset.kelompok(id)`); aset pribadi di Editor Web tidak berubah. `js/aset-panel.js` bisa dipakai ulang oleh editor kelompok.
+
 ## [5.28.0] - 2026-11-21
 
 ### Ditambahkan

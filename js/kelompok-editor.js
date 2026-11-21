@@ -59,6 +59,17 @@
   const warna = (userId) => { const i = anggota.findIndex((a) => a.user_id === userId); return (i < 0 ? 0 : i) % JUMLAH_WARNA; };
   const bagianPratinjau = () => [Object.assign({ nama: "Berkas", umum: true }, nilai())];
 
+  // Aset gambar kelompok: nama file di kode diganti tautan bertanda tangan hanya untuk Hasil utuh dan Tab lain
+  // (Kode utuh dan kiriman tetap memakai nama aslinya).
+  let layananAset = null;
+  function bagianGambar() {
+    const bg = bagianPratinjau();
+    const AP = window.CodingSkanetraAsetPratinjau;
+    const peta = layananAset && AP ? layananAset.peta() : null;
+    if (!peta || !Object.keys(peta).length) return bg;
+    return bg.map((x) => Object.assign({}, x, { html: AP.ganti.html(x.html, peta), css: AP.ganti.css(x.css, peta), js: AP.ganti.js(x.js, peta) }));
+  }
+
   // ---------- Berkas ----------
 
   function buatBerkas(r) {
@@ -335,8 +346,12 @@
     clearTimeout(timerPratinjau);
     const kerja = () => {
       if (tampilan === "hasil") {
-        bersihkanConsole();
-        K.pasangPratinjau($("kg-iframe"), bagianPratinjau(), gulirPratinjau);
+        const gambar = () => {
+          bersihkanConsole();
+          K.pasangPratinjau($("kg-iframe"), bagianGambar(), gulirPratinjau);
+        };
+        const siap = layananAset && layananAset.siapkan();
+        if (siap) siap.then(gambar); else gambar();
       } else {
         $("kg-kode").textContent = K.kode(bagianPratinjau());
       }
@@ -390,7 +405,7 @@
       if (e.key === "Escape" && $("kg-hasil-kolom").classList.contains("penuh") && !$("kg-dialog").open) aturPerbesar(false);
     });
     $("kg-tab-lain").addEventListener("click", () => {
-      if (!K.bukaDiTab(bagianPratinjau())) pesanSementara("Tab baru diblokir browser. Izinkan pop-up untuk situs ini, lalu coba lagi.", 6000);
+      if (!K.bukaDiTab(bagianGambar())) pesanSementara("Tab baru diblokir browser. Izinkan pop-up untuk situs ini, lalu coba lagi.", 6000);
     });
     $("kg-console-bersih").addEventListener("click", bersihkanConsole);
   }
@@ -524,6 +539,7 @@
       if (window.CodingSkanetraKetik) window.CodingSkanetraKetik.pasang(cm, () => bahasa);
       if (window.CodingSkanetraHint) window.CodingSkanetraHint.pasang(cm, () => bahasa);
       b = buatBerkas(r);
+      pasangAset();
       pasangTab();
       pasangPesanPratinjau();
       tampilkan("html");
@@ -539,6 +555,19 @@
     } catch (e) {
       pesan(e.message, true);
     }
+  }
+
+  function pasangAset() {
+    const tombolAset = $("kg-aset");
+    const A = window.CodingSkanetraAset;
+    const P = window.CodingSkanetraAsetPanel;
+    const idKel = detail && detail.kelompok && detail.kelompok.id;
+    if (!tombolAset || !A || !P || !idKel) { if (tombolAset) tombolAset.hidden = true; return; }
+    try { layananAset = A.kelompok(idKel); } catch (e) { tombolAset.hidden = true; return; }
+    tombolAset.hidden = false;
+    P.pasang(layananAset, tombolAset, { kelompok: true, bisaUbah: () => Boolean(b && b.boleh_edit), saatBerubah: () => jadwalPratinjau(true) });
+    const awal = layananAset.siapkan();
+    if (awal) awal.then(() => jadwalPratinjau(true));
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mulai); else mulai();

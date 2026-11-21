@@ -108,122 +108,135 @@
     throw galat("Gambar tetap terlalu besar setelah dikecilkan. Coba gambar lain.", "ukuran");
   }
 
-  // ---------- Panggilan Storage ----------
-  async function kepala(tipe) {
-    const a = akun();
-    if (!a || !a.pengguna()) throw galat("Masuk dulu untuk memakai aset gambar.", "belum-masuk");
-    const token = await a.token();
-    if (!token) throw galat("Masuk dulu untuk memakai aset gambar.", "belum-masuk");
-    return Object.assign({ apikey: String(cfg().anonKey || ""), Authorization: "Bearer " + token }, tipe ? { "Content-Type": tipe } : {});
+  // Satu layanan = satu "folder" di bucket: folder akun (aset pribadi) atau folder kelompok.
+  function buat(folder, rpcPemakaian, paramPemakaian) {
+    // ---------- Panggilan Storage ----------
+    async function kepala(tipe) {
+      const a = akun();
+      if (!a || !a.pengguna()) throw galat("Masuk dulu untuk memakai aset gambar.", "belum-masuk");
+      const token = await a.token();
+      if (!token) throw galat("Masuk dulu untuk memakai aset gambar.", "belum-masuk");
+      return Object.assign({ apikey: String(cfg().anonKey || ""), Authorization: "Bearer " + token }, tipe ? { "Content-Type": tipe } : {});
+    }
+
+    async function panggil(path, opsi) {
+      let res;
+      try { res = await fetch(dasar() + path, opsi); }
+      catch (e) { throw galat("Tidak bisa terhubung ke server. Periksa internet lalu coba lagi.", "jaringan"); }
+      return res;
+    }
+
+    function pesanGalat(res, awal) {
+      if (res.status === 401) return galat("Sesi habis. Masuk lagi lalu coba lagi.", "belum-masuk");
+      if (res.status === 403) return galat("Hanya anggota yang sudah disetujui yang bisa menyimpan gambar.", "izin");
+      if (res.status === 409) return galat("Nama file itu sudah dipakai. Ganti nama berkasnya.", "nama");
+      if (res.status === 413) return galat("Berkas terlalu besar.", "ukuran");
+      if (res.status === 400) return galat("Gambar ditolak server. Kemungkinan jumlah gambarmu sudah penuh (" + BATAS_JUMLAH + ") atau formatnya tidak diizinkan.", "ditolak");
+      return galat(awal + " (kode " + res.status + ").", "server");
+    }
+
+    async function daftar() {
+      const uid = folder();
+      const res = await panggil("/storage/v1/object/list/" + BUCKET, {
+        method: "POST", headers: await kepala("application/json"),
+        body: JSON.stringify({ prefix: uid, limit: 100, offset: 0, sortBy: { column: "name", order: "asc" } }), cache: "no-store"
+      });
+      if (!res.ok) throw pesanGalat(res, "Daftar aset gagal dimuat");
+      const data = await res.json();
+      return (Array.isArray(data) ? data : []).filter((f) => f && POLA_NAMA.test(f.name || "")).map((f) => ({
+        nama: f.name, ukuran: Number(f.metadata && f.metadata.size) || 0, dibuat: f.created_at || ""
+      }));
+    }
+
+    async function pemakaian() {
+      const res = await panggil("/rest/v1/rpc/" + rpcPemakaian, { method: "POST", headers: await kepala("application/json"), body: JSON.stringify(paramPemakaian), cache: "no-store" });
+      if (!res.ok) throw pesanGalat(res, "Pemakaian gagal dimuat");
+      const r = (await res.json())[0] || {};
+      return { jumlah: r.jumlah || 0, byte: Number(r.byte) || 0, batasJumlah: r.batas_jumlah || BATAS_JUMLAH, batasByte: r.batas_byte || BATAS_BYTE };
+    }
+
+    async function tandaiTangan(namaList) {
+      if (!namaList.length) return {};
+      const uid = folder();
+      const res = await panggil("/storage/v1/object/sign/" + BUCKET, {
+        method: "POST", headers: await kepala("application/json"),
+        body: JSON.stringify({ expiresIn: UMUR_TAUTAN, paths: namaList.map((n) => uid + "/" + n) }), cache: "no-store"
+      });
+      if (!res.ok) throw pesanGalat(res, "Tautan gambar gagal dibuat");
+      const hasil = {};
+      (await res.json()).forEach((r) => {
+        if (r && r.signedURL && !r.error) {
+          const nama = String(r.path || "").split("/").pop();
+          const url = dasar() + "/storage/v1" + r.signedURL;
+          if (POLA_NAMA.test(nama)) hasil[nama] = url;
+        }
+      });
+      return hasil;
+    }
+
+    // ---------- Cache untuk pratinjau ----------
+    const kas = { nama: [], tautan: {}, kadaluarsa: 0, dimuat: false, sedang: null };
+    const peta = () => kas.tautan;
+    const perluMuat = () => !kas.dimuat || Date.now() > kas.kadaluarsa - 5 * 60 * 1000;
+
+    function segarkan() {
+      if (kas.sedang) return kas.sedang;
+      kas.sedang = (async () => {
+        try {
+          const d = await daftar();
+          kas.tautan = await tandaiTangan(d.map((x) => x.nama));
+          kas.nama = d.map((x) => x.nama);
+          kas.kadaluarsa = Date.now() + UMUR_TAUTAN * 1000;
+          kas.dimuat = true;
+          return d;
+        } finally { kas.sedang = null; }
+      })();
+      return kas.sedang;
+    }
+
+    function siapkan() {
+      const a = akun();
+      if (!a || !a.pengguna() || !perluMuat()) return null;
+      return segarkan().catch(() => null);
+    }
+
+    // ---------- Unggah dan hapus ----------
+    async function unggah(berkas) {
+      const hasil = await kecilkan(berkas);
+      const ada = new Set((await daftar()).map((x) => x.nama));
+      const nama = namaUnik(namaAman(berkas.name, TIPE[hasil.tipe]), ada);
+      const uid = folder();
+      const res = await panggil("/storage/v1/object/" + BUCKET + "/" + uid + "/" + nama, {
+        method: "POST", headers: Object.assign(await kepala(hasil.tipe), { "x-upsert": "false", "cache-control": "max-age=3600" }), body: hasil.blob
+      });
+      if (!res.ok) throw pesanGalat(res, "Unggah gagal");
+      kas.dimuat = false;
+      return { nama, dikecilkan: hasil.diubah, ukuran: hasil.blob.size, ukuranAsal: berkas.size };
+    }
+
+    async function hapus(nama) {
+      if (!POLA_NAMA.test(nama)) throw galat("Nama tidak valid.", "nama");
+      const uid = folder();
+      const res = await panggil("/storage/v1/object/" + BUCKET + "/" + uid + "/" + nama, { method: "DELETE", headers: await kepala() });
+      if (!res.ok) throw pesanGalat(res, "Hapus gagal");
+      kas.dimuat = false;
+    }
+
+    return {
+      BATAS_BYTE, BATAS_JUMLAH, POLA_NAMA,
+      daftar, pemakaian, unggah, hapus, segarkan, siapkan, peta, tandaiTangan
+    };
   }
 
-  async function panggil(path, opsi) {
-    let res;
-    try { res = await fetch(dasar() + path, opsi); }
-    catch (e) { throw galat("Tidak bisa terhubung ke server. Periksa internet lalu coba lagi.", "jaringan"); }
-    return res;
+  const pribadi = buat(() => akun().pengguna().id, "aset_pemakaian", {});
+  const kelompokDikenal = {};
+  // Layanan untuk satu kelompok: jalur k-<id-kelompok>/<nama>. Lihat supabase/aset-kelompok.sql.
+  function kelompok(id) {
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(id))) throw galat("Kelompok tidak valid.", "kelompok");
+    const k = String(id).toLowerCase();
+    if (!kelompokDikenal[k]) kelompokDikenal[k] = buat(() => "k-" + k, "aset_kelompok_pemakaian", { p_kelompok: k });
+    return kelompokDikenal[k];
   }
 
-  function pesanGalat(res, awal) {
-    if (res.status === 401) return galat("Sesi habis. Masuk lagi lalu coba lagi.", "belum-masuk");
-    if (res.status === 403) return galat("Hanya anggota yang sudah disetujui yang bisa menyimpan gambar.", "izin");
-    if (res.status === 409) return galat("Nama file itu sudah dipakai. Ganti nama berkasnya.", "nama");
-    if (res.status === 413) return galat("Berkas terlalu besar.", "ukuran");
-    if (res.status === 400) return galat("Gambar ditolak server. Kemungkinan jumlah gambarmu sudah penuh (" + BATAS_JUMLAH + ") atau formatnya tidak diizinkan.", "ditolak");
-    return galat(awal + " (kode " + res.status + ").", "server");
-  }
-
-  async function daftar() {
-    const uid = akun().pengguna().id;
-    const res = await panggil("/storage/v1/object/list/" + BUCKET, {
-      method: "POST", headers: await kepala("application/json"),
-      body: JSON.stringify({ prefix: uid, limit: 100, offset: 0, sortBy: { column: "name", order: "asc" } }), cache: "no-store"
-    });
-    if (!res.ok) throw pesanGalat(res, "Daftar aset gagal dimuat");
-    const data = await res.json();
-    return (Array.isArray(data) ? data : []).filter((f) => f && POLA_NAMA.test(f.name || "")).map((f) => ({
-      nama: f.name, ukuran: Number(f.metadata && f.metadata.size) || 0, dibuat: f.created_at || ""
-    }));
-  }
-
-  async function pemakaian() {
-    const res = await panggil("/rest/v1/rpc/aset_pemakaian", { method: "POST", headers: await kepala("application/json"), body: "{}", cache: "no-store" });
-    if (!res.ok) throw pesanGalat(res, "Pemakaian gagal dimuat");
-    const r = (await res.json())[0] || {};
-    return { jumlah: r.jumlah || 0, byte: Number(r.byte) || 0, batasJumlah: r.batas_jumlah || BATAS_JUMLAH, batasByte: r.batas_byte || BATAS_BYTE };
-  }
-
-  async function tandaiTangan(namaList) {
-    if (!namaList.length) return {};
-    const uid = akun().pengguna().id;
-    const res = await panggil("/storage/v1/object/sign/" + BUCKET, {
-      method: "POST", headers: await kepala("application/json"),
-      body: JSON.stringify({ expiresIn: UMUR_TAUTAN, paths: namaList.map((n) => uid + "/" + n) }), cache: "no-store"
-    });
-    if (!res.ok) throw pesanGalat(res, "Tautan gambar gagal dibuat");
-    const hasil = {};
-    (await res.json()).forEach((r) => {
-      if (r && r.signedURL && !r.error) {
-        const nama = String(r.path || "").split("/").pop();
-        const url = dasar() + "/storage/v1" + r.signedURL;
-        if (POLA_NAMA.test(nama)) hasil[nama] = url;
-      }
-    });
-    return hasil;
-  }
-
-  // ---------- Cache untuk pratinjau ----------
-  const kas = { nama: [], tautan: {}, kadaluarsa: 0, dimuat: false, sedang: null };
-  const peta = () => kas.tautan;
-  const perluMuat = () => !kas.dimuat || Date.now() > kas.kadaluarsa - 5 * 60 * 1000;
-
-  function segarkan() {
-    if (kas.sedang) return kas.sedang;
-    kas.sedang = (async () => {
-      try {
-        const d = await daftar();
-        kas.tautan = await tandaiTangan(d.map((x) => x.nama));
-        kas.nama = d.map((x) => x.nama);
-        kas.kadaluarsa = Date.now() + UMUR_TAUTAN * 1000;
-        kas.dimuat = true;
-        return d;
-      } finally { kas.sedang = null; }
-    })();
-    return kas.sedang;
-  }
-
-  function siapkan() {
-    const a = akun();
-    if (!a || !a.pengguna() || !perluMuat()) return null;
-    return segarkan().catch(() => null);
-  }
-
-  // ---------- Unggah dan hapus ----------
-  async function unggah(berkas) {
-    const hasil = await kecilkan(berkas);
-    const ada = new Set((await daftar()).map((x) => x.nama));
-    const nama = namaUnik(namaAman(berkas.name, TIPE[hasil.tipe]), ada);
-    const uid = akun().pengguna().id;
-    const res = await panggil("/storage/v1/object/" + BUCKET + "/" + uid + "/" + nama, {
-      method: "POST", headers: Object.assign(await kepala(hasil.tipe), { "x-upsert": "false", "cache-control": "max-age=3600" }), body: hasil.blob
-    });
-    if (!res.ok) throw pesanGalat(res, "Unggah gagal");
-    kas.dimuat = false;
-    return { nama, dikecilkan: hasil.diubah, ukuran: hasil.blob.size, ukuranAsal: berkas.size };
-  }
-
-  async function hapus(nama) {
-    if (!POLA_NAMA.test(nama)) throw galat("Nama tidak valid.", "nama");
-    const uid = akun().pengguna().id;
-    const res = await panggil("/storage/v1/object/" + BUCKET + "/" + uid + "/" + nama, { method: "DELETE", headers: await kepala() });
-    if (!res.ok) throw pesanGalat(res, "Hapus gagal");
-    kas.dimuat = false;
-  }
-
-  const api = {
-    BATAS_BYTE, BATAS_JUMLAH, POLA_NAMA,
-    daftar, pemakaian, unggah, hapus, segarkan, siapkan, peta, tandaiTangan,
-    _uji: { namaAman, namaUnik, kecilkan }
-  };
-  window.CodingSkanetraAset = api;
+  window.CodingSkanetraAset = Object.assign({}, pribadi, { kelompok, _uji: { namaAman, namaUnik, kecilkan } });
 })();

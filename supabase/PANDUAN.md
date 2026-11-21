@@ -169,3 +169,7 @@ Halaman pengelola: `pages/admin-aset.html` (tautan "Kelola aset" muncul di halam
 - Ukuran: maksimal 60.000 karakter per berkas (HTML + CSS + JS), 15 kerangka awal per tugas, 8 tugas belum diterima per kelompok. Teks kecil, jatah gratis Supabase sangat aman.
 - Keamanan: tabel `kelompok*`, `tugas_*`, `kerja_*`, dan `pengumpulan*` tidak bisa diakses langsung dari browser. Semua lewat fungsi database yang memeriksa keanggotaan, peran ketua, dan pemilik bagian.
 
+
+## Aset gambar kelompok (5.29.0)
+Jalankan `supabase/aset-kelompok.sql` di SQL Editor SESUDAH `aset.sql` dan `kelompok.sql`. Aman diulang.
+Uji dengan dua akun anggota satu kelompok: akun A mengunggah gambar lewat tombol **Aset** di editor kelompok, akun B harus bisa melihat dan menghapusnya. Akun yang bukan anggota kelompok tidak boleh melihatnya.
