@@ -1,9 +1,9 @@
-// Halaman detail tugas kelompok: penjelasan, bagian dan pemiliknya, anggota, kiriman, dan Submit.
+// Halaman detail tugas kelompok: penjelasan, berkas bersama, anggota, kiriman, dan Submit.
 (() => {
   "use strict";
   const K = window.CSKelompok;
   const $ = (id) => document.getElementById(id);
-  const { el, tombol, rpc, waktu, lencana, dialog, isian } = K;
+  const { el, tombol, rpc, waktu, lencana, dialog } = K;
 
   const id = new URLSearchParams(location.search).get("id") || "";
   let d = null; // hasil tugas_detail
@@ -19,8 +19,7 @@
     p.classList.toggle("galat", Boolean(galat));
   }
 
-  const ketua = () => d && d.peran === "ketua";
-  const anggota = () => d && (d.peran === "ketua" || d.peran === "anggota");
+    const anggota = () => d && (d.peran === "ketua" || d.peran === "anggota");
   const arsip = () => d && d.kelompok && d.kelompok.diarsipkan;
 
   async function muat() {
@@ -51,7 +50,7 @@
     $("kg-penjelasan").textContent = d.tugas.penjelasan || "Tidak ada penjelasan tambahan.";
     gambarSyarat($("kg-syarat"), d.syarat);
     gambarAksi();
-    gambarBagian();
+    gambarBerkas();
     gambarAnggota();
     gambarKiriman();
   }
@@ -90,43 +89,22 @@
     else pesanAksi("");
   }
 
-  function gambarBagian() {
+  // Seluruh kelompok mengerjakan satu berkas (HTML, CSS, JS) yang sama; isinya dikelola di editor.
+  function gambarBerkas() {
     const ul = $("kg-bagian");
     ul.textContent = "";
-    $("kg-bagian-baru").hidden = !(ketua() && !arsip());
-    $("kg-bagian-info").textContent = ketua() && !arsip()
-      ? "Kamu ketua: atur bagian, nama, urutan, dan siapa pemiliknya. Bagian Umum dipakai bersama."
-      : "Hanya pemilik bagian yang bisa mengubahnya. Ketua kelompok yang membagi bagian.";
-    d.bagian.forEach((b, i) => {
-      const li = el("li");
-      const info = el("span", "tg-info");
-      info.appendChild(el("strong", "", b.nama));
-      const pemilik = b.umum ? "Dipakai bersama (CSS dan JS umum)" : (b.pemilik_nama ? "Pemilik: " + b.pemilik_nama : "Belum ada pemilik (siapa saja boleh mengisi)");
-      info.appendChild(el("small", "", pemilik + " · versi " + b.versi));
-      if (b.petunjuk) info.appendChild(el("small", "", b.petunjuk));
-      li.appendChild(info);
-
-      if (ketua() && !arsip() && !b.umum) {
-        const aksi = el("div", "kg-bagian-aksi");
-        const naik = tombol("tg-btn", "Naik");
-        naik.disabled = i <= 1; // indeks 0 = Umum
-        naik.setAttribute("aria-label", "Naikkan bagian " + b.nama);
-        naik.addEventListener("click", () => geser(b, -1));
-        const turun = tombol("tg-btn", "Turun");
-        turun.disabled = i === d.bagian.length - 1;
-        turun.setAttribute("aria-label", "Turunkan bagian " + b.nama);
-        turun.addEventListener("click", () => geser(b, 1));
-        const ubah = tombol("tg-btn", "Ubah");
-        ubah.setAttribute("aria-label", "Ubah bagian " + b.nama);
-        ubah.addEventListener("click", () => bukaUbah(b));
-        const hapus = tombol("tg-btn bahaya", "Hapus");
-        hapus.setAttribute("aria-label", "Hapus bagian " + b.nama);
-        hapus.addEventListener("click", () => bukaHapus(b));
-        aksi.append(naik, turun, ubah, hapus);
-        li.appendChild(aksi);
-      }
-      ul.appendChild(li);
-    });
+    const b = d.bagian.find((x) => x.umum) || d.bagian[0];
+    $("kg-bagian-info").textContent = arsip()
+      ? "Kelompok ini diarsipkan, jadi berkas hanya bisa dibaca."
+      : "Semua anggota mengerjakan satu berkas yang sama di editor. Perubahan tersimpan otomatis dan hasilnya langsung tampil.";
+    if (!b) { ul.appendChild(el("li", "", "Berkas belum dibuat. Hubungi pengelola.")); return; }
+    const li = el("li");
+    const info = el("span", "tg-info");
+    info.appendChild(el("strong", "", "Berkas website kelompok"));
+    info.appendChild(el("small", "", "Versi " + b.versi + " · " + Math.max(1, Math.round((b.ukuran || 0) / 1024)) + " KB" +
+      (b.diubah ? " · terakhir diubah " + waktu(b.diubah) : "")));
+    li.appendChild(info);
+    ul.appendChild(li);
   }
 
   function gambarAnggota() {
@@ -166,64 +144,6 @@
         li.appendChild(c);
       }
       ul.appendChild(li);
-    });
-  }
-
-  // ---------- Aksi ketua ----------
-
-  async function geser(b, arah) {
-    try { await rpc("bagian_pindah", { p_bagian: b.id, p_arah: arah }); await muat(); }
-    catch (e) { pesanAksi(e.message, true); }
-  }
-
-  function bukaTambah() {
-    let nama;
-    dialog({
-      judul: "Bagian baru",
-      ok: "Tambah",
-      bangun: (isi) => {
-        isi.appendChild(el("p", "tg-sub", "Contoh: Header, Hero, Footer, Galeri."));
-        nama = isian(isi, "Nama bagian", "kg-f-nama", { maks: 40 });
-        setTimeout(() => nama.focus(), 50);
-      },
-      aksi: async () => { await rpc("bagian_tambah", { p_penugasan: id, p_nama: nama.value }); await muat(); }
-    });
-  }
-
-  function bukaUbah(b) {
-    let nama, pemilik;
-    dialog({
-      judul: "Ubah bagian",
-      bangun: (isi) => {
-        nama = isian(isi, "Nama bagian", "kg-f-nama", { maks: 40, nilai: b.nama });
-        isi.appendChild(el("label", "", "Pemilik bagian")).htmlFor = "kg-f-pemilik";
-        pemilik = el("select", "kg-teks");
-        pemilik.id = "kg-f-pemilik";
-        const kosong = el("option", "", "Belum ada pemilik (siapa saja boleh mengisi)");
-        kosong.value = "";
-        pemilik.appendChild(kosong);
-        d.anggota.forEach((a) => {
-          const o = el("option", "", K.nama(a) + " (@" + a.username + ")");
-          o.value = a.user_id;
-          pemilik.appendChild(o);
-        });
-        pemilik.value = b.pemilik || "";
-        isi.appendChild(pemilik);
-      },
-      aksi: async () => {
-        await rpc("bagian_ubah", { p_bagian: b.id, p_nama: nama.value, p_pemilik: pemilik.value || null });
-        await muat();
-      }
-    });
-  }
-
-  function bukaHapus(b) {
-    dialog({
-      judul: "Hapus bagian?",
-      ok: "Hapus",
-      bahaya: true,
-      bangun: (isi) => { isi.appendChild(el("p", "", "Bagian “" + b.nama + "” beserta kodenya akan dihapus dan tidak bisa dikembalikan.")); },
-      aksi: async () => { await rpc("bagian_hapus", { p_bagian: b.id }); await muat(); }
     });
   }
 
@@ -288,7 +208,6 @@
     if (!K.POLA_ID.test(id)) { pesan("Alamat halaman tidak lengkap. Buka tugas dari daftar Tugas Kelompok.", true); return; }
     const u = await K.wajibMasuk("kelompok");
     if (!u) return;
-    $("kg-bagian-baru").addEventListener("click", bukaTambah);
     try {
       await muat();
       pesan("");

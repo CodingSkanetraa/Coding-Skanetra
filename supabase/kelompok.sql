@@ -6,12 +6,13 @@
 -- Rancangan (sesuai rencana/assets-dan-kelompok.md, Bagian B):
 --   * Admin membentuk kelompok (maks 10 anggota, tepat 1 ketua) dan memberi tugas.
 --   * Tiap tugas punya syarat wajib/opsional dan (opsional) template bagian.
---   * Tiap kelompok punya satu proyek kerja per tugas, terbagi per BAGIAN
---     (header, hero, footer, ...) ditambah satu bagian bersama "Umum".
---     Tiap bagian menyimpan HTML, CSS, dan JS sendiri. Pratinjau menggabungkan semuanya.
---   * Ketua membagi bagian dan pemiliknya. Hanya pemilik (atau siapa saja untuk bagian
---     bersama / bagian tanpa pemilik) yang boleh menyimpan bagian itu.
---   * Simpan berversi: simpan ditolak bila versi dasar sudah berubah (bentrok).
+--   * Tiap kelompok punya SATU berkas kerja per tugas (HTML, CSS, JS) yang dikerjakan
+--     bersama, seperti editor web. Berkas itu disimpan sebagai satu baris kerja_bagian
+--     dengan umum = true. Semua anggota boleh mengubahnya.
+--   * Simpan berversi: simpan ditolak bila versi dasar sudah berubah (bentrok). Browser lalu
+--     menggabungkan otomatis perubahan teman (per baris) dan menyimpan lagi.
+--   * Kehadiran: berkas_sinkron() mencatat tab dan baris kursor tiap anggota dan mengembalikan
+--     siapa saja yang sedang aktif (20 detik terakhir), supaya terlihat siapa mengerjakan apa.
 --   * Submit membuat SNAPSHOT yang tidak bisa diubah. Alur status:
 --       dikirim -> diterima | perlu_revisi (| ditarik oleh anggota)
 --   * Tidak ada INSERT/UPDATE/DELETE langsung dari browser: semua lewat fungsi di bawah.
@@ -135,6 +136,17 @@ create table if not exists public.pengumpulan_cek (
   primary key (pengumpulan_id, syarat_id)
 );
 
+-- Siapa sedang mengerjakan apa: satu baris per anggota per tugas (diperbarui tiap beberapa detik).
+create table if not exists public.kerja_kehadiran (
+  penugasan_id uuid not null references public.tugas_penugasan(id) on delete cascade,
+  user_id      uuid not null references public.profil(id) on delete cascade,
+  tab          text not null default 'html' check (tab in ('html', 'css', 'js')),
+  baris        integer not null default 0 check (baris >= 0),
+  kolom        integer not null default 0 check (kolom >= 0),
+  diperbarui   timestamptz not null default now(),
+  primary key (penugasan_id, user_id)
+);
+
 -- Kunci semua tabel: tidak ada akses langsung dari browser.
 alter table public.kelompok            enable row level security;
 alter table public.kelompok_anggota    enable row level security;
@@ -147,10 +159,11 @@ alter table public.kerja_riwayat       enable row level security;
 alter table public.pengumpulan         enable row level security;
 alter table public.pengumpulan_catatan enable row level security;
 alter table public.pengumpulan_cek     enable row level security;
+alter table public.kerja_kehadiran     enable row level security;
 
 revoke all on public.kelompok, public.kelompok_anggota, public.tugas_kelompok, public.tugas_syarat,
   public.tugas_templat, public.tugas_penugasan, public.kerja_bagian, public.kerja_riwayat,
-  public.pengumpulan, public.pengumpulan_catatan, public.pengumpulan_cek from anon, authenticated;
+  public.pengumpulan, public.pengumpulan_catatan, public.pengumpulan_cek, public.kerja_kehadiran from anon, authenticated;
 
 -- ---------- 2. Fungsi bantu (internal, tidak bisa dipanggil dari browser) ---
 
@@ -254,13 +267,13 @@ begin
     return jsonb_build_object('versi', v_versi, 'diubah', now());
   end if;
 
-  -- Riwayat: simpan versi lama bila penyimpan berbeda dari penyimpan terakhir,
-  -- atau sudah lewat 5 menit dari catatan riwayat terakhir, atau dipaksa (pemulihan).
+  -- Riwayat: simpan versi lama bila sudah lewat 3 menit dari catatan riwayat terakhir
+  -- atau dipaksa (pemulihan). Dengan simpan otomatis oleh banyak orang, mencatat tiap simpan
+  -- akan menghabiskan jatah riwayat dalam hitungan menit.
   if p_paksa_riwayat
-     or v_oleh is distinct from v_uid
      or not exists (
        select 1 from public.kerja_riwayat r
-        where r.bagian_id = p_bagian and r.waktu > now() - interval '5 minutes'
+        where r.bagian_id = p_bagian and r.waktu > now() - interval '3 minutes'
      ) then
     insert into public.kerja_riwayat (bagian_id, versi, html, css, js, oleh)
     values (p_bagian, v_versi, v_html, v_css, v_js, v_oleh);
@@ -271,7 +284,7 @@ begin
          select r.id from public.kerja_riwayat r
           where r.bagian_id = p_bagian
           order by r.versi desc, r.id desc
-          limit 20
+          limit 30
        );
   end if;
 
@@ -625,7 +638,8 @@ begin
 end;
 $$;
 
--- Memberikan tugas ke kelompok: membuat proyek kerja (bagian "Umum" + bagian dari template).
+-- Memberikan tugas ke kelompok: membuat satu berkas kerja. Bila tugas punya template,
+-- isinya digabung menjadi kerangka awal berkas (tiap template diberi penanda komentar).
 create or replace function public.admin_tugas_beri(p_tugas uuid, p_kelompok uuid)
 returns uuid
 language plpgsql
@@ -666,14 +680,16 @@ begin
     raise exception 'Tugas ini sudah diberikan ke kelompok tersebut';
   end if;
 
-  insert into public.kerja_bagian (penugasan_id, urutan, nama, petunjuk, umum)
-  values (v_id, 0, 'Umum', 'CSS dan JavaScript bersama untuk seluruh halaman.', true);
-
-  insert into public.kerja_bagian (penugasan_id, urutan, nama, petunjuk, html, css, js)
-  select v_id, m.urutan, m.nama, m.petunjuk, m.html, m.css, m.js
+  insert into public.kerja_bagian (penugasan_id, urutan, nama, petunjuk, umum, html, css, js)
+  select v_id, 0, 'Berkas', 'Satu berkas website yang dikerjakan bersama.', true,
+         coalesce(string_agg(case when btrim(m.html) <> '' then '<!-- ' || replace(m.nama, '--', '-') || E' -->\n' || m.html end,
+                             E'\n\n' order by m.urutan, m.nama), ''),
+         coalesce(string_agg(case when btrim(m.css) <> '' then '/* ' || replace(m.nama, '*/', '') || E' */\n' || m.css end,
+                             E'\n\n' order by m.urutan, m.nama), ''),
+         coalesce(string_agg(case when btrim(m.js) <> '' then '// ' || replace(replace(m.nama, E'\n', ' '), E'\r', ' ') || E'\n' || m.js end,
+                             E'\n\n' order by m.urutan, m.nama), '')
     from public.tugas_templat m
-   where m.tugas_id = p_tugas
-   order by m.urutan;
+   where m.tugas_id = p_tugas;
 
   return v_id;
 end;
@@ -928,6 +944,7 @@ begin
                'id', b.id, 'nama', b.nama, 'petunjuk', b.petunjuk, 'umum', b.umum,
                'pemilik', b.pemilik, 'pemilik_nama', coalesce(pp.nama, pp.username),
                'versi', b.versi, 'diubah', b.diubah,
+               'diubah_oleh', (select coalesce(px.nama, px.username) from public.profil px where px.id = b.diubah_oleh),
                'html', b.html, 'css', b.css, 'js', b.js,
                'boleh_edit', public.kg_boleh_edit(b.id))
              order by b.umum desc, b.urutan, b.nama)
@@ -997,10 +1014,15 @@ begin
 end;
 $$;
 
--- ---------- 5. Pengelolaan bagian oleh KETUA ---------------------------------
-
-create or replace function public.bagian_tambah(p_penugasan uuid, p_nama text)
-returns uuid
+-- ---------- 5. Satu berkas bersama: sinkron dan kehadiran --------------------
+-- Dipanggil browser tiap beberapa detik. Menyimpan posisi kursor pemanggil, lalu mengembalikan
+--   versi terbaru berkas, isinya (hanya bila beda dari p_versi yang dipegang browser), dan
+--   daftar anggota lain yang aktif dalam 20 detik terakhir.
+-- Admin boleh memanggilnya untuk melihat (tidak tercatat sebagai kehadiran).
+create or replace function public.berkas_sinkron(
+  p_penugasan uuid, p_versi integer, p_tab text, p_baris integer, p_kolom integer
+)
+returns jsonb
 language plpgsql
 security definer
 set search_path = ''
@@ -1008,160 +1030,58 @@ as $$
 declare
   v_kel   uuid;
   v_arsip boolean;
-  v_nama  text := btrim(coalesce(p_nama, ''));
-  v_id    uuid;
-  v_n     integer;
-  v_urut  integer;
+  v_peran text;
+  v_b     public.kerja_bagian;
+  v_tab   text := case when p_tab in ('html', 'css', 'js') then p_tab else 'html' end;
 begin
+  if auth.uid() is null then
+    raise exception 'Belum masuk' using errcode = '28000';
+  end if;
   select tp.kelompok_id, k.diarsipkan into v_kel, v_arsip
-    from public.tugas_penugasan tp join public.kelompok k on k.id = tp.kelompok_id
+    from public.tugas_penugasan tp
+    join public.kelompok k on k.id = tp.kelompok_id
    where tp.id = p_penugasan;
   if not found then
     raise exception 'Tugas tidak ditemukan';
   end if;
-  if not exists (select 1 from public.kelompok_anggota a
-                  where a.kelompok_id = v_kel and a.user_id = auth.uid() and a.peran = 'ketua') then
-    raise exception 'Hanya ketua kelompok yang bisa mengatur bagian' using errcode = '42501';
+  select a.peran into v_peran
+    from public.kelompok_anggota a where a.kelompok_id = v_kel and a.user_id = auth.uid();
+  if v_peran is null and not public.adalah_admin() then
+    raise exception 'Kamu bukan anggota kelompok ini' using errcode = '42501';
   end if;
-  if v_arsip then
-    raise exception 'Kelompok ini sudah diarsipkan';
-  end if;
-  if char_length(v_nama) not between 1 and 40 then
-    raise exception 'Nama bagian 1 sampai 40 huruf';
-  end if;
-  select count(*), coalesce(max(b.urutan), 0) + 1 into v_n, v_urut
-    from public.kerja_bagian b where b.penugasan_id = p_penugasan;
-  if v_n >= 15 then
-    raise exception 'Maksimal 15 bagian per tugas';
-  end if;
-  insert into public.kerja_bagian (penugasan_id, urutan, nama) values (p_penugasan, v_urut, v_nama) returning id into v_id;
-  return v_id;
-end;
-$$;
 
--- Mengubah nama dan pemilik bagian. p_pemilik null = tanpa pemilik. Bagian "Umum" tidak bisa diubah.
-create or replace function public.bagian_ubah(p_bagian uuid, p_nama text, p_pemilik uuid)
-returns void
-language plpgsql
-security definer
-set search_path = ''
-as $$
-declare
-  v_kel   uuid;
-  v_arsip boolean;
-  v_umum  boolean;
-  v_nama  text := btrim(coalesce(p_nama, ''));
-begin
-  select tp.kelompok_id, k.diarsipkan, b.umum into v_kel, v_arsip, v_umum
-    from public.kerja_bagian b
-    join public.tugas_penugasan tp on tp.id = b.penugasan_id
-    join public.kelompok k on k.id = tp.kelompok_id
-   where b.id = p_bagian;
+  select * into v_b from public.kerja_bagian b where b.penugasan_id = p_penugasan and b.umum;
   if not found then
-    raise exception 'Bagian tidak ditemukan';
-  end if;
-  if not exists (select 1 from public.kelompok_anggota a
-                  where a.kelompok_id = v_kel and a.user_id = auth.uid() and a.peran = 'ketua') then
-    raise exception 'Hanya ketua kelompok yang bisa mengatur bagian' using errcode = '42501';
-  end if;
-  if v_arsip then
-    raise exception 'Kelompok ini sudah diarsipkan';
-  end if;
-  if v_umum then
-    raise exception 'Bagian Umum dipakai bersama dan tidak bisa diubah';
-  end if;
-  if char_length(v_nama) not between 1 and 40 then
-    raise exception 'Nama bagian 1 sampai 40 huruf';
-  end if;
-  if p_pemilik is not null and not exists (
-       select 1 from public.kelompok_anggota a where a.kelompok_id = v_kel and a.user_id = p_pemilik) then
-    raise exception 'Pemilik harus anggota kelompok ini';
-  end if;
-  update public.kerja_bagian set nama = v_nama, pemilik = p_pemilik where id = p_bagian;
-end;
-$$;
-
-create or replace function public.bagian_hapus(p_bagian uuid)
-returns void
-language plpgsql
-security definer
-set search_path = ''
-as $$
-declare
-  v_kel   uuid;
-  v_arsip boolean;
-  v_umum  boolean;
-begin
-  select tp.kelompok_id, k.diarsipkan, b.umum into v_kel, v_arsip, v_umum
-    from public.kerja_bagian b
-    join public.tugas_penugasan tp on tp.id = b.penugasan_id
-    join public.kelompok k on k.id = tp.kelompok_id
-   where b.id = p_bagian;
-  if not found then
-    raise exception 'Bagian tidak ditemukan';
-  end if;
-  if not exists (select 1 from public.kelompok_anggota a
-                  where a.kelompok_id = v_kel and a.user_id = auth.uid() and a.peran = 'ketua') then
-    raise exception 'Hanya ketua kelompok yang bisa mengatur bagian' using errcode = '42501';
-  end if;
-  if v_arsip then
-    raise exception 'Kelompok ini sudah diarsipkan';
-  end if;
-  if v_umum then
-    raise exception 'Bagian Umum tidak bisa dihapus';
-  end if;
-  delete from public.kerja_bagian where id = p_bagian;
-end;
-$$;
-
--- Menggeser urutan bagian: p_arah = -1 (naik) atau 1 (turun).
-create or replace function public.bagian_pindah(p_bagian uuid, p_arah integer)
-returns void
-language plpgsql
-security definer
-set search_path = ''
-as $$
-declare
-  v_kel   uuid;
-  v_arsip boolean;
-  v_pen   uuid;
-  v_umum  boolean;
-  v_ids   uuid[];
-  v_i     integer;
-  v_j     integer;
-  k       integer;
-begin
-  select tp.kelompok_id, k2.diarsipkan, b.penugasan_id, b.umum into v_kel, v_arsip, v_pen, v_umum
-    from public.kerja_bagian b
-    join public.tugas_penugasan tp on tp.id = b.penugasan_id
-    join public.kelompok k2 on k2.id = tp.kelompok_id
-   where b.id = p_bagian;
-  if not found then
-    raise exception 'Bagian tidak ditemukan';
-  end if;
-  if not exists (select 1 from public.kelompok_anggota a
-                  where a.kelompok_id = v_kel and a.user_id = auth.uid() and a.peran = 'ketua') then
-    raise exception 'Hanya ketua kelompok yang bisa mengatur bagian' using errcode = '42501';
-  end if;
-  if v_arsip or v_umum then
-    return;
+    raise exception 'Berkas kelompok belum dibuat';
   end if;
 
-  select array_agg(b.id order by b.urutan, b.nama, b.id) into v_ids
-    from public.kerja_bagian b where b.penugasan_id = v_pen and not b.umum;
-  v_i := array_position(v_ids, p_bagian);
-  if v_i is null then
-    return;
+  if v_peran is not null and not v_arsip then
+    insert into public.kerja_kehadiran (penugasan_id, user_id, tab, baris, kolom, diperbarui)
+    values (p_penugasan, auth.uid(), v_tab, greatest(coalesce(p_baris, 0), 0), greatest(coalesce(p_kolom, 0), 0), now())
+    on conflict (penugasan_id, user_id)
+    do update set tab = excluded.tab, baris = excluded.baris, kolom = excluded.kolom, diperbarui = excluded.diperbarui;
   end if;
-  v_j := v_i + case when p_arah < 0 then -1 else 1 end;
-  if v_j < 1 or v_j > array_length(v_ids, 1) then
-    return;
-  end if;
-  v_ids[v_i] := v_ids[v_j];
-  v_ids[v_j] := p_bagian;
-  for k in 1 .. array_length(v_ids, 1) loop
-    update public.kerja_bagian set urutan = k where id = v_ids[k];
-  end loop;
+
+  return jsonb_build_object(
+    'versi', v_b.versi,
+    'berkas', case when v_b.versi is distinct from p_versi then
+                jsonb_build_object(
+                  'id', v_b.id, 'versi', v_b.versi, 'html', v_b.html, 'css', v_b.css, 'js', v_b.js,
+                  'diubah', v_b.diubah,
+                  'diubah_oleh', (select coalesce(p.nama, p.username) from public.profil p where p.id = v_b.diubah_oleh))
+              end,
+    'aktif', coalesce((
+      select jsonb_agg(
+               jsonb_build_object('user_id', h.user_id, 'username', p.username, 'nama', p.nama,
+                                  'tab', h.tab, 'baris', h.baris, 'kolom', h.kolom)
+               order by p.username)
+        from public.kerja_kehadiran h
+        join public.profil p on p.id = h.user_id
+       where h.penugasan_id = p_penugasan
+         and h.user_id <> auth.uid()
+         and h.diperbarui > now() - interval '20 seconds'
+    ), '[]'::jsonb)
+  );
 end;
 $$;
 
@@ -1206,12 +1126,13 @@ begin
     raise exception 'Tugas ini sudah diterima';
   end if;
 
+  -- Snapshot = isi berkas bersama saat ini. Bentuknya tetap {bagian: [...]} supaya kiriman lama
+  -- (yang punya beberapa bagian) dan kiriman baru bisa ditampilkan dengan kode yang sama.
   select jsonb_build_object('bagian', coalesce(
-           jsonb_agg(jsonb_build_object('nama', b.nama, 'umum', b.umum, 'html', b.html, 'css', b.css, 'js', b.js)
-                     order by b.umum desc, b.urutan, b.nama),
+           jsonb_agg(jsonb_build_object('nama', b.nama, 'umum', true, 'html', b.html, 'css', b.css, 'js', b.js)),
            '[]'::jsonb))
     into v_snap
-    from public.kerja_bagian b where b.penugasan_id = p_penugasan;
+    from public.kerja_bagian b where b.penugasan_id = p_penugasan and b.umum;
 
   select coalesce(max(g.nomor), 0) + 1 into v_nomor from public.pengumpulan g where g.penugasan_id = p_penugasan;
 
@@ -1328,10 +1249,7 @@ revoke all on function
   public.bagian_simpan(uuid, integer, text, text, text),
   public.bagian_riwayat(uuid),
   public.bagian_pulihkan(uuid, bigint, integer),
-  public.bagian_tambah(uuid, text),
-  public.bagian_ubah(uuid, text, uuid),
-  public.bagian_hapus(uuid),
-  public.bagian_pindah(uuid, integer),
+  public.berkas_sinkron(uuid, integer, text, integer, integer),
   public.pengumpulan_kirim(uuid),
   public.pengumpulan_tarik(uuid),
   public.pengumpulan_detail(uuid)
@@ -1357,11 +1275,74 @@ grant execute on function
   public.bagian_simpan(uuid, integer, text, text, text),
   public.bagian_riwayat(uuid),
   public.bagian_pulihkan(uuid, bigint, integer),
-  public.bagian_tambah(uuid, text),
-  public.bagian_ubah(uuid, text, uuid),
-  public.bagian_hapus(uuid),
-  public.bagian_pindah(uuid, integer),
+  public.berkas_sinkron(uuid, integer, text, integer, integer),
   public.pengumpulan_kirim(uuid),
   public.pengumpulan_tarik(uuid),
   public.pengumpulan_detail(uuid)
 to authenticated;
+
+-- ---------- 8. Migrasi (aman diulang): lipat bagian lama menjadi satu berkas ----
+-- Versi sebelumnya membagi website per bagian. Kini cukup satu berkas bersama. Isi bagian lama
+-- ditambahkan ke berkas bersama (diberi penanda komentar), lalu bagian lamanya dihapus.
+-- Versi berkas sebelum digabung masuk Riwayat, jadi bisa dipulihkan. Bila hasil gabungan
+-- melebihi 60.000 karakter, penugasan itu dilewati (bagian lama dibiarkan, tidak tampil di editor).
+do $$
+declare
+  r      record;
+  v_umum public.kerja_bagian;
+  v_h    text;
+  v_c    text;
+  v_j    text;
+  v_nh   text;
+  v_nc   text;
+  v_nj   text;
+begin
+  for r in select distinct b.penugasan_id from public.kerja_bagian b where not b.umum loop
+    select * into v_umum from public.kerja_bagian b where b.penugasan_id = r.penugasan_id and b.umum for update;
+    if not found then
+      insert into public.kerja_bagian (penugasan_id, urutan, nama, petunjuk, umum)
+      values (r.penugasan_id, 0, 'Berkas', 'Satu berkas website yang dikerjakan bersama.', true)
+      returning * into v_umum;
+    end if;
+
+    select
+      coalesce(string_agg(case when btrim(b.html) <> '' then '<!-- ' || replace(b.nama, '--', '-') || E' -->\n' || b.html end,
+                          E'\n\n' order by b.urutan, b.nama), ''),
+      coalesce(string_agg(case when btrim(b.css) <> '' then '/* ' || replace(b.nama, '*/', '') || E' */\n' || b.css end,
+                          E'\n\n' order by b.urutan, b.nama), ''),
+      coalesce(string_agg(case when btrim(b.js) <> '' then '// ' || replace(replace(b.nama, E'\n', ' '), E'\r', ' ') || E'\n' || b.js end,
+                          E'\n\n' order by b.urutan, b.nama), '')
+      into v_h, v_c, v_j
+      from public.kerja_bagian b
+     where b.penugasan_id = r.penugasan_id and not b.umum;
+
+    v_nh := v_umum.html || case when btrim(v_umum.html) <> '' and v_h <> '' then E'\n\n' else '' end || v_h;
+    v_nc := v_umum.css  || case when btrim(v_umum.css)  <> '' and v_c <> '' then E'\n\n' else '' end || v_c;
+    v_nj := v_umum.js   || case when btrim(v_umum.js)   <> '' and v_j <> '' then E'\n\n' else '' end || v_j;
+
+    if char_length(v_nh) + char_length(v_nc) + char_length(v_nj) > 60000 then
+      raise notice 'Penugasan % dilewati: gabungan bagian lebih dari 60.000 karakter', r.penugasan_id;
+      continue;
+    end if;
+
+    if v_h <> '' or v_c <> '' or v_j <> '' then
+      insert into public.kerja_riwayat (bagian_id, versi, html, css, js, oleh)
+      values (v_umum.id, v_umum.versi, v_umum.html, v_umum.css, v_umum.js, v_umum.diubah_oleh);
+      update public.kerja_bagian
+         set html = v_nh, css = v_nc, js = v_nj, versi = versi + 1, diubah = now()
+       where id = v_umum.id;
+    end if;
+    delete from public.kerja_bagian where penugasan_id = r.penugasan_id and not umum;
+  end loop;
+
+  update public.kerja_bagian
+     set nama = 'Berkas', petunjuk = 'Satu berkas website yang dikerjakan bersama.'
+   where umum and (nama <> 'Berkas' or petunjuk <> 'Satu berkas website yang dikerjakan bersama.');
+end;
+$$;
+
+-- Fungsi pembagian bagian tidak dipakai lagi.
+drop function if exists public.bagian_tambah(uuid, text);
+drop function if exists public.bagian_ubah(uuid, text, uuid);
+drop function if exists public.bagian_hapus(uuid);
+drop function if exists public.bagian_pindah(uuid, integer);

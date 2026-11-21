@@ -99,9 +99,45 @@
 
 @media (min-width: 900px) {
   .kg-ed-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
-  .kg-iframe, .kg-kode, .kg-cm .CodeMirror { height: 560px; }
+  .kg-cm .CodeMirror { height: 580px; }
+  .kg-iframe, .kg-kode { height: 430px; }
 }
 @media (max-width: 720px) {
-  .kg-iframe, .kg-kode { height: 380px; }
+  .kg-iframe, .kg-kode { height: 300px; }
   .kg-cm .CodeMirror { height: 380px; }
 }
+
+/* Satu berkas bersama: siapa mengerjakan apa. Tiap anggota punya warna (kelas kg-w0 sampai kg-w9). */
+.kg-w0 { --w: #4cc9f0; } .kg-w1 { --w: #f72585; } .kg-w2 { --w: #ffb703; } .kg-w3 { --w: #80ed99; } .kg-w4 { --w: #b388ff; }
+.kg-w5 { --w: #ff7a59; } .kg-w6 { --w: #2ec4b6; } .kg-w7 { --w: #e9c46a; } .kg-w8 { --w: #90a4ff; } .kg-w9 { --w: #ff99c8; }
+.kg-aktif { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.kg-orang { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border: 1px solid var(--border); border-radius: 999px; background: var(--card-background); color: var(--muted); font-size: .84rem; opacity: .65; }
+.kg-orang.aktif { opacity: 1; color: var(--text); border-color: color-mix(in srgb, var(--w) 60%, var(--border)); }
+.kg-orang small { color: var(--muted); font-size: .76rem; }
+.kg-titik { display: inline-block; flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--w); }
+.kg-orang:not(.aktif) .kg-titik { background: transparent; box-shadow: inset 0 0 0 2px var(--w); }
+.kg-tab-btn .kg-titik { width: 8px; height: 8px; margin-left: 6px; vertical-align: middle; }
+.kg-cm .kg-kursor { position: relative; display: inline-block; width: 0; height: 1.2em; margin-left: -1px; border-left: 2px solid var(--w); vertical-align: text-bottom; }
+.kg-cm .kg-kursor-nama { position: absolute; bottom: 100%; left: -2px; z-index: 5; padding: 0 5px; border-radius: 4px 4px 4px 0; background: var(--w); color: #111; font: 600 .68rem/1.5 system-ui, sans-serif; white-space: nowrap; pointer-events: none; }
+.kg-garis-w0 { background: rgb(76 201 240 / 14%); } .kg-garis-w1 { background: rgb(247 37 133 / 14%); } .kg-garis-w2 { background: rgb(255 183 3 / 14%); }
+.kg-garis-w3 { background: rgb(128 237 153 / 14%); } .kg-garis-w4 { background: rgb(179 136 255 / 14%); } .kg-garis-w5 { background: rgb(255 122 89 / 14%); }
+.kg-garis-w6 { background: rgb(46 196 182 / 14%); } .kg-garis-w7 { background: rgb(233 196 106 / 14%); } .kg-garis-w8 { background: rgb(144 164 255 / 14%); }
+.kg-garis-w9 { background: rgb(255 153 200 / 14%); }
+.kg-kanan { margin-left: auto; }
+
+/* Console di bawah hasil */
+.kg-console { margin-top: 8px; border: 1px solid var(--border); border-radius: 12px; background: var(--background); overflow: hidden; }
+.kg-console[hidden] { display: none; }
+.kg-console-kepala { display: flex; align-items: center; justify-content: space-between; padding: 5px 10px; border-bottom: 1px solid var(--border); color: var(--muted); font-size: .8rem; }
+.kg-console-kepala .kg-tab-btn { min-height: 28px; padding: 3px 10px; font-size: .78rem; }
+.kg-console-isi { height: 110px; overflow: auto; padding: 6px 10px; font: .78rem/1.5 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+.kg-console-isi:empty::before { content: "Belum ada output. console.log dan error JavaScript muncul di sini."; color: var(--muted); }
+.kg-console-baris { padding: 1px 0; white-space: pre-wrap; overflow-wrap: anywhere; border-bottom: 1px dashed color-mix(in srgb, var(--border) 60%, transparent); }
+.kg-console-baris.warn { color: var(--warning, #f0d77a); }
+.kg-console-baris.error { color: var(--danger, #ff8a80); }
+
+/* Hasil diperbesar memenuhi layar (Esc untuk kembali) */
+.kg-ed-kolom.penuh { position: fixed; inset: 0; z-index: 200; display: flex; flex-direction: column; padding: 12px; background: var(--background); }
+.kg-ed-kolom.penuh .kg-iframe, .kg-ed-kolom.penuh .kg-kode { flex: 1 1 auto; height: auto; min-height: 0; }
+.kg-ed-kolom.penuh .kg-console-isi { height: 90px; }
+body.kg-tanpa-gulir { overflow: hidden; }

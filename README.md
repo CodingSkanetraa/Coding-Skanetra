@@ -156,4 +156,4 @@ Lihat berkas `LICENSE` untuk ketentuan penggunaan, penyalinan, modifikasi, dan d
 
 ## Proyek Kelompok
 
-Anggota mengerjakan satu website bersama, dibagi per bagian, lalu mengirimnya ke pengelola untuk ditinjau. Pemasangan dan alur: lihat `supabase/PANDUAN.md` bagian "Proyek Kelompok" dan `supabase/kelompok.sql`.
+Anggota mengerjakan satu website bersama di satu editor (satu berkas HTML, CSS, JS yang sama, seperti Editor Web). Simpan otomatis, perubahan teman digabung otomatis per baris, dan terlihat siapa sedang mengerjakan apa. Hasilnya lalu dikirim ke pengelola untuk ditinjau. Pemasangan dan alur: lihat `supabase/PANDUAN.md` bagian "Proyek Kelompok" dan `supabase/kelompok.sql`.

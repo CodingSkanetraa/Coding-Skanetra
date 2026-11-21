@@ -1,4 +1,4 @@
-// Halaman pengelola Proyek Kelompok: kelompok dan anggotanya, tugas (syarat + template), pemberian tugas,
+// Halaman pengelola Proyek Kelompok: kelompok dan anggotanya, tugas (syarat + kerangka awal), pemberian tugas,
 // dan daftar kiriman yang perlu ditinjau.
 (() => {
   "use strict";
@@ -177,7 +177,7 @@
       const li = el("li");
       const kepala = el("div", "tg-baris-aksi");
       kepala.appendChild(el("h3", "", t.judul));
-      kepala.appendChild(el("span", "tg-meta", (t.tenggat ? "Tenggat " + waktu(t.tenggat) : "Tanpa tenggat") + " · " + t.syarat.length + " syarat · " + t.templat.length + " bagian template"));
+      kepala.appendChild(el("span", "tg-meta", (t.tenggat ? "Tenggat " + waktu(t.tenggat) : "Tanpa tenggat") + " · " + t.syarat.length + " syarat · " + t.templat.length + " kerangka awal"));
       li.appendChild(kepala);
 
       const chips = el("div", "kg-chips-kecil");
@@ -248,15 +248,15 @@
         nama.type = "text";
         nama.maxLength = 40;
         nama.value = m.nama || "";
-        nama.placeholder = "Nama bagian (mis. Header)";
-        nama.setAttribute("aria-label", "Nama bagian template " + (i + 1));
+        nama.placeholder = "Nama kerangka (mis. Header)";
+        nama.setAttribute("aria-label", "Nama kerangka awal " + (i + 1));
         nama.addEventListener("input", () => { m.nama = nama.value; });
         const pet = el("input", "kg-teks");
         pet.type = "text";
         pet.maxLength = 500;
         pet.value = m.petunjuk || "";
-        pet.placeholder = "Petunjuk untuk pemegang bagian (opsional)";
-        pet.setAttribute("aria-label", "Petunjuk bagian " + (i + 1));
+        pet.placeholder = "Catatan untuk kelompok (opsional, tidak masuk ke kode)";
+        pet.setAttribute("aria-label", "Catatan kerangka " + (i + 1));
         pet.addEventListener("input", () => { m.petunjuk = pet.value; });
         const det = el("details");
         det.appendChild(el("summary", "", "Kerangka kode awal (opsional)"));
@@ -267,11 +267,11 @@
           ta.spellcheck = false;
           ta.value = m[k] || "";
           ta.placeholder = k.toUpperCase();
-          ta.setAttribute("aria-label", "Kerangka " + k.toUpperCase() + " bagian " + (i + 1));
+          ta.setAttribute("aria-label", "Kerangka " + k.toUpperCase() + " kerangka " + (i + 1));
           ta.addEventListener("input", () => { m[k] = ta.value; });
           det.appendChild(ta);
         });
-        const hapus = tombol("tg-btn bahaya", "Hapus bagian ini");
+        const hapus = tombol("tg-btn bahaya", "Hapus kerangka ini");
         hapus.addEventListener("click", () => { templat.splice(i, 1); gambarTemplat(); });
         blok.append(nama, pet, det, hapus);
         wTemplat.appendChild(blok);
@@ -292,10 +292,10 @@
         tambahS.addEventListener("click", () => { if (syarat.length < 30) { syarat.push({ teks: "", wajib: true }); gambarSyarat(); } });
         isi.appendChild(tambahS);
 
-        isi.appendChild(el("label", "", "Template bagian (opsional, maksimal 14). Dipakai saat tugas diberikan; kelompok yang sudah mengerjakan tidak berubah."));
+        isi.appendChild(el("label", "", "Kerangka awal (opsional, maksimal 14). Saat tugas diberikan, semua kerangka digabung menjadi satu berkas awal (HTML, CSS, JS) yang dikerjakan bersama; kelompok yang sudah mengerjakan tidak berubah."));
         wTemplat = el("div");
         isi.appendChild(wTemplat);
-        const tambahT = tombol("tg-btn", "+ Bagian template");
+        const tambahT = tombol("tg-btn", "+ Kerangka awal");
         tambahT.addEventListener("click", () => { if (templat.length < 14) { templat.push({ nama: "", petunjuk: "", html: "", css: "", js: "" }); gambarTemplat(); } });
         isi.appendChild(tambahT);
         gambarSyarat();
@@ -350,7 +350,7 @@
         const sumber = k ? tugas.map((x) => ({ id: x.id, teks: x.judul })) : kelompok.filter((x) => !x.diarsipkan).map((x) => ({ id: x.id, teks: x.nama }));
         sumber.forEach((x) => { const o = el("option", "", x.teks); o.value = x.id; pilih.appendChild(o); });
         isi.appendChild(pilih);
-        isi.appendChild(el("p", "tg-sub", "Kelompok mendapat satu proyek kerja baru (bagian Umum + bagian dari template). Maksimal 8 tugas yang belum diterima per kelompok."));
+        isi.appendChild(el("p", "tg-sub", "Kelompok mendapat satu berkas kerja baru (berisi kerangka awal tugas bila ada). Maksimal 8 tugas yang belum diterima per kelompok."));
       },
       aksi: async () => {
         if (!pilih.value) throw new Error("Belum ada pilihan yang tersedia.");

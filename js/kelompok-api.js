@@ -1,7 +1,8 @@
 // Proyek Kelompok: fungsi bersama untuk halaman anggota dan pengelola.
 //   * rpc()      : memanggil fungsi database (supabase/kelompok.sql) dengan token login.
-//   * dokumen()  : menggabungkan semua bagian menjadi satu halaman utuh untuk pratinjau iframe.
-//   * kode()     : tampilan "kode utuh" (hanya baca) dengan penanda tiap bagian.
+//   * rakit()/dokumen() : merakit HTML, CSS, dan JS menjadi satu halaman utuh untuk pratinjau iframe.
+//   * kode()     : "kode utuh" (hanya baca): satu berkas HTML lengkap yang bisa disalin.
+//   * bukaDiTab(): membuka hasil di tab sendiri.
 // Semua teks dari server hanya dipasang lewat textContent (tidak lewat innerHTML).
 (() => {
   "use strict";
@@ -82,48 +83,175 @@
     return u;
   }
 
-  // ---------- Menggabungkan bagian ----------
+  // ---------- Merakit halaman dari HTML, CSS, dan JS ----------
 
   const amanStyle = (s) => String(s || "").replace(/<\/style/gi, "<\\/style");
   const amanSkrip = (s) => String(s || "").replace(/<\/script/gi, "<\\/script");
+  const adaIsi = (s) => String(s == null ? "" : s).trim() !== "";
 
-  // bagian: [{nama, umum, html, css, js}] sudah berurutan (Umum lebih dulu).
+  // Dipasang paling awal di halaman pratinjau: penyimpanan sementara (iframe tanpa asal tidak boleh memakai
+  // localStorage), console yang diteruskan ke editor, dan tautan jangkar (#bagian) yang tidak jalan di srcdoc.
+  // __OFFSET__ diganti jumlah baris sebelum JS pengguna, supaya nomor baris error sesuai tab JS.
+  const SKRIP_AWAL = `(function () {
+  try { void window.localStorage; } catch (e) {
+    var d = {};
+    var pen = {
+      getItem: function (k) { return Object.prototype.hasOwnProperty.call(d, k) ? d[k] : null; },
+      setItem: function (k, v) { d[k] = String(v); },
+      removeItem: function (k) { delete d[k]; },
+      clear: function () { d = {}; },
+      key: function (i) { return Object.keys(d)[i] || null; }
+    };
+    Object.defineProperty(pen, "length", { get: function () { return Object.keys(d).length; } });
+    ["localStorage", "sessionStorage"].forEach(function (n) {
+      try { Object.defineProperty(window, n, { configurable: true, get: function () { return pen; } }); } catch (x) {}
+    });
+  }
+  var OFFSET = __OFFSET__;
+  var GULIR = __GULIR__;
+  if (GULIR) window.addEventListener("load", function () { window.scrollTo(0, GULIR); });
+  var tungguGulir = null;
+  window.addEventListener("scroll", function () {
+    if (tungguGulir) return;
+    tungguGulir = setTimeout(function () {
+      tungguGulir = null;
+      try { parent.postMessage({ kg: "gulir", y: window.scrollY }, "*"); } catch (e) {}
+    }, 200);
+  });
+  function teks(v) {
+    if (typeof v === "string") return v;
+    if (v instanceof Error) return v.name + ": " + v.message;
+    if (typeof v === "undefined") return "undefined";
+    if (typeof v === "function") return "[fungsi " + (v.name || "") + "]";
+    try { var s = JSON.stringify(v); return s === undefined ? String(v) : s; } catch (e) { return String(v); }
+  }
+  function kirim(jenis, isi) { try { parent.postMessage({ kg: "console", jenis: jenis, isi: isi }, "*"); } catch (e) {} }
+  ["log", "info", "warn", "error"].forEach(function (n) {
+    var asli = console[n];
+    console[n] = function () {
+      kirim(n, Array.prototype.map.call(arguments, teks).join(" "));
+      try { asli.apply(console, arguments); } catch (e) {}
+    };
+  });
+  window.addEventListener("error", function (e) {
+    var tempat = e.lineno ? (e.lineno > OFFSET ? " (JS baris " + (e.lineno - OFFSET) + ")" : " (baris " + e.lineno + ")") : "";
+    kirim("error", (e.message || "Terjadi kesalahan") + tempat);
+  });
+  window.addEventListener("unhandledrejection", function (e) {
+    var r = e.reason;
+    kirim("error", "Promise ditolak: " + (r && r.message ? r.message : teks(r)));
+  });
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+    if (!a) return;
+    var h = a.getAttribute("href");
+    if (!h || h.charAt(0) !== "#") return;
+    e.preventDefault();
+    var id = ""; try { id = decodeURIComponent(h.slice(1)); } catch (x) { id = h.slice(1); }
+    var t = id ? (document.getElementById(id) || document.getElementsByName(id)[0]) : null;
+    if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+    else if (!id || id === "top") window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+})();`;
+
+  // Merakit satu halaman utuh dari tiga tab, sama seperti editor web.
+  //   * HTML berupa potongan (tanpa <html>)  : dibungkus kerangka halaman.
+  //   * HTML berupa dokumen lengkap          : CSS disisipkan di <head>, JS di akhir <body>.
+  //   * polos = true                         : tanpa skrip bantu; dipakai untuk "Kode utuh" (satu berkas siap salin).
+  //   * gulir                                : posisi gulir (px) yang dipulihkan setelah halaman dimuat ulang.
+  function rakit(html, css, js, polos, gulir) {
+    const PENANDA = "\u0001KGJS\u0001";
+    let dok = String(html == null ? "" : html);
+    const gaya = adaIsi(css) ? "<style>\n" + amanStyle(css) + "\n</style>\n" : "";
+    const skripAwal = polos ? "" : "<script>\n" + SKRIP_AWAL + "\n</script>\n";
+    const skripAkhir = adaIsi(js) ? "<script>\n" + PENANDA + "\n</script>\n" : "";
+
+    if (!/<html[\s>]/i.test(dok)) {
+      dok = "<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n<meta charset=\"UTF-8\">\n" +
+        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+        skripAwal + gaya + "</head>\n<body>\n" + dok + "\n" + skripAkhir + "</body>\n</html>";
+    } else {
+      const kepala = /<head(\s[^>]*)?>/i;
+      const tutupKepala = /<\/head\s*>/i;
+      if (kepala.test(dok)) {
+        const adaTutup = tutupKepala.test(dok);
+        dok = dok.replace(kepala, (m) => m + "\n" + skripAwal + (adaTutup ? "" : gaya));
+        if (adaTutup) dok = dok.replace(tutupKepala, (m) => gaya + m);
+      } else {
+        dok = dok.replace(/<html(\s[^>]*)?>/i, (m) => m + "\n<head>\n<meta charset=\"UTF-8\">\n" + skripAwal + gaya + "</head>");
+      }
+      if (skripAkhir) {
+        if (/<\/body\s*>/i.test(dok)) dok = dok.replace(/<\/body\s*>/i, (m) => skripAkhir + m);
+        else if (/<\/html\s*>/i.test(dok)) dok = dok.replace(/<\/html\s*>/i, (m) => skripAkhir + m);
+        else dok += "\n" + skripAkhir;
+      }
+    }
+
+    const i = dok.indexOf(PENANDA);
+    const offset = i >= 0 ? dok.slice(0, i).split("\n").length - 1 : 0;
+    dok = dok.replace("__OFFSET__", String(offset)).replace("__GULIR__", String(Math.max(0, Math.floor(Number(gulir) || 0))));
+    if (i >= 0) dok = dok.replace(PENANDA, () => amanSkrip(js));
+    return dok;
+  }
+
+  // bagian: [{nama, umum, html, css, js}]. Berkas bersama = satu elemen, dipakai apa adanya.
+  // Kiriman lama (beberapa bagian) digabung: Umum lebih dulu, tiap bagian diberi penanda komentar.
   function gabung(bagian) {
     const urut = (bagian || []).slice();
-    const html = urut.filter((b) => !b.umum && String(b.html || "").trim())
+    if (urut.length === 1) return { html: urut[0].html || "", css: urut[0].css || "", js: urut[0].js || "" };
+    const html = urut.filter((b) => adaIsi(b.html))
       .map((b) => "<!-- bagian: " + String(b.nama).replace(/--/g, "-") + " -->\n" + b.html + "\n<!-- /bagian -->").join("\n\n");
-    const css = urut.filter((b) => String(b.css || "").trim())
+    const css = urut.filter((b) => adaIsi(b.css))
       .map((b) => "/* bagian: " + String(b.nama).replace(/\*\//g, "") + " */\n" + b.css).join("\n\n");
-    const js = urut.filter((b) => String(b.js || "").trim())
+    const js = urut.filter((b) => adaIsi(b.js))
       .map((b) => "// bagian: " + String(b.nama).replace(/[\r\n]/g, " ") + "\n" + b.js).join("\n\n");
     return { html, css, js };
   }
 
-  // Menggulir tautan jangkar (#bagian) di dalam iframe srcdoc, sama seperti pratinjau editor.
-  const SKRIP_JANGKAR = "document.addEventListener('click',function(e){var a=e.target&&e.target.closest?e.target.closest('a[href^=\"#\"]'):null;" +
-    "if(!a)return;var id=a.getAttribute('href').slice(1);e.preventDefault();if(!id){window.scrollTo(0,0);return;}" +
-    "var t=document.getElementById(id)||document.getElementsByName(id)[0];if(t&&t.scrollIntoView)t.scrollIntoView();});";
-
-  function dokumen(bagian) {
+  function dokumen(bagian, gulir) {
     const g = gabung(bagian);
-    return "<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n<meta charset=\"UTF-8\">\n" +
-      "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<style>\n" + amanStyle(g.css) + "\n</style>\n</head>\n<body>\n" +
-      g.html + "\n<script>\n" + SKRIP_JANGKAR + "\n</script>\n<script>\n" + amanSkrip(g.js) + "\n</script>\n</body>\n</html>";
+    return rakit(g.html, g.css, g.js, false, gulir);
   }
 
-  // Satu teks utuh untuk dibaca (bukan untuk dijalankan).
+  // "Kode utuh": satu berkas HTML lengkap yang bisa disalin dan dijalankan di mana saja.
   function kode(bagian) {
     const g = gabung(bagian);
-    return "<!-- ===== HTML ===== -->\n" + (g.html || "(belum ada HTML)") +
-      "\n\n/* ===== CSS ===== */\n" + (g.css || "(belum ada CSS)") +
-      "\n\n// ===== JavaScript =====\n" + (g.js || "(belum ada JavaScript)");
+    if (!adaIsi(g.html) && !adaIsi(g.css) && !adaIsi(g.js)) return "(belum ada kode)";
+    return rakit(g.html, g.css, g.js, true);
   }
 
-  function pasangPratinjau(iframe, bagian) {
-    iframe.setAttribute("sandbox", "allow-scripts allow-modals allow-forms");
+  function pasangPratinjau(iframe, bagian, gulir) {
+    iframe.setAttribute("sandbox", "allow-scripts allow-modals allow-forms allow-popups");
     iframe.setAttribute("referrerpolicy", "no-referrer");
-    iframe.srcdoc = dokumen(bagian);
+    iframe.srcdoc = dokumen(bagian, gulir);
   }
+
+  const amanJson = (teks) => JSON.stringify(teks).replace(/</g, "\\u003c").replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029");
+
+  // Membuka hasil di tab sendiri (memenuhi layar seperti web sungguhan). Kode tetap berjalan di iframe
+  // terisolasi (tanpa allow-same-origin) di dalam halaman pembungkus, jadi kode kelompok tidak bisa
+  // menyentuh akun atau penyimpanan situs ini. Mengembalikan false bila tab diblokir browser.
+  let alamatTab = null;
+  function bukaDiTab(bagian) {
+    const dok = dokumen(bagian);
+    const g = gabung(bagian);
+    const cocok = /<title[^>]*>([^<]*)<\/title>/i.exec(g.html || "");
+    const judul = ((cocok && cocok[1].trim()) || "Pratinjau").replace(/[<>&"]/g, "").slice(0, 80);
+    const pembungkus = "<!DOCTYPE html>\n<html lang=\"id\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+      "<title>" + judul + " | Pratinjau CodingSkanetra</title>\n" +
+      "<style>html,body{margin:0;height:100%;background:#fff}iframe{display:block;width:100%;height:100%;border:0}</style></head>\n" +
+      "<body><iframe id=\"f\" title=\"Pratinjau\" sandbox=\"allow-scripts allow-modals allow-forms allow-popups\" referrerpolicy=\"no-referrer\"></iframe>\n" +
+      "<script>document.getElementById(\"f\").srcdoc = " + amanJson(dok) + ";</script></body></html>";
+    const alamat = URL.createObjectURL(new Blob([pembungkus], { type: "text/html;charset=utf-8" }));
+    const jendela = window.open(alamat, "codingskanetra-kelompok");
+    if (!jendela) { URL.revokeObjectURL(alamat); return false; }
+    const lama = alamatTab;
+    alamatTab = alamat;
+    if (lama) window.setTimeout(() => URL.revokeObjectURL(lama), 5000);
+    return true;
+  }
+  window.addEventListener("pagehide", () => { if (alamatTab) URL.revokeObjectURL(alamatTab); });
 
 
   // Dialog bersama (elemen #kg-dialog di halaman). opsi: { judul, ok, bahaya, bangun(isiEl), aksi() }
@@ -180,5 +308,5 @@
 
   const nama = (a) => (a && (a.nama || a.username)) ? String(a.nama || a.username) : "";
 
-  window.CSKelompok = { dialog, isian, el, tombol, waktu, STATUS, lencana, rpc, wajibMasuk, gabung, dokumen, kode, pasangPratinjau, POLA_ID, nama, akun };
+  window.CSKelompok = { dialog, isian, el, tombol, waktu, STATUS, lencana, rpc, wajibMasuk, gabung, rakit, dokumen, kode, pasangPratinjau, bukaDiTab, POLA_ID, nama, akun };
 })();

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Editor tugas kelompok: tiap anggota mengerjakan bagiannya, pratinjau menampilkan website utuh.">
+  <meta name="description" content="Editor tugas kelompok: satu website dikerjakan bersama, simpan otomatis, dan hasilnya langsung tampil.">
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#0b100e">
   <title>Editor Kelompok | CodingSkanetra</title>
@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="../css/app-mobile.css?v=1">
   <link rel="stylesheet" href="../css/navbar-akun.css?v=3">
   <link rel="stylesheet" href="../css/tantangan.css?v=1">
-  <link rel="stylesheet" href="../css/kelompok.css?v=1">
+  <link rel="stylesheet" href="../css/kelompok.css?v=2">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/theme/material-darker.min.css">
   <script src="../js/akun-config.js?v=1" defer></script>
@@ -34,8 +34,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/edit/closetag.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.20/addon/edit/closebrackets.min.js" defer></script>
   <script src="../js/tanpa-tempel.js?v=2" defer></script>
-  <script src="../js/kelompok-api.js?v=1" defer></script>
-  <script src="../js/kelompok-editor.js?v=1" defer></script>
+  <script src="../js/kelompok-gabung.js?v=1" defer></script>
+  <script src="../js/kelompok-api.js?v=2" defer></script>
+  <script src="../js/kelompok-editor.js?v=2" defer></script>
   <link rel="stylesheet" href="../css/poles.css?v=2">
 </head>
 <body class="tg-hal">
@@ -74,12 +75,12 @@
           <p class="tg-sub" id="kg-sub"></p>
         </div>
         <div class="kg-simpan-bar">
-          <span class="kg-simpan-status" id="kg-simpan-status" role="status" aria-live="polite">Tersimpan</span>
-          <button class="tg-btn utama" id="kg-simpan" type="button">Simpan</button>
+          <span class="kg-simpan-status" id="kg-simpan-status" role="status" aria-live="polite">Tersimpan otomatis</span>
+          <button class="tg-btn" id="kg-simpan" type="button" title="Perubahan sudah tersimpan otomatis. Tombol ini menyimpan seketika (Ctrl + S).">Simpan sekarang</button>
         </div>
       </header>
 
-      <div class="kg-chip-bungkus" id="kg-chip" role="tablist" aria-label="Bagian website"></div>
+      <div class="kg-aktif" id="kg-aktif" aria-label="Anggota kelompok dan siapa yang sedang mengerjakan"></div>
       <div class="kg-info-bagian" id="kg-info"></div>
 
       <div class="kg-ed-grid">
@@ -92,13 +93,22 @@
           </div>
           <div class="kg-cm" id="kg-cm"></div>
         </div>
-        <div class="kg-ed-kolom">
+        <div class="kg-ed-kolom" id="kg-hasil-kolom">
           <div class="kg-tab" role="tablist" aria-label="Tampilan website">
             <button type="button" role="tab" class="kg-tab-btn" data-v="hasil" aria-selected="true">Hasil utuh</button>
             <button type="button" role="tab" class="kg-tab-btn" data-v="kode" aria-selected="false">Kode utuh</button>
+            <button type="button" class="kg-tab-btn kg-kanan" id="kg-perbesar" aria-pressed="false">Perbesar</button>
+            <button type="button" class="kg-tab-btn" id="kg-tab-lain" title="Buka hasil di tab sendiri, memenuhi layar seperti web sungguhan">Tab lain</button>
           </div>
-          <iframe class="kg-iframe" id="kg-iframe" title="Pratinjau website utuh"></iframe>
+          <iframe class="kg-iframe" id="kg-iframe" title="Pratinjau website utuh" sandbox="allow-scripts allow-modals allow-forms allow-popups" referrerpolicy="no-referrer"></iframe>
           <pre class="kg-kode" id="kg-kode" hidden></pre>
+          <div class="kg-console" id="kg-console-bungkus">
+            <div class="kg-console-kepala">
+              <span>Console</span>
+              <button type="button" class="kg-tab-btn" id="kg-console-bersih">Bersihkan</button>
+            </div>
+            <div class="kg-console-isi" id="kg-console" role="log" aria-live="polite" aria-label="Output console JavaScript"></div>
+          </div>
         </div>
       </div>
     </section>

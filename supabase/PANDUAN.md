@@ -156,14 +156,16 @@ Halaman pengelola: `pages/admin-aset.html` (tautan "Kelola aset" muncul di halam
 
 **Alur pengelola** (halaman `pages/admin-kelompok.html`, tautan "Kelola kelompok" di Peringkat):
 1. Tab **Kelompok**: buat kelompok, centang anggota (maksimal 10) dan pilih **satu ketua**. Hanya akun yang sudah disetujui (`anggota = true`) yang muncul.
-2. Tab **Tugas**: buat tugas (judul, penjelasan, tenggat opsional, syarat wajib/opsional, template bagian opsional), lalu **Beri ke kelompok**. Kelompok mendapat bagian **Umum** ditambah satu bagian per template.
+2. Tab **Tugas**: buat tugas (judul, penjelasan, tenggat opsional, syarat wajib/opsional, kerangka awal opsional), lalu **Beri ke kelompok**. Kelompok mendapat **satu berkas** (HTML, CSS, JS); bila tugas punya kerangka awal, semuanya digabung menjadi isi awal berkas itu (tiap kerangka diberi komentar penanda).
 3. Tab **Tinjau**: buka kiriman, centang syarat yang terpenuhi, tulis catatan, lalu **Diterima** atau **Perlu revisi**.
 
 **Aturan penting:**
-- Ketua kelompok membagi pemilik bagian dari halaman detail tugas. Bagian tanpa pemilik boleh diisi siapa saja; bagian Umum bersama.
+- Semua anggota mengerjakan **satu berkas yang sama** di editor, tanpa pembagian bagian. Simpan otomatis ±1,5 detik setelah berhenti mengetik. Bila dua orang menyimpan hampir bersamaan, perubahan digabung otomatis per baris; kalau mengubah baris yang sama, yang menyimpan belakangan dipakai dan versi lainnya tetap ada di Riwayat. Kesalahan satu anggota adalah urusan kelompok.
+- Editor menyelaraskan diri tiap 3 detik dan menampilkan siapa yang aktif (20 detik terakhir), di tab apa, dan di baris berapa. Datanya ada di tabel `kerja_kehadiran` (satu baris per anggota per tugas, ditimpa terus, ukurannya kecil).
+- **Memperbarui dari versi lama (bagian per bagian):** jalankan ulang `supabase/kelompok.sql`. Bagian lama otomatis dilipat ke dalam satu berkas (diberi komentar penanda; versi sebelumnya masuk Riwayat) dan fungsi `bagian_tambah/ubah/hapus/pindah` dihapus.
 - Kiriman adalah salinan (snapshot) kode saat dikirim; mengedit sesudahnya tidak mengubah kiriman.
-- Mengeluarkan anggota dari kelompok membuat bagiannya tanpa pemilik (kodenya tetap).
+- Mengeluarkan anggota dari kelompok tidak mengubah kode berkas.
 - Mencabut tugas dari kelompok atau menghapus kelompok/tugas menghapus kode dan kiriman terkait secara permanen. Untuk menutup kelompok tanpa kehilangan data, pakai **Arsipkan** (semuanya jadi hanya baca).
-- Ukuran: maksimal 60.000 karakter per bagian, 15 bagian per tugas, 8 tugas belum diterima per kelompok. Teks kecil, jatah gratis Supabase sangat aman.
+- Ukuran: maksimal 60.000 karakter per berkas (HTML + CSS + JS), 15 kerangka awal per tugas, 8 tugas belum diterima per kelompok. Teks kecil, jatah gratis Supabase sangat aman.
 - Keamanan: tabel `kelompok*`, `tugas_*`, `kerja_*`, dan `pengumpulan*` tidak bisa diakses langsung dari browser. Semua lewat fungsi database yang memeriksa keanggotaan, peran ketua, dan pemilik bagian.
 

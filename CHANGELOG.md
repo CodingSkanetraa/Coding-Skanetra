@@ -3,6 +3,22 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.26.0] - 2026-11-21
+
+### Diubah
+- **Editor kelompok kini satu berkas bersama, seperti Editor Web.** Tidak ada lagi pembagian bagian dan pemilik bagian: semua anggota mengerjakan satu berkas HTML, CSS, dan JS yang sama. Halaman tugas menampilkan satu kartu **Berkas bersama** (menggantikan daftar bagian dan tombol ketua). Template tugas di halaman pengelola menjadi **kerangka awal** yang digabung menjadi isi awal berkas.
+- **Simpan otomatis tanpa dialog bentrok.** Simpan 1,5 detik setelah berhenti mengetik. Bila temanmu menyimpan lebih dulu, perubahan kalian digabung otomatis per baris (`js/kelompok-gabung.js`) dan disimpan lagi. Bila dua orang mengubah baris yang sama, yang dipakai adalah versi yang menyimpan belakangan, dan versi lainnya tetap ada di Riwayat. Riwayat kini dicatat tiap 3 menit, 30 versi.
+- **Hasil tampil penuh seperti editor web.** Pratinjau merakit halaman dari tab HTML, CSS, JS (HTML boleh berupa dokumen lengkap atau potongan), dengan panel **Console** (log dan error, nomor baris error sesuai tab JS), tombol **Perbesar** dan **Tab lain**, `localStorage` yang tidak error di pratinjau, dan posisi gulir yang tetap saat hasil menyegarkan diri. **Kode utuh** menampilkan satu berkas HTML lengkap yang siap disalin.
+
+### Ditambahkan
+- **Penanda siapa mengerjakan apa.** Baris anggota di atas editor menunjukkan siapa yang aktif beserta tab dan barisnya; titik berwarna di tab HTML/CSS/JS dan kursor berlabel nama di editor menunjukkan posisi teman. Fungsi database `berkas_sinkron` (selaras tiap 3 detik) dan tabel `kerja_kehadiran`.
+
+### Diperbaiki
+- Hasil dan Kode utuh kosong ("belum ada HTML") padahal kode sudah ditulis: HTML yang ditulis di bagian Umum tidak ikut digabung ke pratinjau. Dengan satu berkas, penyebabnya hilang; kiriman lama (beberapa bagian) tetap tampil dan kini ikut menyertakan HTML bagian Umum.
+
+### Perlu dijalankan
+- `supabase/kelompok.sql` di SQL Editor (aman diulang). Bagian lama otomatis dilipat ke satu berkas (versi sebelumnya masuk Riwayat); fungsi `bagian_tambah`, `bagian_ubah`, `bagian_hapus`, `bagian_pindah` dihapus.
+
 ## [5.25.0] - 2026-11-19
 
 ### Ditambahkan
