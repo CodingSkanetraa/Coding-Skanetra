@@ -58,7 +58,9 @@
     document.body.classList.toggle("pf-masuk", Boolean(p));
     window.dispatchEvent(new Event("pf:render"));
     if (!p) { tutupForm(); el.tautan.hidden = true; return; }
-    el.username.textContent = data && data.nama ? data.nama : "@" + p.username;
+    if (data && window.CodingSkanetraNama) window.CodingSkanetraNama.catat(data.nama || "");
+    el.username.textContent = data ? (data.nama || "(Isi nama)") : "@" + p.username;
+    el.username.classList.toggle("pf-kosong", Boolean(data) && !data.nama);
     el.baris.textContent = "@" + p.username;
     gambarAvatar();
     el.barisKelas.hidden = !(data && data.kelas);
@@ -82,6 +84,8 @@
       data = { nama: (pr && pr.nama) || "", kelas: (pr && pr.kelas) || "", anggota: Boolean(pr && pr.anggota) };
     } catch (e) { data = null; }
     render();
+    // Tautan "(Isi nama)" dari navbar membuka formulir nama langsung.
+    if (data && location.hash === "#nama" && el.namaForm.hidden) el.namaBuka.click();
   }
 
   // ---------- Foto profil ----------
@@ -224,7 +228,7 @@
       data = Object.assign({ kelas: "", anggota: false }, data, { nama: typeof hasil === "string" ? hasil : "" });
       tutupNama();
       render();
-      el.status.textContent = nama ? "Nama tersimpan." : "Nama dihapus. Tampilan memakai username.";
+      el.status.textContent = nama ? "Nama tersimpan." : "Nama dihapus.";
     } catch (err) {
       pesanNama("Nama belum tersimpan. Coba lagi sebentar lagi.", true);
     }

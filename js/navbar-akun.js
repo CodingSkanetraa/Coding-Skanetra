@@ -60,6 +60,49 @@
 
   window.CodingSkanetraAvatar = { buat: avatar, username: usernameAktif };
 
+  // Nama tampilan akun yang sedang masuk, disimpan di browser supaya navbar dan beranda bisa menampilkannya
+  // tanpa menunggu server. Sumber aslinya kolom profil.nama (halaman Profil memperbaruinya saat nama diganti).
+  const KUNCI_NAMA = "codingskanetra-nama"; // { uid, nama }
+  function uidSesi() {
+    try { const s = JSON.parse(localStorage.getItem("codingskanetra-sesi")); return s && s.user && s.user.id ? s.user.id : null; } catch (e) { return null; }
+  }
+  const Nama = {
+    // null = belum diketahui; "" = diketahui kosong; selain itu nama.
+    baca() {
+      try {
+        const o = JSON.parse(localStorage.getItem(KUNCI_NAMA));
+        if (o && o.uid && o.uid === uidSesi() && typeof o.nama === "string") return o.nama;
+      } catch (e) { /* belum ada */ }
+      return null;
+    },
+    catat(nama) {
+      const uid = uidSesi();
+      if (!uid) return;
+      const bersih = typeof nama === "string" ? nama.trim() : "";
+      if (Nama.baca() === bersih) return;
+      try { localStorage.setItem(KUNCI_NAMA, JSON.stringify({ uid, nama: bersih })); } catch (e) { /* abaikan */ }
+      window.dispatchEvent(new Event("cs:nama"));
+    },
+    // Teks yang ditampilkan: nama, "(Isi nama)" bila kosong, atau @username selama belum diketahui.
+    teks(username) {
+      const n = Nama.baca();
+      if (n === null) return "@" + username;
+      return n || "(Isi nama)";
+    },
+    kosong() { return Nama.baca() === ""; },
+    async pastikan() {
+      if (Nama.baca() !== null || !uidSesi()) return;
+      const akun = window.CodingSkanetraAkun;
+      if (!akun || !akun.tersedia || !akun.profil) return;
+      try {
+        await akun.siap;
+        const p = await akun.profil();
+        if (p) Nama.catat(p.nama);
+      } catch (e) { /* jaringan: tetap tampil @username */ }
+    }
+  };
+  window.CodingSkanetraNama = Nama;
+
   const nav = document.querySelector("#nav-links");
   if (!nav) return;
   const el = (tag, kelas, teks) => {
@@ -123,11 +166,12 @@
     slot.classList.toggle("masuk", !u);
     slot.classList.toggle("active", diProfil);
     if (u) {
-      slot.href = urlProfil;
+      slot.href = urlProfil + (Nama.kosong() ? "#nama" : "");
       slot.title = "Profil @" + u;
-      slot.setAttribute("aria-label", "Profil, masuk sebagai @" + u);
+      slot.setAttribute("aria-label", "Profil, masuk sebagai " + Nama.teks(u) + " (@" + u + ")");
       if (diProfil) slot.setAttribute("aria-current", "page");
-      slot.append(avatar(u), el("span", "nav-akun-nama", "@" + u));
+      const label = el("span", "nav-akun-nama" + (Nama.kosong() ? " kosong" : ""), Nama.teks(u));
+      slot.append(avatar(u), label);
     } else {
       slot.href = urlMasuk + next;
       slot.title = "Masuk atau daftar";
@@ -137,6 +181,8 @@
     }
   }
   gambar();
+  window.addEventListener("cs:nama", gambar);
+  Nama.pastikan();
 
   // ---------- Tab "Pengelola" (hanya untuk admin) ----------
   const tabAdmin = el("a", "nav-link nav-admin", "Pengelola");

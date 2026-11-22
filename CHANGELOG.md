@@ -3,6 +3,12 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.30.0] - 2026-11-22
+
+### Diubah
+- Navbar (pojok kanan atas), sapaan "Halo, …" di Beranda, dan judul halaman Profil kini menampilkan **nama**, bukan username. Bila nama belum diisi tampil **(Isi nama)**; mengkliknya di navbar membuka formulir nama di halaman Profil.
+- Nama disimpan sementara di browser (`codingskanetra-nama`) agar tampil seketika; selama belum diketahui tetap tampil @username. Berubah otomatis saat nama diganti di Profil, dan terpisah per akun.
+
 ## [5.29.3] - 2026-11-22
 
 ### Diubah

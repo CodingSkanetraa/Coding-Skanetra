@@ -104,3 +104,6 @@ dialog[open]::backdrop { animation: poles-latar 0.25s ease both; }
   .brand:hover .brand-logo { transform: none; }
   :where(.button-primary, .btn-primary, .py-btn, .button-secondary, .py-btn-secondary, .playground-reset):hover { transform: none; }
 }
+
+/* Judul profil saat nama belum diisi */
+.pf-kosong { font-style: italic; opacity: .75; }

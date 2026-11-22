@@ -121,3 +121,5 @@
 /* Tab Pengelola (hanya muncul untuk admin) */
 .navbar .nav-admin[hidden] { display: none; }
 .navbar .nav-admin { color: var(--accent); }
+
+.nav-akun-nama.kosong { font-style: italic; opacity: .8; }

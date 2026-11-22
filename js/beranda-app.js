@@ -33,9 +33,12 @@
   };
 
   const tampil = () => {
+    window.removeEventListener("cs:nama", tampil);
+    window.addEventListener("cs:nama", tampil);
     const p = sesiLokal();
     if (!p) return;
-    halo.textContent = "Halo, @" + p.username;
+    const N = window.CodingSkanetraNama;
+    halo.textContent = "Halo, " + (N ? N.teks(p.username) : "@" + p.username);
     sub.textContent = "Lihat profil dan proyekmu";
     tautan.setAttribute("href", "pages/profil.html");
     const foto = fotoLokal(p.id);
