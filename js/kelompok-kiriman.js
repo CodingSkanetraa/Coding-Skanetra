@@ -49,7 +49,7 @@
     cat.textContent = "";
     d.catatan.forEach((c) => {
       const li = el("li", "", c.isi);
-      li.appendChild(el("small", "", "Catatan pengelola" + (c.penulis ? " (@" + c.penulis + ")" : "") + " · " + waktu(c.waktu)));
+      li.appendChild(el("small", "", "Catatan pengelola" + (c.penulis ? " (" + K.orang(c.penulis_nama, c.penulis) + ")" : "") + " · " + waktu(c.waktu)));
       cat.appendChild(li);
     });
 

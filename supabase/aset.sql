@@ -60,8 +60,9 @@ as $$
 $$;
 
 -- Ringkasan semua akun untuk halaman admin.
+drop function if exists public.aset_ringkasan_admin(); -- tipe hasil berubah (kolom nama ditambah)
 create or replace function public.aset_ringkasan_admin()
-returns table (user_id uuid, username text, jumlah int, byte bigint)
+returns table (user_id uuid, username text, nama text, jumlah int, byte bigint)
 language plpgsql
 security definer
 stable
@@ -72,12 +73,12 @@ begin
     raise exception 'Khusus pengelola' using errcode = '42501';
   end if;
   return query
-    select p.id, p.username, count(o.id)::int, coalesce(sum((o.metadata ->> 'size')::bigint), 0)::bigint
+    select p.id, p.username, p.nama, count(o.id)::int, coalesce(sum((o.metadata ->> 'size')::bigint), 0)::bigint
     from storage.objects o
     join public.profil p on p.id::text = (storage.foldername(o.name))[1]
     where o.bucket_id = 'aset'
-    group by p.id, p.username
-    order by 4 desc;
+    group by p.id, p.username, p.nama
+    order by 5 desc;
 end;
 $$;
 

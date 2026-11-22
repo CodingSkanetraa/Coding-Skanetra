@@ -451,7 +451,7 @@
       const ul = el("ul", "kg-riwayat-daftar");
       daftar.forEach((r) => {
         const li = el("li");
-        li.appendChild(el("span", "", "Versi " + r.versi + " · " + waktu(r.waktu) + (r.oleh ? " · @" + r.oleh : "") + " · " + Math.max(1, Math.round(r.ukuran / 1024)) + " KB"));
+        li.appendChild(el("span", "", "Versi " + r.versi + " · " + waktu(r.waktu) + (r.oleh ? " · " + K.orang(r.oleh_nama, r.oleh) : "") + " · " + Math.max(1, Math.round(r.ukuran / 1024)) + " KB"));
         if (b.boleh_edit) {
           const pulih = tombol("tg-btn", "Pulihkan");
           pulih.addEventListener("click", async () => {

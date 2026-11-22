@@ -727,7 +727,7 @@ begin
     select jsonb_agg(
       jsonb_build_object(
         'id', g.id, 'nomor', g.nomor, 'status', g.status, 'terlambat', g.terlambat,
-        'dikirim', g.dikirim, 'tugas', t.judul, 'kelompok', k.nama, 'oleh', p.username
+        'dikirim', g.dikirim, 'tugas', t.judul, 'kelompok', k.nama, 'oleh', p.username, 'oleh_nama', p.nama
       )
       order by g.dikirim desc
     )
@@ -898,7 +898,7 @@ begin
       select jsonb_agg(
                jsonb_build_object(
                  'id', g.id, 'nomor', g.nomor, 'status', g.status, 'terlambat', g.terlambat,
-                 'dikirim', g.dikirim, 'oleh', pg.username,
+                 'dikirim', g.dikirim, 'oleh', pg.username, 'oleh_nama', pg.nama,
                  'catatan', coalesce((
                    select jsonb_agg(jsonb_build_object('isi', c.isi, 'waktu', c.waktu) order by c.waktu)
                      from public.pengumpulan_catatan c where c.pengumpulan_id = g.id
@@ -984,7 +984,7 @@ begin
   end if;
   return coalesce((
     select jsonb_agg(
-             jsonb_build_object('id', r.id, 'versi', r.versi, 'waktu', r.waktu, 'oleh', p.username,
+             jsonb_build_object('id', r.id, 'versi', r.versi, 'waktu', r.waktu, 'oleh', p.username, 'oleh_nama', p.nama,
                                 'ukuran', char_length(r.html) + char_length(r.css) + char_length(r.js))
              order by r.versi desc, r.id desc)
       from public.kerja_riwayat r left join public.profil p on p.id = r.oleh
@@ -1214,7 +1214,7 @@ begin
        where s.tugas_id = v_tug
     ), '[]'::jsonb),
     'catatan', coalesce((
-      select jsonb_agg(jsonb_build_object('isi', c.isi, 'waktu', c.waktu, 'penulis', p.username) order by c.waktu)
+      select jsonb_agg(jsonb_build_object('isi', c.isi, 'waktu', c.waktu, 'penulis', p.username, 'penulis_nama', p.nama) order by c.waktu)
         from public.pengumpulan_catatan c left join public.profil p on p.id = c.penulis
        where c.pengumpulan_id = v_pg.id
     ), '[]'::jsonb)

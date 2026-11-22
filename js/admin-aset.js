@@ -59,9 +59,11 @@
     $("aa-total").textContent = baris.length ? jumlah + " gambar dari " + baris.length + " anggota · " + KB(byte) + " terpakai (kuota gratis Supabase: 1 GB)" : "Belum ada gambar yang diunggah.";
     baris.forEach((x) => {
       const tr = el("tr");
-      tr.append(el("td", "", "@" + x.username), el("td", "", String(x.jumlah)), el("td", "", KB(x.byte)));
+      const sel = el("td", "aa-orang");
+      sel.append(el("strong", "", x.nama || "(nama belum diisi)"), el("small", "", "@" + x.username));
+      tr.append(sel, el("td", "", String(x.jumlah)), el("td", "", KB(x.byte)));
       const aksi = el("td"); const b = el("button", "aa-lihat", "Lihat"); b.type = "button";
-      b.setAttribute("aria-label", "Lihat gambar @" + x.username);
+      b.setAttribute("aria-label", "Lihat gambar " + (x.nama || "@" + x.username));
       b.addEventListener("click", () => detail(x));
       aksi.appendChild(b); tr.appendChild(aksi); isi.appendChild(tr);
     });
@@ -70,7 +72,7 @@
   async function detail(x) {
     if (!POLA_UID.test(x.user_id)) return;
     const d = $("aa-detail"); d.hidden = false;
-    $("aa-detail-judul").textContent = "Gambar @" + x.username;
+    $("aa-detail-judul").textContent = "Gambar " + (x.nama ? x.nama + " (@" + x.username + ")" : "@" + x.username);
     const p = $("aa-detail-pesan"), grid = $("aa-grid"); grid.textContent = ""; p.textContent = "Memuat…";
     try {
       const daftar = await berkasAkun(x.user_id); const peta = await tautan(x.user_id, daftar);

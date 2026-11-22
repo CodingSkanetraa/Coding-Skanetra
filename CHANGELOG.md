@@ -3,6 +3,17 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.29.3] - 2026-11-22
+
+### Diubah
+- Semua tampilan orang di halaman kelompok dan pengelola kini menunjukkan **nama dan username**: kartu kelompok di halaman pengelola (nama dengan @username kecil), "dikirim oleh", catatan pengelola, riwayat versi editor, dan tabel Aset gambar (nama dengan @username kecil). Bila nama belum diisi tampil "(nama belum diisi)" atau @username saja.
+- SQL: `kelompok.sql` menambah kolom nama (`oleh_nama`, `penulis_nama`) pada data kiriman, riwayat, dan catatan; `aset.sql` mengubah `aset_ringkasan_admin` agar mengembalikan nama. **Jalankan ulang kedua berkas SQL ini** (aman diulang).
+
+## [5.29.2] - 2026-11-22
+
+### Diubah
+- Pemilih anggota di form kelompok (halaman pengelola) kini menampilkan **nama** di atas dan **@username** kecil di bawahnya (plus kelas bila ada). Akun yang kolom namanya belum diisi diberi penanda "(nama belum diisi)".
+
 ## [5.29.1] - 2026-11-21
 
 ### Diperbaiki

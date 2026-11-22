@@ -16,3 +16,6 @@
 .aa-gambar img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .aa-kartu code { font-size: .8rem; overflow-wrap: anywhere; }
 .aa-uk { font-size: .78rem; color: var(--muted); }
+
+.aa-orang { display: grid; gap: 1px; }
+.aa-orang small { color: var(--muted); font-size: .78rem; }

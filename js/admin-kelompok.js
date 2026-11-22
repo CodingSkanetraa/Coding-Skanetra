@@ -60,7 +60,10 @@
       cb.type = "checkbox";
       cb.checked = terpilih.has(a.id);
       cb.setAttribute("aria-label", "Pilih " + K.nama(a));
-      const nama = el("span", "", K.nama(a) + " (@" + a.username + ")");
+      // Nama resmi di atas, @username kecil di bawahnya. Bila nama belum diisi, tampil penanda supaya pengelola tahu.
+      const nama = el("span", "kg-pa-nama");
+      nama.appendChild(a.nama ? el("strong", "", a.nama) : el("strong", "kg-pa-kosong", "(nama belum diisi)"));
+      nama.appendChild(el("small", "", "@" + a.username + (a.kelas ? " · " + a.kelas : "")));
       const kt = el("span", "ketua");
       const r = el("input");
       r.type = "radio";
@@ -115,7 +118,12 @@
 
       const chips = el("div", "kg-chips-kecil");
       if (!k.anggota.length) chips.appendChild(el("span", "tg-meta", "Belum ada anggota."));
-      k.anggota.forEach((a) => chips.appendChild(el("span", "tg-label" + (a.peran === "ketua" ? " kg-ketua" : ""), K.nama(a) + (a.peran === "ketua" ? " (ketua)" : ""))));
+      k.anggota.forEach((a) => {
+        const chip = el("span", "tg-label kg-chip-orang" + (a.peran === "ketua" ? " kg-ketua" : ""));
+        chip.appendChild(el("strong", "", (a.nama || "(nama belum diisi)") + (a.peran === "ketua" ? " (ketua)" : "")));
+        chip.appendChild(el("small", "", "@" + a.username));
+        chips.appendChild(chip);
+      });
       li.appendChild(chips);
 
       const aksi = el("div", "tg-baris-aksi");
@@ -390,7 +398,7 @@
       kepala.appendChild(lencana(k.status));
       if (k.terlambat) kepala.appendChild(el("span", "tg-label kg-terlambat", "Terlambat"));
       li.appendChild(kepala);
-      li.appendChild(el("span", "tg-meta", "Kiriman " + k.nomor + " · " + waktu(k.dikirim) + (k.oleh ? " · oleh @" + k.oleh : "")));
+      li.appendChild(el("span", "tg-meta", "Kiriman " + k.nomor + " · " + waktu(k.dikirim) + (k.oleh ? " · oleh " + K.orang(k.oleh_nama, k.oleh) : "")));
       const buka = el("a", "tg-btn" + (k.status === "dikirim" ? " utama" : ""), k.status === "dikirim" ? "Tinjau" : "Lihat");
       buka.href = "kelompok-kiriman.html?dari=admin&id=" + encodeURIComponent(k.id);
       li.appendChild(buka);

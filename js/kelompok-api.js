@@ -306,7 +306,9 @@
     return k;
   }
 
+  // "Nama (@username)", atau "@username" bila nama belum diisi.
+  const orang = (nama, username) => (nama ? String(nama) + " (@" + username + ")" : "@" + username);
   const nama = (a) => (a && (a.nama || a.username)) ? String(a.nama || a.username) : "";
 
-  window.CSKelompok = { dialog, isian, el, tombol, waktu, STATUS, lencana, rpc, wajibMasuk, gabung, rakit, dokumen, kode, pasangPratinjau, bukaDiTab, POLA_ID, nama, akun };
+  window.CSKelompok = { dialog, isian, el, tombol, waktu, STATUS, lencana, rpc, wajibMasuk, gabung, rakit, dokumen, kode, pasangPratinjau, bukaDiTab, POLA_ID, nama, orang, akun };
 })();

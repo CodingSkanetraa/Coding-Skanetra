@@ -133,7 +133,7 @@
       lihat.href = "kelompok-kiriman.html?id=" + encodeURIComponent(k.id);
       kepala.appendChild(lihat);
       li.appendChild(kepala);
-      li.appendChild(el("span", "tg-meta", "Dikirim " + waktu(k.dikirim) + (k.oleh ? " oleh @" + k.oleh : "")));
+      li.appendChild(el("span", "tg-meta", "Dikirim " + waktu(k.dikirim) + (k.oleh ? " oleh " + K.orang(k.oleh_nama, k.oleh) : "")));
       if (k.catatan && k.catatan.length) {
         const c = el("ul", "kg-catatan");
         k.catatan.forEach((x) => {
