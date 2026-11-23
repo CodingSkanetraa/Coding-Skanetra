@@ -329,6 +329,7 @@
   function tampilkan(bhs) {
     if (bhs) bahasa = bhs;
     cm.swapDoc(b.docs[bahasa]);
+    cm.setOption("autoCloseBrackets", bahasa === "js"); // kurung/kutip otomatis hanya di JavaScript, sama seperti Editor Web
     cm.setOption("readOnly", b.boleh_edit ? false : true);
     $("kg-cm").classList.toggle("baca-saja", !b.boleh_edit);
     document.querySelectorAll(".kg-tab-btn[data-b]").forEach((t) => t.setAttribute("aria-selected", String(t.dataset.b === bahasa)));
@@ -523,7 +524,7 @@
         tabSize: 4,
         indentWithTabs: false,
         smartIndent: true,
-        autoCloseBrackets: true,
+        autoCloseBrackets: false,
         autoCloseTags: false, // tutup tag ditangani editor-ketik.js
         matchBrackets: true,
         lineWrapping: false,
@@ -537,6 +538,7 @@
       });
       if (window.CodingSkanetraEditorPrefs) window.CodingSkanetraEditorPrefs.pasang(cm);
       if (window.CodingSkanetraKetik) window.CodingSkanetraKetik.pasang(cm, () => bahasa);
+      if (window.CodingSkanetraLipat) window.CodingSkanetraLipat.pasang(cm, () => bahasa);
       if (window.CodingSkanetraHint) window.CodingSkanetraHint.pasang(cm, () => bahasa);
       b = buatBerkas(r);
       pasangAset();

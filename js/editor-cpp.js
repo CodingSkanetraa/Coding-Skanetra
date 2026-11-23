@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     editor.setSize("100%", "390px");
     if (window.CodingSkanetraKetik) window.CodingSkanetraKetik.pasang(editor, "cpp");
+    if (window.CodingSkanetraLipat) window.CodingSkanetraLipat.pasang(editor, "cpp");
     if (window.CodingSkanetraEditorPrefs) window.CodingSkanetraEditorPrefs.pasang(editor);
   } else {
     // Cadangan bila CodeMirror gagal dimuat: textarea biasa tetap bisa dipakai.

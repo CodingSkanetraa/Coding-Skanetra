@@ -5,96 +5,96 @@
       "id": "profil",
       "nama": "Profil",
       "berkas": "profil.png",
-      "pembuat": "Putri Nur",
-      "kelas": "X PPLG 1",
+      "pembuat": "",
+      "kelas": "",
       "tautan": ""
     },
     {
       "id": "struktur",
       "nama": "Struktur",
       "berkas": "struktur.png",
-      "pembuat": "Alin Sarifathul Zanah",
-      "kelas": "XII RPL 3",
+      "pembuat": "",
+      "kelas": "",
       "tautan": ""
     },
     {
       "id": "dokumentasi",
       "nama": "Dokumentasi",
       "berkas": "dokumentasi.png",
-      "pembuat": "Alin Sarifathul Zanah",
-      "kelas": "XII RPL 3",
+      "pembuat": "",
+      "kelas": "",
       "tautan": ""
     },
     {
       "id": "games",
       "nama": "Games",
       "berkas": "games.png",
-      "pembuat": "Yeni Apriani",
-      "kelas": "X TJKT 1",
+      "pembuat": "",
+      "kelas": "",
       "tautan": ""
     },
     {
       "id": "peringkat",
       "nama": "Peringkat",
       "berkas": "peringkat.png",
-      "pembuat": "Syifa Nurhasanah",
-      "kelas": "X PPLG 1",
+      "pembuat": "",
+      "kelas": "",
       "tautan": ""
     },
     {
       "id": "playground",
       "nama": "Playground",
       "berkas": "playground.png",
-      "pembuat": "Aditya Ihsan",
-      "kelas": "X PPLG 1",
+      "pembuat": "",
+      "kelas": "",
       "tautan": ""
     },
     {
       "id": "proyek-mini",
       "nama": "Proyek Mini",
       "berkas": "proyek-mini.png",
-      "pembuat": "Deden Maulana",
-      "kelas": "X PPLG 2",
+      "pembuat": "",
+      "kelas": "",
       "tautan": ""
     },
     {
       "id": "javascript",
       "nama": "JavaScript",
       "berkas": "javascript.png",
-      "pembuat": "Rizpadli Chaerulsyah Sobari",
-      "kelas": "X PPLG 1",
+      "pembuat": "",
+      "kelas": "",
       "tautan": ""
     },
     {
       "id": "css",
       "nama": "CSS",
       "berkas": "css.png",
-      "pembuat": "Kaito Sora",
-      "kelas": "XII RPL 2",
+      "pembuat": "",
+      "kelas": "",
       "tautan": ""
     },
     {
       "id": "cpp",
       "nama": "C++",
       "berkas": "cpp.png",
-      "pembuat": "Dyona Octaviani",
-      "kelas": "X PPLG 2",
+      "pembuat": "",
+      "kelas": "",
       "tautan": ""
     },
     {
       "id": "python",
       "nama": "Python",
       "berkas": "python.png",
-      "pembuat": "Alin Sarifathul Zanah",
-      "kelas": "XII RPL 3",
+      "pembuat": "",
+      "kelas": "",
       "tautan": ""
     },
     {
       "id": "html",
       "nama": "HTML",
       "berkas": "html.png",
-      "pembuat": "Putri Nur",
-      "kelas": "X PPLG 1",
+      "pembuat": "",
+      "kelas": "",
       "tautan": ""
     },
     {
@@ -104,7 +104,14 @@
       "pembuat": "Kaito Sora",
       "kelas": "XII RPL 2",
       "tautan": ""
+    },
+    {
+      "id": "pengaturan",
+      "nama": "Pengaturan",
+      "berkas": "pengaturan.png",
+      "pembuat": "",
+      "kelas": "",
+      "tautan": ""
     }
-    
   ]
 }

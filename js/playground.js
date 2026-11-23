@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     smartIndent: true,
     // Penutup tag ditangani js/editor-ketik.js (jalan di HP juga, dan <p></p> tidak dipecah jadi tiga baris).
     autoCloseTags: false,
-    autoCloseBrackets: true,
+    autoCloseBrackets: false, // HTML: kurung/kutip tidak ditutup otomatis (hanya di JavaScript)
     matchBrackets: true,
     lineWrapping: false,
 
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     tabSize: 4,
     indentWithTabs: false,
     smartIndent: true,
-    autoCloseBrackets: true,
+    autoCloseBrackets: false,
     matchBrackets: true,
     lineWrapping: false,
 
@@ -152,6 +152,11 @@ document.addEventListener("DOMContentLoaded", () => {
     window.CodingSkanetraKetik.pasang(htmlEditor, "html");
     window.CodingSkanetraKetik.pasang(cssEditor, "css");
     window.CodingSkanetraKetik.pasang(jsEditor, "js");
+    if (window.CodingSkanetraLipat) {
+      window.CodingSkanetraLipat.pasang(htmlEditor, "html");
+      window.CodingSkanetraLipat.pasang(cssEditor, "css");
+      window.CodingSkanetraLipat.pasang(jsEditor, "js");
+    }
   }
 
   // Petunjuk kode (autocomplete) HTML, CSS, dan JavaScript

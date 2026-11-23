@@ -90,6 +90,7 @@ teks("Halo, Visual Python!", 320, 320, "#ffffff", 24)`;
     });
     editor.setSize("100%", "390px");
     if (window.CodingSkanetraKetik) window.CodingSkanetraKetik.pasang(editor, "py");
+    if (window.CodingSkanetraLipat) window.CodingSkanetraLipat.pasang(editor, "py");
     if (window.CodingSkanetraEditorPrefs) window.CodingSkanetraEditorPrefs.pasang(editor);
   }
 

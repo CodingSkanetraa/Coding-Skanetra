@@ -70,7 +70,8 @@
       cm.replaceRange(nama + ">", kursor, kursor, "+autoclose");
     }
 
-    function pasangan(c, kursor) {
+    // hanyaLewati: tidak menutup kurung/kutip sendiri (HTML dan CSS), tetapi mengetik penutup di depan penutup yang sama tetap melewatinya.
+    function pasangan(c, kursor, hanyaLewati) {
       const baris = cm.getLine(kursor.line);
       const sebelumC = baris.charAt(kursor.ch - 2);
       const sesudah = baris.charAt(kursor.ch);
@@ -80,7 +81,7 @@
         return;
       }
       const penutup = PASANGAN[c];
-      if (!penutup) return;
+      if (!penutup || hanyaLewati) return;
       if (KUTIP.has(c) && (KATA.test(sebelumC) || sebelumC === c)) return; // apostrof dalam kata, atau kutip ke-2
       if (sesudah && !/[\s)\]}>,;:.]/.test(sesudah)) return; // jangan membungkus kata yang sudah ada
       cm.replaceRange(penutup, kursor, kursor, "+autoclose");
@@ -99,7 +100,12 @@
         // Tutup tag dan "</" aman diulang (tidak menambah bila penutupnya sudah ada), jadi tidak peduli ada keypress atau tidak.
         if (lang() === "html" && c === ">") tutupTag(kursor);
         else if (lang() === "html" && c === "/" && baris.charAt(kursor.ch - 2) === "<") lengkapiPenutup(kursor);
-        else if ((PASANGAN[c] || PENUTUP.has(c)) && Date.now() - keypressTerakhir >= 150) pasangan(c, kursor); // kalau ada keypress, addon bawaan yang bekerja
+        else if (PASANGAN[c] || PENUTUP.has(c)) {
+          // Bila addon bawaan aktif dan ada keypress, addon itulah yang bekerja; selain itu jalur ini.
+          if (!cm.getOption("autoCloseBrackets") || Date.now() - keypressTerakhir >= 150) {
+            pasangan(c, kursor, lang() === "html" || lang() === "css");
+          }
+        }
       } finally {
         sibuk = false;
       }
@@ -121,6 +127,18 @@
           cm.replaceRange("\n" + dasar + satuan + "\n" + dasar, k, k, "+input");
           cm.setCursor({ line: k.line + 1, ch: dasar.length + satuan.length });
         });
+        return undefined;
+      }
+    });
+
+    // Backspace di dalam indentasi (hanya spasi di depan kursor): mundur satu tingkat indentasi sekaligus.
+    cm.addKeyMap({
+      Backspace: () => {
+        if (cm.getOption("readOnly") || cm.somethingSelected()) return window.CodeMirror.Pass;
+        const k = cm.getCursor();
+        const depan = cm.getLine(k.line).slice(0, k.ch);
+        if (!depan || /\S/.test(depan) || depan.includes("\t")) return window.CodeMirror.Pass;
+        cm.execCommand("delSpaceToPrevTabStop");
         return undefined;
       }
     });

@@ -1,0 +1,20 @@
+/* Garis panduan indentasi dan tombol lipat kode (js/editor-lipat.js) */
+.CodeMirror .cs-panduan::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(4px + var(--cs-satuan) * 1ch);
+  width: calc(var(--cs-lebar) * 1ch);
+  pointer-events: none;
+  background-image: repeating-linear-gradient(to right, rgba(255, 255, 255, .16) 0, rgba(255, 255, 255, .16) 1px, transparent 1px, transparent calc(var(--cs-satuan) * 1ch));
+}
+
+.CodeMirror-foldgutter { width: 1em; }
+.CodeMirror-foldgutter-open,
+.CodeMirror-foldgutter-folded { cursor: pointer; text-align: center; color: rgba(255, 255, 255, .45); }
+.CodeMirror-foldgutter-open::after { content: "\25BE"; }
+.CodeMirror-foldgutter-folded::after { content: "\25B8"; color: var(--accent, #7ee0a8); }
+.CodeMirror-foldgutter-open:hover,
+.CodeMirror-foldgutter-folded:hover { color: var(--accent, #7ee0a8); }
+.CodeMirror-foldmarker { color: var(--accent, #7ee0a8); background: rgba(255, 255, 255, .08); border-radius: 4px; padding: 0 5px; margin: 0 2px; cursor: pointer; font-family: inherit; text-shadow: none; }

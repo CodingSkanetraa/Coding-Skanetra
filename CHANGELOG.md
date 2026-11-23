@@ -3,6 +3,18 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.31.0] - 2026-11-23
+
+### Ditambahkan
+- **Garis panduan indentasi:** garis tegak tipis di tiap tingkat indentasi, supaya blok tag atau kurung mudah dilihat.
+- **Tombol lipat kode** di kolom nomor baris (▾ terbuka, ▸ terlipat): klik untuk menyembunyikan atau menampilkan satu blok. Hanya blok yang membentang beberapa baris yang diberi tombol (kode satu baris seperti `<p>Hai</p>` tidak). HTML melipat per tag, CSS/JavaScript/C++ per `{ }`, Python per blok indentasi. Berlaku di Editor Web, Python, C++, dan editor kelompok (`js/editor-lipat.js`, `css/editor-lipat.css`; memuat addon fold CodeMirror dari CDN).
+
+### Diubah
+- Perilaku editor disamakan dengan editor di tempat PKL:
+  - **Backspace di indentasi** (hanya spasi di depan kursor) mundur satu tingkat indentasi (4 spasi) sekaligus. Berlaku di semua editor.
+  - **Kurung dan kutip otomatis hanya di tab JavaScript.** Di tab HTML dan CSS tidak ditutup otomatis (Python dan C++ tidak berubah). Mengetik kutip penutup tepat di depan kutip yang sudah ada tetap melewatinya, jadi `class="|"` hasil autocomplete tidak jadi dobel.
+  - Yang sudah sama dan tidak diubah: `>` menutup tag jadi `<p>|</p>`, Enter di antaranya memecah jadi tiga baris dengan isi menjorok 4 spasi, Tab 4 spasi, Enter menerima autocomplete (nama tag tanpa `>`), dan atribut otomatis menjadi `class=""`.
+
 ## [5.30.0] - 2026-11-22
 
 ### Diubah
