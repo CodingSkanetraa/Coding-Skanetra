@@ -138,7 +138,10 @@
         const k = cm.getCursor();
         const depan = cm.getLine(k.line).slice(0, k.ch);
         if (!depan || /\S/.test(depan) || depan.includes("\t")) return window.CodeMirror.Pass;
-        cm.execCommand("delSpaceToPrevTabStop");
+        // Hapus spasi sampai batas indentasi sebelumnya (kelipatan indentUnit); selalu minimal satu spasi.
+        const satuan = Math.max(1, cm.getOption("indentUnit") || 4);
+        const hapus = k.ch % satuan || Math.min(satuan, k.ch);
+        cm.replaceRange("", { line: k.line, ch: k.ch - hapus }, k, "+delete");
         return undefined;
       }
     });

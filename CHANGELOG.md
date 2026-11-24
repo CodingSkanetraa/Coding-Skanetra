@@ -3,6 +3,11 @@
 Semua perubahan penting pada website Coding Skanetra dicatat di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/) dan penomoran versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [5.31.1] - 2026-11-23
+
+### Diperbaiki
+- Backspace di baris yang hanya berisi spasi (indentasi) tidak melakukan apa-apa. Kini menghapus spasi sampai batas indentasi sebelumnya (kelipatan 4).
+
 ## [5.31.0] - 2026-11-23
 
 ### Ditambahkan
